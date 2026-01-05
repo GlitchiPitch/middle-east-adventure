@@ -15,7 +15,7 @@ function Inventory.new(data)
 end
 
 function Inventory:toData()
-    return self
+    return {}
 end
 
 return Inventory

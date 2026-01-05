@@ -1,11 +1,10 @@
----@class ServerPlayerService
+---@class ServerApplicationPlayerService
 ---@field diContainer DIContainer
 local PlayerService = {}
 PlayerService.__index = PlayerService
 
-
 ---@param diContainer DIContainer
----@return ServerPlayerService
+---@return ServerApplicationPlayerService
 function PlayerService.new(diContainer)
     local self = setmetatable({}, PlayerService)
     self.diContainer = diContainer

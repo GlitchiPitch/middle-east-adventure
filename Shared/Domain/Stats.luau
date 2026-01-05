@@ -13,7 +13,7 @@ function Stats.new(data)
 end
 
 function Stats:toData()
-    return self
+    return {}
 end
 
 return Stats

@@ -1,0 +1,3 @@
+---@class damageData
+---@field isCrit boolean
+---@field value number

@@ -15,7 +15,7 @@ function Skills.new(data)
 end
 
 function Skills:toData()
-    return self
+    return {}
 end
 
 return Skills
