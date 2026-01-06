@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = require(ReplicatedStorage.Shared)
 
+local Infrastructure = require(script.Infrastructure)
 local Application = require(script.Application)
 local Presentation = require(script.Presentation)
 
@@ -8,6 +9,7 @@ local Presentation = require(script.Presentation)
 ---@field shared Shared
 ---@field application ClientApplication
 ---@field presentation Presentation
+---@field infrastructure ClientInfrastructure
 ---@field diContainer DIContainer
 local Client = {}
 Client.__index = Client
@@ -18,6 +20,7 @@ function Client.new()
     self.shared = Shared.new()
     self.application = Application.new()
     self.presentation = Presentation.new()
+    self.infrastructure = Infrastructure.new()
     self.diContainer = self.shared.diContainer
     return self
 end
@@ -37,6 +40,10 @@ function Client:init()
 
     self.diContainer:singleton("Presentation", function()
         return self.presentation
+    end)
+
+    self.diContainer:singleton("Infrastructure", function()
+        return self.infrastructure
     end)
 
     self.application:init()

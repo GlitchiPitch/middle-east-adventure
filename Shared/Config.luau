@@ -4,6 +4,9 @@ local Config = {
 
     Client = {
         PopupLifeTime = 2,
+        Control = {
+            Action = Enum.KeyCode.MouseLeftButton,
+        }
     },
 }
 return Config

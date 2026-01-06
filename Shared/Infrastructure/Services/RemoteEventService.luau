@@ -24,9 +24,6 @@ function RemoteEventService:connectToEvents(connectData)
     end
 end
 
----@class eventData
----@field eventName string
----@field data table
 
 if RunService:IsServer() then
     ---@param player Player

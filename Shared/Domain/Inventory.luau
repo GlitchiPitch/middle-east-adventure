@@ -6,12 +6,21 @@ Inventory.__index = Inventory
 ---@return InventoryEntity
 function Inventory.new(data)
     local self = setmetatable({}, Inventory)
-    
-    for i, v in data do
-        self[i] = v
-    end
+
+    self.all = data.all
+    self.equipped = data.equipped
 
     return self
+end
+
+--[[
+    data has info about sword boosts (fire, poison)
+    durability
+]]
+
+---@param item table
+function Inventory:addItem(item)
+    self[item.name] = item
 end
 
 function Inventory:toData()

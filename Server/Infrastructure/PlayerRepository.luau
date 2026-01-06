@@ -16,26 +16,7 @@ end
 
 ---@param player Player
 function PlayerRepository:onPlayerAdded(player)
-    ---@type SharedDomain
-    local domain = self.diContainer:resolve("Domain")
-    ---@type Shared
-    local shared = self.diContainer:resolve("Shared")
-    local dataStore = DataStoreService:GetDataStore(shared.config.PlayerDataStoreKey)
-
-    local success, result = pcall(function()
-        return dataStore:GetAsync(player.UserId)
-    end)
-
-    local _playerData = success and result or {}
-
-    local playerData = {
-        inventory = domain.Inventory.new(_playerData.inventory or {}),
-        skills = domain.Skills.new(_playerData.skills or {}),
-        stats = domain.Stats.new(_playerData.stats or {}),
-    }
-
-    self._players[player.UserId] = domain.Player.new(player)
-    self._players[player.UserId]:fromData(playerData)
+    self:_createPlayerEntity(player)
 end
 
 ---@param player Player
@@ -56,6 +37,38 @@ function PlayerRepository:onPlayerRemoving(player)
 
         self._players[player.UserId] = nil
     end
+end
+
+---@param player Player
+function PlayerRepository:getPlayerEntity(player)
+    if not self._players[player.UserId] then
+        self:_createPlayerEntity(player)
+    end
+    
+    return self._players[player.UserId]
+end
+
+function PlayerRepository:_createPlayerEntity(player)
+    ---@type SharedDomain
+    local domain = self.diContainer:resolve("Domain")
+    ---@type Shared
+    local shared = self.diContainer:resolve("Shared")
+    local dataStore = DataStoreService:GetDataStore(shared.config.PlayerDataStoreKey)
+
+    local success, result = pcall(function()
+        return dataStore:GetAsync(player.UserId)
+    end)
+
+    local _playerData = success and result or {}
+
+    local playerData = {
+        inventory = domain.Inventory.new(_playerData.inventory or {}),
+        skills = domain.Skills.new(_playerData.skills or {}),
+        stats = domain.Stats.new(_playerData.stats or {}),
+    }
+
+    self._players[player.UserId] = domain.Player.new(player)
+    self._players[player.UserId]:fromData(playerData)
 end
 
 return PlayerRepository

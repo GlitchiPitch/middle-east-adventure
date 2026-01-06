@@ -22,9 +22,18 @@ end
 ---@param player Player
 function PlayerService:onPlayerRemoving(player)
     ---@type ServerInfrastructure
-local infrastructure = self.diContainer:resolve("Infrastructure")
-local playerRepository = infrastructure.playerRepository
-playerRepository:onPlayerRemoving(player)
+    local infrastructure = self.diContainer:resolve("Infrastructure")
+    local playerRepository = infrastructure.playerRepository
+    playerRepository:onPlayerRemoving(player)
+end
+
+---@param player Player
+---@return table
+function PlayerService:getPlayerData(player)
+    ---@type ServerInfrastructure
+    local infrastructure = self.diContainer:resolve("Infrastructure")
+    local playerEntity = infrastructure.playerRepository:getPlayerEntity(player)
+    return playerEntity:toData()
 end
 
 return PlayerService
