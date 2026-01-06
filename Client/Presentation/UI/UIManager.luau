@@ -1,3 +1,4 @@
+local CollectionService = game:GetService("CollectionService")
 ---@alias _uiNames '"Inventory"' | '"Combat"'
 
 ---@class UIManager
@@ -8,6 +9,12 @@ UIManager.__index = UIManager
 function UIManager.new()
     local self = setmetatable({}, UIManager)
     return self
+end
+
+function UIManager:init()
+    local animatedButton = CollectionService:GetTagged("")
+    CollectionService:GetInstanceAddedSignal():Connect()
+    CollectionService:GetInstanceRemovedSignal():Connect()
 end
 
 ---@param name _uiNames

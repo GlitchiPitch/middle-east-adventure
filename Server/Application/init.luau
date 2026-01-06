@@ -40,6 +40,12 @@ function Application:init()
                 eventName = shared.constants.REMOTE_EVENTS.UPDATE_PLAYER_DATA,
                 data = playerData,
             })
+        end,
+        
+        ---@param player Player
+        ---@param eventData eventData
+        [shared.constants.REMOTE_EVENTS.CLICK_INVENTORY_ITEM] = function(player, eventData)
+            self.services.inventoryService:clickItem(player, eventData.data)
         end
     })
 

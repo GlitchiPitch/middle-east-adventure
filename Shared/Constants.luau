@@ -4,6 +4,7 @@ local Constants = {
 
     REMOTE_EVENTS = {
         UPDATE_PLAYER_DATA = "UpdatePlayerData",
+        CLICK_INVENTORY_ITEM = "ClickInventoryItem",
     },
 }
 

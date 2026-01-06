@@ -11,11 +11,13 @@ function InventoryService.new(diContainer)
     return self
 end
 
-function InventoryService:equip()
-    
-end
-
-function InventoryService:unequip()
+---@param player Player
+---@param itemData table
+function InventoryService:clickItem(player, itemData)
+    ---@type ServerApplication
+    local application = self.diContainer:resolve("Application")
+    local playerEntity = application.services.playerService:getPlayerEntity(player)
+    local itemData = playerEntity.inventory:getItem(itemData.name)
     
 end
 

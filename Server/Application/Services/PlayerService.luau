@@ -36,4 +36,13 @@ function PlayerService:getPlayerData(player)
     return playerEntity:toData()
 end
 
+---@param player Player
+---@return PlayerEntity
+function PlayerService:getPlayerEntity(player)
+    ---@type ServerInfrastructure
+    local infrastructure = self.diContainer:resolve("Infrastructure")
+    local playerEntity = infrastructure.playerRepository:getPlayerEntity(player)
+    return playerEntity
+end
+
 return PlayerService

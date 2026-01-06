@@ -1,8 +1,10 @@
 local Infrastructure = require(script.Infrastructure)
+local Application = require(script.Application)
 local Constants = require(script.Constants)
 local Config = require(script.Config)
 local Domain = require(script.Domain)
 local Data = require(script.Data)
+
 local Types = require(script.Types)
 
 ---@class Shared
@@ -10,6 +12,7 @@ local Types = require(script.Types)
 ---@field _infrastructure SharedInfrastructure
 ---@field diContainer DIContainer
 ---@field domain SharedDomain
+---@field application SharedApplication
 ---@field constants Constants
 ---@field config Config
 ---@field data SharedData
@@ -20,9 +23,11 @@ function Shared.new()
     local self = setmetatable({}, Shared)
     self._infrastructure = Infrastructure.new()
     self.domain = Domain.new()
-
+    
     self.diContainer = self._infrastructure.diContainer
     self.remoteEventService = self._infrastructure.remoteEventService
+
+    self.application = Application.new(self.diContainer)
 
     self.config = Config
     self.constants = Constants
