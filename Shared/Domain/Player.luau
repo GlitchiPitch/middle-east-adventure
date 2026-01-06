@@ -1,5 +1,6 @@
 ---@class PlayerEntity
 ---@field inventory InventoryEntity
+---@field equipment EquipmentEntity
 ---@field skills SkillsEntity
 ---@field stats StatsEntity
 local Player = {}
@@ -11,7 +12,9 @@ function Player.new(player)
     local self = setmetatable({}, Player)
     self._instance = player
 
+    self.attributes = nil
     self.inventory = nil
+    self.equipment = nil
     self.skills = nil
     self.stats = nil
     return self
@@ -19,8 +22,10 @@ end
 
 ---@class playerData
 ---@field inventory InventoryEntity
+---@field equipment EquipmentEntity
 ---@field skills SkillsEntity
 ---@field stats StatsEntity
+---@field attributes AttributesEntity
 
 ---@param playerData playerData
 function Player:fromData(playerData)
@@ -34,6 +39,7 @@ function Player:toData()
         inventory = self.inventory:toData(),
         skills = self.skills:toData(),
         stats = self.stats:toData(),
+        equipment = self.equipment:toData(),
     }
 end
 
@@ -41,6 +47,7 @@ end
 function Player:getData()
     return {
         inventory = self.inventory,
+        equipment = self.equipment,
         skills = self.skills,
         stats = self.stats,
     }

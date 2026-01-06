@@ -6,11 +6,12 @@ Skills.__index = Skills
 ---@return SkillsEntity
 function Skills.new(data)
     local self = setmetatable({}, Skills)
-    
-    for i, v in data do
-        self[i] = v
-    end
-
+    self.combat = {}
+    self.magic = {}
+    self.thief = {}
+    self.hunting = {}
+    self.alchemy = {}
+    self.misc = {}
     return self
 end
 

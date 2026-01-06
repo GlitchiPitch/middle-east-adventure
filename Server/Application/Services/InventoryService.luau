@@ -17,8 +17,12 @@ function InventoryService:clickItem(player, itemData)
     ---@type ServerApplication
     local application = self.diContainer:resolve("Application")
     local playerEntity = application.services.playerService:getPlayerEntity(player)
-    local itemData = playerEntity.inventory:getItem(itemData.name)
-    
+    local item = playerEntity.inventory:getItem(itemData.name) -- entity
+    if itemData.equipdable then
+        playerEntity.equipment:equip(item)
+    elseif itemData.usable then
+        item:use()
+    end
 end
 
 ---@param playerEntity PlayerEntity

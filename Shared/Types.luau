@@ -6,6 +6,11 @@
 ---@field name string
 ---@field data table
 
+---@class statsData
+---@field health number
+---@field mana number
+---@field stamina number
+
 ---@class eventData
 ---@field eventName string
 ---@field data table
@@ -15,16 +20,28 @@ local DAMAGE_TYPE = {
 	BLADE = "Blade",
 }
 
+-- permament values (max hp eg.)
 local PLAYER_ATTRIBUTES = {
-	STRENGTH = "Strength",
-	DEXTERITY = "Dexterity",
-	ANCHIENT_KNOWLADGE = "AncientKnowladge",
-	BLACKSMITH = "Blacksmith",
-	THIEF = "Thief",
-	ALCHEMY = "Alchemy",
-	HEALTH = "Health",
-	STAMINA = "Stamina",
-	MANA = "Mana",
+	STRENGTH = "strength",
+	DEXTERITY = "dexterity",
+	ANCHIENT_KNOWLADGE = "ancientKnowladge",
+	BLACKSMITH = "blacksmith",
+	THIEF = "thief",
+	ALCHEMY = "alchemy",
+	HEALTH = "health",
+	STAMINA = "stamina",
+	MANA = "mana",
+}
+
+-- temp stats of player
+local STATS = {
+	WEAK = "weak",
+	POSIONED = "posioned",
+	FROSTED = "frosted",
+	FIRED = "fired",
+	HEALTH = "health",
+	STAMINA = "stamina",
+	MANA = "mana",
 }
 
 local SKILLS = {
@@ -45,6 +62,12 @@ local SKILLS = {
 		STAFF_FIGHT = "Staff Fight",
 		FIRE_MAGICIAN = "Fire magician",
 	},
+	HUNTING = {},
+	THIEF = {},
+	ALCHEMY = {},
+	MISC = {
+		
+	},
 }
 
 local DEFENCES = {
@@ -63,4 +86,5 @@ return {
 	SKILLS = SKILLS,
 	DEFENCES = DEFENCES,
 	BOOSTS = BOOSTS,
+	STATS = STATS,
 }
