@@ -6,6 +6,12 @@ An RPG game. A story about a nameless hero who must stop the apocalypse.
 
 The game features a variety of activities, including hunting, fishing, collecting, combat, and much more. Level up your hero and find a way to stop the disaster.
 
+## Links
+
+- [Project TODO](./.dev/TODO.md)
+- [Changelog](./.dev/CHANGELOG.md)
+
+
 ## Project Structure
 
 This project follows Clean Architecture principles, organized into three main layers:
