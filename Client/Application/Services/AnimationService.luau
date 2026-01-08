@@ -1,3 +1,4 @@
+local Players = game:GetService("Players")
 ---@class AnimationService
 ---@field diContainer DIContainer
 ---@field animTracks table<string, AnimationTrack>
@@ -9,6 +10,7 @@ AnimationService.__index = AnimationService
 function AnimationService.new(diContainer)
 	local self = setmetatable({}, AnimationService)
 	self.diContainer = diContainer
+	self.player = Players.LocalPlayer
 	self.animTracks = {}
 	return self
 end
@@ -28,8 +30,9 @@ function AnimationService:init()
 	}
 end
 
----@param character Model
-function AnimationService:setupAnimationToCharacter(character)
+function AnimationService:setupAnimationToCharacter()
+	local character = self.player.Character
+
 	self.animTracks.OneHandedIdle = character.Humanoid.Animator:LoadAnimation(self.oneHandedIdle) :: AnimationTrack
 	self.animTracks.OneHandedIdle.Looped = true
 	self.animTracks.OneHandedIdle.Priority = Enum.AnimationPriority.Action
@@ -60,8 +63,8 @@ function AnimationService:stopAnimation(name)
 end
 
 ---@param name string
-function AnimationService:playCombatAnimation(name) 
-
+function AnimationService:playCombatAnimation(name)
+	print(name)
 end
 
 return AnimationService

@@ -5,29 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.7] - 2026-01-08
+## [1.0.8] - 2026-01-08
 
 ### Added
-- Enhanced camera system with improved lock-on mechanics
-- Character head tracking system that follows cursor movement
-- Better target acquisition and switching logic
-- Optimized camera smoothing and responsiveness
+- Complete sprint system with running animations and speed transitions
+- Run key binding (Left Shift) in client configuration
+- SprintService with smooth walk/run speed transitions
+- Run animation asset integration
 
 ### Changed
-- Refactored CameraService with cleaner architecture and better performance
-- Improved mouse handling and input responsiveness
-- Enhanced lock-on range and target detection
-- Updated task management system with progress tracking
+- Integrated SprintService into client application initialization
+- Enhanced input configuration with run key binding
+- Updated animation assets with running animation support
 
 ### Fixed
-- Camera positioning and angle calculations
-- Lock-on target switching with better debounce handling
-- Memory management and variable scoping in camera service
+- Service initialization order in client application
 
 ### Development
-- Updated TODO.md with current implementation status
-- Marked core systems (Animation, Input, Tool) as completed
-- Added progress tracking for remaining game systems
+- Sprint mechanics implemented and integrated
+- Movement systems (walk/run) now complete
 
 ## [1.0.6] - 2026-01-XX
 

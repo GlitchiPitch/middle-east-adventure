@@ -40,6 +40,10 @@ function InputService:init()
 		elseif input.KeyCode == config.Client.Control.TargetCamera then
 			application.services.camerService:toggleTargetCamera()
 		end
+
+		if input.KeyCode == config.Client.Control.RunKey then
+			application.services.sprintService:run()
+		end
 	end
 
 	local function onInputEnded(input, gameProccessed)
@@ -54,21 +58,25 @@ function InputService:init()
 				application.services.toolService:block(false)
 			end
 		end
+
+		if input.KeyCode == config.Client.Control.RunKey then
+			application.services.sprintService:walk()
+		end
 	end
 
-    local function onInputChanged(input, gameProccessed)
-        if gameProccessed then
-            return
-        end
+	local function onInputChanged(input, gameProccessed)
+		if gameProccessed then
+			return
+		end
 
-        if input.UserInputType == Enum.UserInputType.MouseMovement then
-            application.services.camerService:mouseMovement(input)
-        end
-    end
+		if input.UserInputType == Enum.UserInputType.MouseMovement then
+			application.services.camerService:mouseMovement(input)
+		end
+	end
 
 	self._inputBegan = UserInputService.InputBegan:Connect(onInputBegan)
 	self._inputEnded = UserInputService.InputEnded:Connect(onInputEnded)
-    self._inputChanged = UserInputService.InputChanged:Connect(onInputChanged)
+	self._inputChanged = UserInputService.InputChanged:Connect(onInputChanged)
 end
 
 return InputService

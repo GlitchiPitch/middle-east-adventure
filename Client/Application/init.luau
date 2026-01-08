@@ -24,19 +24,19 @@ function Application:init()
 	local shared = self.diContainer:resolve("Shared")
 	local remoteEventService = shared.remoteEventService
 
-	local function onCharacterAdded(character)
+	local function onCharacterAdded(_)
 		---@type ClientApplication
 		local application = self.diContainer:resolve("Application")
-		application.services.toolService:checkCharacterTool(character)
-		application.services.animationService:setupAnimationToCharacter(character)
+		application.services.toolService:checkCharacterTool()
+		application.services.animationService:setupAnimationToCharacter()
 		application.services.camerService:init()
+		application.services.sprintService:init()
 	end
 
 	remoteEventService:connectToEvents({
 
 		---@param eventData eventData
 		[shared.constants.REMOTE_EVENTS.UPDATE_PLAYER_DATA] = function(eventData)
-			print(eventData)
 			self.services.playerService:updatePlayerData(eventData.data)
 		end,
 	})

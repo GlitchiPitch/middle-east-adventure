@@ -4,6 +4,7 @@ local ToolService = require(script.ToolService)
 local AnimationService = require(script.AnimationService)
 local CameraService = require(script.CameraService)
 local InputService = require(script.InputService)
+local SprintService = require(script.SprintService)
 
 ---@class ClientApplicationServices
 ---@field playerService ClientApplicationPlayerService
@@ -12,6 +13,7 @@ local InputService = require(script.InputService)
 ---@field animationService AnimationService
 ---@field camerService CameraService
 ---@field inputService InputService
+---@field sprintService SprintService
 local Services = {}
 Services.__index = Services
 
@@ -25,6 +27,7 @@ function Services.new(diContainer)
 	self.animationService = AnimationService.new(diContainer)
 	self.camerService = CameraService.new()
 	self.inputService = InputService.new(diContainer)
+	self.sprintService = SprintService.new(diContainer)
 	return self
 end
 

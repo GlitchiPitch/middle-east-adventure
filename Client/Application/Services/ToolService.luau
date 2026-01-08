@@ -1,3 +1,4 @@
+local Players = game:GetService("Players")
 ---@class ClientToolService
 ---@field _currentTool Tool
 ---@field diContainer DIContainer
@@ -13,6 +14,7 @@ function ToolService.new(diContainer)
 	local self = setmetatable({}, ToolService)
 	self.diContainer = diContainer
 	self._currentTool = nil
+	self.player = Players.LocalPlayer
 
 	self.debounce = false
 	self.attackIndex = 1
@@ -22,7 +24,8 @@ function ToolService.new(diContainer)
 	return self
 end
 
-function ToolService:checkCharacterTool(character)
+function ToolService:checkCharacterTool()
+	local character = self.player.Character
 	---@param child Instance
 	local function _onChildAdded(child)
 		if child:IsA("Tool") then
