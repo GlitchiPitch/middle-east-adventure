@@ -32,6 +32,7 @@ function PlayerService:updatePlayerData(newData)
     newData.inventory = domain.Inventory.new(newData.inventory)
     newData.skills = domain.Skills.new(newData.skills)
     newData.stats = domain.Stats.new(newData.stats)
+    
 
     infrastructure.playerRepository:updatePlayerEntity(newData)
 end

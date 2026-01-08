@@ -62,12 +62,42 @@ local SKILLS = {
 		STAFF_FIGHT = "Staff Fight",
 		FIRE_MAGICIAN = "Fire magician",
 	},
-	HUNTING = {},
-	THIEF = {},
-	ALCHEMY = {},
-	MISC = {
-		
+	HUNTING = {
+		GAME_HUNTER = "GameHunter",
+		GAME_HUNTER2 = "GameHunter2",
+		SILENT_HUNTER = "SilentHunter",
+		EXTRACTION = "Extraction",
+		ANIMAL_SKINNING = "AnimalSkinning",
 	},
+	THIEF = {
+		Breaking_Simple_Lock = "BreakingSimpleLock",
+		Breaking_Complex_Lock = "BreakingComplexLock",
+		Breaking_Impossible_Lock = "BreakingImpossibleLock",
+	},
+	ALCHEMY = {
+		BREWING_HEALING_POTION = "BrewingHealingPotion",
+		BREWING_MANA_POTION = "BrewingManaPotions",
+		LONG_POTION = "LongPotions",
+		TRANSMUTATION_POTION = "TransmutationPotions",
+		MAKING_POISON = "MakingPoison",
+		ELEMENTAL_BLADES = "ElementalBlades",
+		ELEMENTAL_ARROWS = "ElementalArrows",
+	},
+	MISC = {
+		ACROBATICS = "Acrobatics",
+		WOLF_ENDURANCE = "WolfEndurance",
+		FIRE_RESISTANCE = "FireResistance",
+		WEAKNESS_RESISTANCE = "WeaknessResistance",
+		POSION_RESISTANCE = "PosionResistance",
+	},
+	SMITH = {
+		BLACKSMITH = "Blacksmith",
+		FORGING_ORE_WEAPONS = "ForgingOreWeapons",
+		FORGING_FROM_PURE_ORE = "ForgingFromPureOre",
+		ORE_MINING = "OreMining",
+		BLADE_SHARPENING = "BladeSharpening",
+		ARMOR_ENCHANCEMENT = "ArmorEnchancement",
+	}
 }
 
 local DEFENCES = {
@@ -80,6 +110,10 @@ local BOOSTS = {
 	ORC_SLAYER = "Orc Slayer",
 }
 
+local ITEMS = {
+	
+}
+
 return {
 	DAMAGE_TYPE = DAMAGE_TYPE,
 	PLAYER_ATTRIBUTES = PLAYER_ATTRIBUTES,
@@ -87,4 +121,5 @@ return {
 	DEFENCES = DEFENCES,
 	BOOSTS = BOOSTS,
 	STATS = STATS,
+	ITEMS = ITEMS,
 }

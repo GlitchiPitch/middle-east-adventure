@@ -2,6 +2,11 @@
 local Data = {
 	Weapons = require(script.Weapons),
 	Magic = require(script.Magic),
+	Hunting = require(script.Hunting),
+	Alchemy = require(script.Alchemy),
+	Misc = require(script.Misc),
+	Smith = require(script.Smith),
+	Thief = require(script.Thief),
 }
 
 ---@param itemName string
