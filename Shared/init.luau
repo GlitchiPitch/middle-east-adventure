@@ -12,6 +12,7 @@ local Types = require(script.Types)
 ---@field remoteEventService RemoteEventService
 ---@field _infrastructure SharedInfrastructure
 ---@field diContainer DIContainer
+---@field eventBus EventBus
 ---@field domain SharedDomain
 ---@field application SharedApplication
 ---@field constants Constants
@@ -28,6 +29,7 @@ function Shared.new()
     
     self.diContainer = self._infrastructure.diContainer
     self.remoteEventService = self._infrastructure.remoteEventService
+    self.eventBus = self._infrastructure.eventBus
 
     self.application = Application.new(self.diContainer)
 

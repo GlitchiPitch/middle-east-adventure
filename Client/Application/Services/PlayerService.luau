@@ -32,7 +32,7 @@ function PlayerService:updatePlayerData(newData)
 	newData.inventory = domain.Inventory.new(newData.inventory)
 	newData.skills = domain.Skills.new(newData.skills)
 	newData.stats = domain.Stats.new(newData.stats)
-    newData.equipment = domain.Equipment.new()
+	newData.equipment = domain.Equipment.new()
 
 	infrastructure.playerRepository:updatePlayerEntity(newData)
 end
@@ -55,6 +55,12 @@ end
 function PlayerService:setPlayerState(state)
 	local playerEntity = self:getPlayerEntity()
 	playerEntity.state = state
+end
+
+---@return EquipmentEntity
+function PlayerService:getPlayerEquipment()
+	local playerEntity = self:getPlayerEntity()
+	return playerEntity.equipment
 end
 
 return PlayerService

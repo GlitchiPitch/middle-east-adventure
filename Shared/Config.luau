@@ -10,6 +10,13 @@ local Config = {
 			FreeMouse = Enum.KeyCode.F,
 			TargetCamera = Enum.KeyCode.E,
 			RunKey = Enum.KeyCode.LeftShift,
+
+			EquippmentKeys = {
+				One = Enum.KeyCode.One,
+				Two = Enum.KeyCode.Two,
+				Three = Enum.KeyCode.Three,
+				Four = Enum.KeyCode.Four,
+			},
 		},
 		UpdateBarTweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
 	},

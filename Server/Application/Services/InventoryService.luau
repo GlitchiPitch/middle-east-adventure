@@ -33,7 +33,7 @@ function InventoryService:addItem(playerEntity, itemData)
     ---@type Shared
     local shared = self.diContainer:resolve("Shared")
     local _itemData = shared.data:getItemData(itemData.name)
-    local sword = domain.Sword.new()
+    local sword = domain.OneHanded.new()
 
     playerEntity.inventory:addItem(sword)
 end

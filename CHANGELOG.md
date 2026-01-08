@@ -5,25 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.8] - 2026-01-08
+## [1.0.9] - 2026-01-08
 
 ### Added
-- Complete sprint system with running animations and speed transitions
-- Run key binding (Left Shift) in client configuration
-- SprintService with smooth walk/run speed transitions
-- Run animation asset integration
+- EquippedSlotsService for equipment slot management with keyboard shortcuts
+- EventBus service for inter-service communication
+- Equipment key bindings (1,2,3,4) in client configuration
+- New domain entities: OneHanded, TwoHanded, Cloth weapons/armor
 
 ### Changed
-- Integrated SprintService into client application initialization
-- Enhanced input configuration with run key binding
-- Updated animation assets with running animation support
-
-### Fixed
-- Service initialization order in client application
+- Refactored InputService with modular handler methods and equipment key support
+- Replaced Sword domain with specialized weapon/armor domain entities
+- Enhanced service initialization with EventBus integration
 
 ### Development
-- Sprint mechanics implemented and integrated
-- Movement systems (walk/run) now complete
+- Equipment system foundation implemented
+- Domain architecture expanded for different equipment types
 
 ## [1.0.6] - 2026-01-XX
 
