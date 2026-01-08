@@ -1,127 +1,6 @@
 local UserInputService = game:GetService("UserInputService")
-local runService = game:GetService("RunService")
-local players = game:GetService("Players")
-
-repeat
-	task.wait()
-until game:GetService("Players").LocalPlayer.Character ~= nil
-
-local function onInputChanged(inputObject)
-	if inputObject.UserInputType == Enum.UserInputType.MouseMovement then
-		local delta = Vector2.new(inputObject.Delta.x / Sensitivity, inputObject.Delta.y / Sensitivity) * Smoothness
-
-		local X = TargetAngleX - delta.y
-		TargetAngleX = (X >= 80 and 80) or (X <= -80 and -80) or X
-		TargetAngleY = (TargetAngleY - delta.x) % 360
-	end
-end
-
-local function getTargetsInRange()
-	local targets = {}
-
-	for _, part in pairs(workspace:GetPartBoundsInRadius(character.HumanoidRootPart.Position, lockOnInfo.Range)) do
-		if part:IsA("BasePart") and part.Parent:FindFirstChild("Humanoid") then
-			if game.Players:GetPlayerFromCharacter(part.Parent) then
-				if lockOnInfo.LockOnPlayers == true then
-					if not table.find(targets, part.Parent) then
-						table.insert(targets, part.Parent)
-					end
-				end
-			else
-				if not table.find(targets, part.Parent) then
-					table.insert(targets, part.Parent)
-				end
-			end
-		end
-	end
-
-	return targets
-end
-
-local function getTargetsClosestCrosshair()
-	local targets = getTargetsInRange()
-
-	local nearest = 1
-	target = nil
-
-	for _, char in targets do
-		if char and char ~= character then
-			local distance = (char.HumanoidRootPart.Position - character.HumanoidRootPart.Position).Magnitude
-
-			local cameraToTarget = (char.HumanoidRootPart.Position - cam.CFrame.Position).Unit
-			local cameraLook = cam.CFrame.LookVector
-
-			local dotProduct = cameraToTarget:Dot(cameraLook)
-			local difference = math.abs(1 - dotProduct)
-
-			if distance < lockOnInfo.Range and dotProduct > 0.5 then
-				if difference < nearest then
-					nearest = difference
-					target = char
-				end
-			end
-		end
-	end
-
-	local rightTarget = nil
-	local leftTarget = nil
-
-	local nearestRight = lockOnInfo.SwitchRange
-	local nearestLeft = -lockOnInfo.SwitchRange
-
-	for _, char in targets do
-		if char and target and char ~= target then
-			local distance = character.HumanoidRootPart.CFrame:ToObjectSpace(char.HumanoidRootPart.CFrame)
-			if distance.Z < 0 then
-				if distance.X > 0 then
-					if nearestRight then
-						if distance.X < nearestRight then
-							nearestRight = distance.X
-							rightTarget = char
-						end
-					else
-						nearestRight = distance.X
-						rightTarget = char
-					end
-				elseif distance.X < 0 then
-					if nearestLeft then
-						if distance.X > nearestLeft then
-							nearestLeft = distance.X
-							leftTarget = char
-						end
-					else
-						nearestLeft = distance.X
-						leftTarget = char
-					end
-				end
-			end
-		end
-	end
-
-	return target, rightTarget, leftTarget
-end
-
-local function isTargetInView()
-	local excludedCharacters = getTargetsInRange()
-	table.remove(excludedCharacters, table.find(excludedCharacters, target))
-
-	local rayParams = RaycastParams.new()
-	rayParams.FilterType = Enum.RaycastFilterType.Exclude
-	rayParams.FilterDescendantsInstances = excludedCharacters
-
-	local origin = character.HumanoidRootPart.Position
-	local direction = (target.HumanoidRootPart.Position - origin).Unit
-
-	local ray = workspace:Raycast(origin, direction * lockOnInfo.Range, rayParams)
-
-	if ray then
-		if ray.Instance.Parent == target then
-			return true
-		end
-	end
-
-	return false
-end
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
 
 ---@class CameraService
 local CameraService = {}
@@ -141,8 +20,8 @@ function CameraService.new()
 	self.headOffset = CFrame.new(-1, 0.7, 10) -- how far your camera is from your head
 
 	self.cam = game.Workspace.CurrentCamera
-	self.player = players.LocalPlayer
-	self.m = self.player:GetMouse()
+	self.player = Players.LocalPlayer
+	self.mouse = self.player:GetMouse()
 
 	self.angleX, self.targetAngleX = 0, 0
 	self.angleY, self.targetAngleY = 0, 0
@@ -168,6 +47,17 @@ function CameraService.new()
 	self.checkedTarget = nil
 	self.currentCheckedTarget = nil
 
+	self.charAngle = CFrame.Angles --[Storing these as variables so I dont have to type them out.]
+	self.aSin = math.asin
+	self.aTan = math.atan
+
+	self.headHorFactor = 1
+	self.headVertFactor = 0.6
+	self.bodyHorFactor = 0.5
+	self.bodyVertFactor = 0.4
+
+	self.updateSpeed = 0.5
+
 	return self
 end
 
@@ -176,13 +66,25 @@ function CameraService:init()
 	local function onRender(deltaTime)
 		self:_onRender(deltaTime)
 	end
-	self.m.Icon = "http://www.roblox.com/asset/?id=569021388" -- replaces mouse icon
+	self.mouse.Icon = "http://www.roblox.com/asset/?id=569021388" -- replaces mouse icon
 
 	self.character = self.player.Character or self.player.CharacterAdded:wait()
 	self.head = self.character:WaitForChild("Head")
 	self.camPos, self.targetCamPos = self.cam.CFrame.Position, self.cam.CFrame.Position
 
-	runService.RenderStepped:Connect(onRender)
+	--[Setup]:
+	self.humanoid = self.character:WaitForChild("Humanoid")
+	self.humanoidRootPart = self.character:WaitForChild("HumanoidRootPart")
+	self.torso = self.character:WaitForChild("UpperTorso")
+	self.neck = self.head:WaitForChild("Neck") --[Once we know the Rig, we know what to find.]
+	self.waist = self.torso:WaitForChild("Waist")
+
+	self.neckOrgnC0 = self.neck.C0 --[Get the base C0 to manipulate off of.]
+	self.waistOrgnC0 = self.waist.C0 --[Get the base C0 to manipulate off of.]
+
+	self.neck.MaxVelocity = 1 / 3
+
+	RunService.RenderStepped:Connect(onRender)
 end
 
 function CameraService:toggleTargetCamera()
@@ -202,7 +104,6 @@ function CameraService:mouseMovement(input)
 	self.targetAngleY = (self.targetAngleY - delta.x) % 360
 end
 
-
 function CameraService:_onRender(dt)
 	if not self.character then
 		return
@@ -212,121 +113,229 @@ function CameraService:_onRender(dt)
 		if self.running then
 			self.camPos = self.camPos + (self.targetCamPos - self.camPos) * 0.20
 			self.angleX = self.angleX + (self.targetAngleX - self.angleX) * 0.30
-			local dist = TargetAngleY - AngleY
+			local dist = self.targetAngleY - self.angleY
 			dist = math.abs(dist) > 180 and dist - (dist / math.abs(dist)) * 360 or dist
-			AngleY = (AngleY + dist * 0.35) % 360
-			cam.CameraType = Enum.CameraType.Scriptable
+			self.angleY = (self.angleY + dist * 0.35) % 360
+			self.cam.CameraType = Enum.CameraType.Scriptable
 
-			cam.CoordinateFrame = CFrame.new(head.Position)
-				* CFrame.Angles(0, math.rad(AngleY), 0)
-				* CFrame.Angles(math.rad(AngleX), 0, 0)
-				* HeadOffset -- offset
+			self.cam.CFrame = CFrame.new(self.head.Position)
+				* CFrame.Angles(0, math.rad(self.angleY), 0)
+				* CFrame.Angles(math.rad(self.angleX), 0, 0)
+				* self.headOffset -- offset
 		else
 			UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 		end
 
-		if (cam.Focus.Position - cam.CFrame.Position).Magnitude < 1 then
-			running = false
+		if (self.cam.Focus.Position - self.cam.CFrame.Position).Magnitude < 1 then
+			self.running = false
 		else
-			running = true
-			if freemouse == true then
+			self.running = true
+			if self._freemouse then
 				UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 			else
 				UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
 			end
 		end
 
-		if not CanToggleMouse.allowed then
-			freemouse = false
-		end
+		self.cam.FieldOfView = self.fieldOfView
 
-		cam.FieldOfView = FieldOfView
+		self.checkedTarget = self:_getTargetsClosestCrosshair()
 
-		checkedTarget = getTargetsClosestCrosshair()
-
-		if checkedTarget then
-			if currentCheckedTarget and currentCheckedTarget ~= checkedTarget then
-				local humanoid = currentCheckedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
+		if self.checkedTarget then
+			if self.currentCheckedTarget and self.currentCheckedTarget ~= self.checkedTarget then
+				local humanoid = self.currentCheckedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
 				if humanoid then
 					humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
 				end
 			end
 
-			local distance = (checkedTarget.HumanoidRootPart.Position - character.HumanoidRootPart.Position).Magnitude
-			if distance < 15 then
-				local humanoid = checkedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
+			local distance = (self.checkedTarget.HumanoidRootPart.Position - self.character.HumanoidRootPart.Position).Magnitude
+			if distance < 10 then
+				local humanoid = self.checkedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
 				if humanoid then
 					humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.Viewer
-					currentCheckedTarget = checkedTarget
+					self.currentCheckedTarget = self.checkedTarget
 				end
 			end
 		end
 	else
-		target = getTargetsClosestCrosshair()
+		self.target = self:_getTargetsClosestCrosshair()
 
-		dt = (lastDelta + dt) / 2 -- Smooth the delta to prevent fps drops
-		lastDelta = dt
+		dt = (self.lastDelta + dt) / 2 -- Smooth the delta to prevent fps drops
+		self.lastDelta = dt
 
-		if not target then
+		if not self.target then
 			return
 		end
 
-		local distance = (target.HumanoidRootPart.Position - character.HumanoidRootPart.Position).Magnitude
+		local distance = (self.target.HumanoidRootPart.Position - self.character.HumanoidRootPart.Position).Magnitude
 
-		local requiresLineOfSight = lockOnInfo.RequiresLineOfSight
-		local hasLineOfSight = isTargetInView()
+		local requiresLineOfSight = self.lockOnInfo.requiresLineOfSight
+		local hasLineOfSight = self:_isTargetInView()
 		local lineOfSight = (hasLineOfSight and requiresLineOfSight) or not requiresLineOfSight -- Check for line of sight if required
 
 		if not lineOfSight then
-			if not lastObstructed then
-				lastObstructed = tick()
-			elseif tick() - lastObstructed > 1 then
-				lastObstructed = nil
+			if not self.lastObstructed then
+				self.lastObstructed = tick()
+			elseif tick() - self.lastObstructed > 1 then
+				self.lastObstructed = nil
 				return
 			end
 		else
-			lastObstructed = nil
+			self.lastObstructed = nil
 		end
 
-		if distance < lockOnInfo.Range and target.Humanoid.Health > 0 then
+		if distance < self.lockOnInfo.range and self.target.Humanoid.Health > 0 then
 			local targetPosition = Vector3.new(
-				target.HumanoidRootPart.Position.X,
-				character.HumanoidRootPart.Position.Y,
-				target.HumanoidRootPart.Position.Z
+				self.target.HumanoidRootPart.Position.X,
+				self.character.HumanoidRootPart.Position.Y,
+				self.target.HumanoidRootPart.Position.Z
 			)
 			local newCFrame = CFrame.lookAt(
-				character.HumanoidRootPart.Position,
+				self.character.HumanoidRootPart.Position,
 				targetPosition,
-				character.HumanoidRootPart.CFrame.UpVector
+				self.character.HumanoidRootPart.CFrame.UpVector
 			)
 
-			local offsetX = newCFrame.RightVector * lockOnInfo.Offset.X
-			local offsetY = newCFrame.UpVector * lockOnInfo.Offset.Y
-			local offsetZ = newCFrame.LookVector * lockOnInfo.Offset.Z
+			local offsetX = newCFrame.RightVector * self.lockOnInfo.offset.X
+			local offsetY = newCFrame.UpVector * self.lockOnInfo.offset.Y
+			local offsetZ = newCFrame.LookVector * self.lockOnInfo.offset.Z
 
 			local offset = offsetX + offsetY + offsetZ
 			local cameraPosition = newCFrame.Position + offset
 
-			local targetCFrame = CFrame.lookAt(cameraPosition, target.HumanoidRootPart.Position, newCFrame.UpVector)
-			cam.CFrame = cam.CFrame:Lerp(targetCFrame, dt * lockOnInfo.Speed)
-			if tick() - lastTime > lockOnInfo.SwitchDebounce then
+			local targetCFrame =
+				CFrame.lookAt(cameraPosition, self.target.HumanoidRootPart.Position, newCFrame.UpVector)
+			self.cam.CFrame = self.cam.CFrame:Lerp(targetCFrame, dt * self.lockOnInfo.speed)
+			if tick() - self.lastTime > self.lockOnInfo.switchDebounce then
 				local mouseDeltaX = UserInputService:GetMouseDelta().X
 
-				if mouseDeltaX > lockOnInfo.SwitchSens or mouseDeltaX < -lockOnInfo.SwitchSens then
-					local _, rightTarget, leftTarget = getTargetsClosestCrosshair()
+				if mouseDeltaX > self.lockOnInfo.switchSens or mouseDeltaX < -self.lockOnInfo.switchSens then
+					local _, rightTarget, leftTarget = self:_getTargetsClosestCrosshair()
 
-					if mouseDeltaX > lockOnInfo.SwitchSens and rightTarget and isTargetInView() then -- Determine the direction of the mouse and switching target accordingly
-						target = rightTarget
-					elseif mouseDeltaX < -lockOnInfo.SwitchSens and leftTarget and isTargetInView() then
-						target = leftTarget
+					if mouseDeltaX > self.lockOnInfo.switchSens and rightTarget and self:_isTargetInView() then -- Determine the direction of the mouse and switching target accordingly
+						self.target = rightTarget
+					elseif mouseDeltaX < -self.lockOnInfo.switchSens and leftTarget and self:_isTargetInView() then
+						self.target = leftTarget
 					end
 				end
 
-				lastTime = tick()
+				self.lastTime = tick()
 			end
 		end
 	end
+
+	self:_followCharacterToCursor()
 end
 
+function CameraService:_getTargetsInRange()
+	local targets = {}
+
+	for _, part in
+		pairs(workspace:GetPartBoundsInRadius(self.character.HumanoidRootPart.Position, self.lockOnInfo.range))
+	do
+		if part:IsA("BasePart") and part.Parent:FindFirstChild("Humanoid") then
+			if game.Players:GetPlayerFromCharacter(part.Parent) then
+				if self.lockOnInfo.lockOnPlayers == true then
+					if not table.find(targets, part.Parent) then
+						table.insert(targets, part.Parent)
+					end
+				end
+			else
+				if not table.find(targets, part.Parent) then
+					table.insert(targets, part.Parent)
+				end
+			end
+		end
+	end
+
+	return targets
+end
+
+function CameraService:_getTargetsClosestCrosshair()
+	local targets = self:_getTargetsInRange()
+
+	local nearest = 1
+	self.target = nil
+
+	for _, char in targets do
+		if char and char ~= self.character then
+			local distance = (char.HumanoidRootPart.Position - self.character.HumanoidRootPart.Position).Magnitude
+
+			local cameraToTarget = (char.HumanoidRootPart.Position - self.cam.CFrame.Position).Unit
+			local cameraLook = self.cam.CFrame.LookVector
+
+			local dotProduct = cameraToTarget:Dot(cameraLook)
+			local difference = math.abs(1 - dotProduct)
+
+			if distance < self.lockOnInfo.range and dotProduct > 0.5 then
+				if difference < nearest then
+					nearest = difference
+					self.target = char
+				end
+			end
+		end
+	end
+
+	return self.target
+end
+
+function CameraService:_isTargetInView()
+	local excludedCharacters = self:_getTargetsInRange()
+	table.remove(excludedCharacters, table.find(excludedCharacters, self.target))
+
+	local rayParams = RaycastParams.new()
+	rayParams.FilterType = Enum.RaycastFilterType.Exclude
+	rayParams.FilterDescendantsInstances = excludedCharacters
+
+	local origin = self.character.HumanoidRootPart.Position
+	local direction = (self.target.HumanoidRootPart.Position - origin).Unit
+
+	local ray = workspace:Raycast(origin, direction * self.lockOnInfo.range, rayParams)
+
+	if ray then
+		if ray.Instance.Parent == self.target then
+			return true
+		end
+	end
+
+	return false
+end
+
+function CameraService:_followCharacterToCursor()
+	local CamCF = self.cam.CFrame
+	local TrsoLV = self.torso.CFrame.lookVector
+	local HdPos = self.head.CFrame.Position
+
+	local Dist = (self.head.CFrame.Position - CamCF.Position).Magnitude
+	local Diff = self.head.CFrame.Y - CamCF.Y
+	self.neck.C0 = self.neck.C0:lerp(
+		self.neckOrgnC0
+			* self.charAngle(
+				(self.aSin(Diff / Dist) * self.headVertFactor),
+				-(((HdPos - CamCF.Position).Unit):Cross(TrsoLV)).Y * self.headHorFactor,
+				0
+			),
+		self.updateSpeed / 2
+	)
+	self.waist.C0 = self.waist.C0:lerp(
+		self.waistOrgnC0
+			* self.charAngle(
+				(self.aSin(Diff / Dist) * self.bodyVertFactor),
+				-(((HdPos - CamCF.Position).Unit):Cross(TrsoLV)).Y * self.bodyHorFactor,
+				0
+			),
+		self.updateSpeed / 2
+	)
+	-- if TurnCharacterToMouse == true then
+	-- 	Hum.AutoRotate = false
+	-- 	Core.CFrame = Core.CFrame:lerp(
+	-- 		CFrame.new(Core.Position, Vector3.new(Mouse.Hit.Position.X, Core.Position.Y, Mouse.Hit.Position.Z)),
+	-- 		UpdateSpeed / 2
+	-- 	)
+	-- else
+	-- 	Hum.AutoRotate = true
+	-- end
+end
 
 return CameraService
