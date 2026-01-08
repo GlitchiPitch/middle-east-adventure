@@ -16,7 +16,17 @@ function PlayerService:onPlayerAdded(player)
     ---@type ServerInfrastructure
     local infrastructure = self.diContainer:resolve("Infrastructure")
     local playerRepository = infrastructure.playerRepository
+
+    ---@param character Model
+    local function onCharacterAdded(character)
+        ---@type ServerApplication
+        local application = self.diContainer:resolve("Application")
+        application.handlers.ragdoll:setRagdollToCharacter(character)  
+    end
+
     playerRepository:onPlayerAdded(player)
+
+    player.CharacterAdded:Connect(onCharacterAdded)
 end
 
 ---@param player Player

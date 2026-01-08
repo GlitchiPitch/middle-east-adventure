@@ -30,7 +30,7 @@ function StatsUI:updateUI(statsData)
     local shared = self.diContainer:resolve("Shared")
     ---@type ClientApplication
     local application = self.diContainer:resolve("Application")
-    local playerEntity = 
+    -- local playerEntity = 
 
     for i, v in {
         [statsData.stamina] = self.staminaBar,
@@ -40,7 +40,7 @@ function StatsUI:updateUI(statsData)
         local tween = TweenService:Create(
             v.Bar,
             shared.config.Client.UpdateBarTweenInfo,
-            { Size = UDim2.fromScale(i / ) }
+            { Size = UDim2.fromScale(i / 1) }
         )
     end
 end

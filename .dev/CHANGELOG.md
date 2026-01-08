@@ -25,6 +25,26 @@
 * **Dependency Injection**: DIContainer for service management
 * **Configuration**: Game settings and UI tween configurations
 
+## [v1.0.6] - Animation & Input Systems (2026-01-08)
+
+### Added
+- **AnimationService**: Comprehensive animation system for character movements and combat
+- **ToolService**: Tool and weapon management system for client-side interactions
+- **CameraService**: Camera controls moved to Application layer for better architecture
+- **InputService**: Input handling system moved to Application layer
+- **Ragdoll Handler**: Server-side physics handler for character ragdoll effects
+- **Shared Assets**: Animation assets folder with combat and idle animations
+
+### Enhanced
+- **Domain Entities**: Improved Player entity with state management and proper initialization
+- **Service Architecture**: Restructured services between Application and Presentation layers
+- **UI Components**: Enhanced StatsUI and other UI elements with better integration
+
+### Technical Improvements
+- **Dependency Injection**: Better service initialization and dependency management
+- **Event Handling**: Improved remote event connections and player data synchronization
+- **Type Safety**: Enhanced type definitions for better code reliability
+
 ### Next Steps
 
 * Begin implementation of core game systems (Combat, Hunting, Fishing, Alchemy, Smithing)

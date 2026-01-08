@@ -1,4 +1,4 @@
-local DataStoreService = game:GetService("DataStoreService")
+-- local DataStoreService = game:GetService("DataStoreService")
 ---@class PlayerRepository
 ---@field diContainer DIContainer
 ---@field _players table<number, PlayerEntity>
@@ -24,11 +24,11 @@ function PlayerRepository:onPlayerRemoving(player)
     if self._players[player.UserId] then
         ---@type Shared
         local shared = self.diContainer:resolve("Shared")
-        local dataStore = DataStoreService:GetDataStore(shared.config.PlayerDataStoreKey)
+        -- local dataStore = DataStoreService:GetDataStore(shared.config.PlayerDataStoreKey)
 
         local playerData = self._players[player.UserId]:toData()
         local success, _ = pcall(function()
-            return dataStore:SetAsync(player.UserId, playerData)
+            return {} ---dataStore:SetAsync(player.UserId, playerData)
         end)
 
         if not success then
@@ -53,10 +53,10 @@ function PlayerRepository:_createPlayerEntity(player)
     local domain = self.diContainer:resolve("Domain")
     ---@type Shared
     local shared = self.diContainer:resolve("Shared")
-    local dataStore = DataStoreService:GetDataStore(shared.config.PlayerDataStoreKey)
+    -- local dataStore = DataStoreService:GetDataStore(shared.config.PlayerDataStoreKey)
 
     local success, result = pcall(function()
-        return dataStore:GetAsync(player.UserId)
+        return {} --dataStore:GetAsync(player.UserId)
     end)
 
     local _playerData = success and result or {}
@@ -65,6 +65,7 @@ function PlayerRepository:_createPlayerEntity(player)
         inventory = domain.Inventory.new(_playerData.inventory or {}),
         skills = domain.Skills.new(_playerData.skills or {}),
         stats = domain.Stats.new(_playerData.stats or {}),
+        equipment = domain.Equipment.new(),
     }
 
     self._players[player.UserId] = domain.Player.new(player)

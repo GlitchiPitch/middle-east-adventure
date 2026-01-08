@@ -5,7 +5,10 @@ local Config = {
     Client = {
         PopupLifeTime = 2,
         Control = {
-            Action = Enum.KeyCode.MouseLeftButton,
+            MainAction = Enum.UserInputType.MouseButton1,
+            SecondAction = Enum.UserInputType.MouseButton2,
+            FreeMouse = Enum.KeyCode.F,
+            TargetCamera = Enum.KeyCode.E,
         },
         UpdateBarTweenInfo = TweenInfo.new(.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
     },

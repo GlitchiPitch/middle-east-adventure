@@ -6,30 +6,6 @@ repeat
 	task.wait()
 until game:GetService("Players").LocalPlayer.Character ~= nil
 
--- you can mess with these settings
-local CanToggleMouse = { allowed = true, activationkey = Enum.KeyCode.F } -- lets you move your mouse around in firstperson
-local Sensitivity = 0.6 -- anything higher would make looking up and down harder; recommend anything between 0~1
-local Smoothness = 0.05 -- recommend anything between 0~1
-local FieldOfView = 80 -- fov
-local HeadOffset = CFrame.new(-1, 0.7, 10) -- how far your camera is from your head
-
-local cam = game.Workspace.CurrentCamera
-local player = players.LocalPlayer
-local m = player:GetMouse()
-m.Icon = "http://www.roblox.com/asset/?id=569021388" -- replaces mouse icon
-local character = player.Character or player.CharacterAdded:wait()
-
-local head = character:WaitForChild("Head")
-local CamPos, TargetCamPos = cam.CFrame.Position, cam.CFrame.Position
-local AngleX, TargetAngleX = 0, 0
-local AngleY, TargetAngleY = 0, 0
-
-local running = true
-local freemouse = false
-
-local target
-local cameraMode = "Freecam"
-
 local function onInputChanged(inputObject)
 	if inputObject.UserInputType == Enum.UserInputType.MouseMovement then
 		local delta = Vector2.new(inputObject.Delta.x / Sensitivity, inputObject.Delta.y / Sensitivity) * Smoothness
@@ -39,18 +15,6 @@ local function onInputChanged(inputObject)
 		TargetAngleY = (TargetAngleY - delta.x) % 360
 	end
 end
-
-local lockOnInfo = {
-	Range = 100, -- The range of the lock on
-	Speed = 20, -- The speed of which the lock on camera is moving
-	Offset = Vector3.new(3, 4, -9), -- The camera offset when using lock on
-	LockOnPlayers = true, -- Lock on player in the world
-	RequiresLineOfSight = true, -- If the characer needs line of sight with target to use lock on.
-	ObstructionBreakTime = 0.5, -- The time without line of sight that takes to exit the lock on.
-	SwitchDebounce = 0.3, -- The debounce or cooldown of switching targets
-	SwitchSens = 5, -- How sensetive the switching should be
-	SwitchRange = 50, -- How far away you can switch target
-}
 
 local function getTargetsInRange()
 	local targets = {}
@@ -159,14 +123,95 @@ local function isTargetInView()
 	return false
 end
 
-local lastDelta = 0
-local lastObstructed = nil
-local lastTime = 0
-local function onRender(dt)
-	if cameraMode == "Freecam" then
-		if running then
-			CamPos = CamPos + (TargetCamPos - CamPos) * 0.20
-			AngleX = AngleX + (TargetAngleX - AngleX) * 0.30
+---@class CameraService
+local CameraService = {}
+CameraService.__index = CameraService
+
+---@return CameraService
+function CameraService.new()
+	local self = setmetatable({}, CameraService)
+	self._freemouse = false
+	self._targetCamera = false
+
+	-- you can mess with these settings
+	self.canToggleMouse = { allowed = true, activationkey = Enum.KeyCode.F } -- lets you move your mouse around in firstperson
+	self.sensitivity = 0.6 -- anything higher would make looking up and down harder; recommend anything between 0~1
+	self.smoothness = 0.05 -- recommend anything between 0~1
+	self.fieldOfView = 80 -- fov
+	self.headOffset = CFrame.new(-1, 0.7, 10) -- how far your camera is from your head
+
+	self.cam = game.Workspace.CurrentCamera
+	self.player = players.LocalPlayer
+	self.m = self.player:GetMouse()
+
+	self.angleX, self.targetAngleX = 0, 0
+	self.angleY, self.targetAngleY = 0, 0
+
+	self.running = true
+	self.target = nil
+	self.cameraMode = "Freecam"
+	self.lockOnInfo = {
+		range = 100, -- The range of the lock on
+		speed = 20, -- The speed of which the lock on camera is moving
+		offset = Vector3.new(3, 4, -9), -- The camera offset when using lock on
+		lockOnPlayers = true, -- Lock on player in the world
+		requiresLineOfSight = true, -- If the characer needs line of sight with target to use lock on.
+		obstructionBreakTime = 0.5, -- The time without line of sight that takes to exit the lock on.
+		switchDebounce = 0.3, -- The debounce or cooldown of switching targets
+		switchSens = 5, -- How sensetive the switching should be
+		switchRange = 50, -- How far away you can switch target
+	}
+
+	self.lastDelta = 0
+	self.lastObstructed = nil
+	self.lastTime = 0
+	self.checkedTarget = nil
+	self.currentCheckedTarget = nil
+
+	return self
+end
+
+function CameraService:init()
+	---@param deltaTime number
+	local function onRender(deltaTime)
+		self:_onRender(deltaTime)
+	end
+	self.m.Icon = "http://www.roblox.com/asset/?id=569021388" -- replaces mouse icon
+
+	self.character = self.player.Character or self.player.CharacterAdded:wait()
+	self.head = self.character:WaitForChild("Head")
+	self.camPos, self.targetCamPos = self.cam.CFrame.Position, self.cam.CFrame.Position
+
+	runService.RenderStepped:Connect(onRender)
+end
+
+function CameraService:toggleTargetCamera()
+	self._targetCamera = not self._targetCamera
+end
+
+function CameraService:toggleFreeMouse()
+	self.freemouse = not self.freemouse
+end
+
+---@param input InputObject
+function CameraService:mouseMovement(input)
+	local delta = Vector2.new(input.Delta.x / self.sensitivity, input.Delta.y / self.sensitivity) * self.smoothness
+
+	local X = self.targetAngleX - delta.y
+	self.targetAngleX = (X >= 80 and 80) or (X <= -80 and -80) or X
+	self.targetAngleY = (self.targetAngleY - delta.x) % 360
+end
+
+
+function CameraService:_onRender(dt)
+	if not self.character then
+		return
+	end
+
+	if not self._targetCamera then
+		if self.running then
+			self.camPos = self.camPos + (self.targetCamPos - self.camPos) * 0.20
+			self.angleX = self.angleX + (self.targetAngleX - self.angleX) * 0.30
 			local dist = TargetAngleY - AngleY
 			dist = math.abs(dist) > 180 and dist - (dist / math.abs(dist)) * 360 or dist
 			AngleY = (AngleY + dist * 0.35) % 360
@@ -196,6 +241,26 @@ local function onRender(dt)
 		end
 
 		cam.FieldOfView = FieldOfView
+
+		checkedTarget = getTargetsClosestCrosshair()
+
+		if checkedTarget then
+			if currentCheckedTarget and currentCheckedTarget ~= checkedTarget then
+				local humanoid = currentCheckedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
+				if humanoid then
+					humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+				end
+			end
+
+			local distance = (checkedTarget.HumanoidRootPart.Position - character.HumanoidRootPart.Position).Magnitude
+			if distance < 15 then
+				local humanoid = checkedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
+				if humanoid then
+					humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.Viewer
+					currentCheckedTarget = checkedTarget
+				end
+			end
+		end
 	else
 		target = getTargetsClosestCrosshair()
 
@@ -263,24 +328,5 @@ local function onRender(dt)
 	end
 end
 
-local function onInputBegan(inputObject)
-	if inputObject.UserInputType == Enum.UserInputType.Keyboard then
-		if inputObject.KeyCode == CanToggleMouse.activationkey then
-			if CanToggleMouse.allowed and freemouse == false then
-				freemouse = true
-			else
-				freemouse = false
-			end
-		elseif inputObject.KeyCode == Enum.KeyCode.E then
-			if cameraMode == "Freecam" then
-				cameraMode = "LockNearest"
-			else
-				cameraMode = "Freecam"
-			end
-		end
-	end
-end
 
-UserInputService.InputChanged:Connect(onInputChanged)
-UserInputService.InputBegan:Connect(onInputBegan)
-runService.RenderStepped:Connect(onRender)
+return CameraService

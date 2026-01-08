@@ -17,8 +17,8 @@ function Server.new()
     local self = setmetatable({}, Server)
     self.shared = Shared.new()
     self.diContainer = self.shared.diContainer
-    self.application = Application.new()
-    self.infrastructure = Infrastructure.new()
+    self.application = Application.new(self.diContainer)
+    self.infrastructure = Infrastructure.new(self.diContainer)
     return self
 end
 

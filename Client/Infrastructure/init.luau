@@ -5,11 +5,12 @@ local PlayerRepository = require(script.PlayerRepository)
 local Infrastructure = {}
 Infrastructure.__index = Infrastructure
 
+---@param diContainer DIContainer
 ---@return ClientInfrastructure
-function Infrastructure.new()
-    local self = setmetatable({}, Infrastructure)
-    self.playerRepository = PlayerRepository.new()
-    return self
+function Infrastructure.new(diContainer)
+	local self = setmetatable({}, Infrastructure)
+	self.playerRepository = PlayerRepository.new(diContainer)
+	return self
 end
 
 return Infrastructure

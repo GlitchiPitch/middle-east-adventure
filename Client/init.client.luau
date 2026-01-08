@@ -18,10 +18,10 @@ Client.__index = Client
 function Client.new()
     local self = setmetatable({}, Client)
     self.shared = Shared.new()
-    self.application = Application.new()
-    self.presentation = Presentation.new()
-    self.infrastructure = Infrastructure.new()
     self.diContainer = self.shared.diContainer
+    self.application = Application.new(self.diContainer)
+    self.presentation = Presentation.new()
+    self.infrastructure = Infrastructure.new(self.diContainer)
     return self
 end
 
@@ -47,7 +47,7 @@ function Client:init()
     end)
 
     self.application:init()
-    self.presentation:init()
+    -- self.presentation:init()
 end
 
 local client = Client.new()

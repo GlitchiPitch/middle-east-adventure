@@ -25,7 +25,7 @@ Services.__index = Services
 ---@return ServerApplicationServices
 function Services.new(diContainer)
     local self = setmetatable({}, Services)
-    self.inventoryService = InventoryService.new()
+    self.inventoryService = InventoryService.new(diContainer)
     self.playerService = PlayerService.new(diContainer)
     self.tradeService = TradeService.new()
     self.craftService = CraftService.new()

@@ -4,6 +4,7 @@ local Constants = require(script.Constants)
 local Config = require(script.Config)
 local Domain = require(script.Domain)
 local Data = require(script.Data)
+local Assets = require(script.Assets)
 
 local Types = require(script.Types)
 
@@ -15,6 +16,7 @@ local Types = require(script.Types)
 ---@field application SharedApplication
 ---@field constants Constants
 ---@field config Config
+---@field assets Assets
 ---@field data SharedData
 local Shared = {}
 Shared.__index = Shared
@@ -31,7 +33,8 @@ function Shared.new()
 
     self.config = Config
     self.constants = Constants
-    self.Data = Data
+    self.data = Data
+    self.assets = Assets
     self.Types = Types
     return self
 end

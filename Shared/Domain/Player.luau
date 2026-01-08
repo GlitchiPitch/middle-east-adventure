@@ -3,6 +3,8 @@
 ---@field equipment EquipmentEntity
 ---@field skills SkillsEntity
 ---@field stats StatsEntity
+---@field _instance Player
+---@field state playerStateEnum
 local Player = {}
 Player.__index = Player
 
@@ -17,6 +19,8 @@ function Player.new(player)
     self.equipment = nil
     self.skills = nil
     self.stats = nil
+
+    self.state = ""
     return self
 end
 

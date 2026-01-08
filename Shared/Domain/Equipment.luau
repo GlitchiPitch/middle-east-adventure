@@ -55,4 +55,8 @@ function Equipment:calculateBoosts()
     
 end
 
+function Equipment:toData()
+    return {}
+end
+
 return Equipment
