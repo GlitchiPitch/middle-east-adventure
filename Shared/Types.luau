@@ -15,7 +15,7 @@
 ---@field eventName string
 ---@field data table
 
----@alias playerStateEnum '"Loot"' | '"Weapon"' | '"NPC"'
+---@alias playerStateEnum '"Loot"' | '"Weapon"' | '"NPC"' | '"Interact"'
 
 local DAMAGE_TYPE = {
 	HIT = "Hit",

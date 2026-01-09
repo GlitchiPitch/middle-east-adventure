@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.12] - 2026-01-09
+
+### Added
+- World interaction system foundation with InteractService and LootService
+- DialogService for NPC conversation mechanics with customizable styling
+- AlchemyService client implementation for potion crafting system
+- AlchemyUI, DialogUI, and TradeUI components for world interactions
+- Player state constants for Interact, Loot, NPC, and Weapon states
+
+### Changed
+- CameraService enhanced with DI container integration and multi-target support
+- Improved target detection for NPCs, interactive objects, and loot containers
+- Enhanced player state management through integrated camera-targeting system
+- Updated Constants.luau with comprehensive player state definitions
+
+### Fixed
+- Camera target switching with proper UI state management for different target types
+- Player state synchronization between camera targeting and game services
+
+### Development
+- World interaction systems foundation implemented
+- NPC dialog infrastructure established
+- Camera-targeting system expanded for comprehensive world interaction
+
 ## [1.0.11] - 2026-01-09
 
 ### Added

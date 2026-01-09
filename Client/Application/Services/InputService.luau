@@ -49,7 +49,11 @@ function InputService:_inputBegan(input, gameProccessed)
 		if playerState == "Weapon" then
 			application.services.toolService:activated()
 		elseif playerState == "Loot" then
+			application.services.lootService:pickupLoot()
 		elseif playerState == "NPC" then
+			application.services.dialogService:activateDialog()
+		elseif playerState == "Interact" then
+			application.services.interactService:activate()
 		end
 	elseif input.UserInputType == config.Client.Control.SecondAction then
 		if playerState == "Weapon" then

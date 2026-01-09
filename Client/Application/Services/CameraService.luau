@@ -3,12 +3,17 @@ local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
 ---@class CameraService
+---@field diContainer DIContainer
+---@field constants Constants
+---@field playerService ClientApplicationPlayerService
 local CameraService = {}
 CameraService.__index = CameraService
 
+---@param diContainer DIContainer
 ---@return CameraService
-function CameraService.new()
+function CameraService.new(diContainer)
 	local self = setmetatable({}, CameraService)
+	self.diContainer = diContainer
 	self._freemouse = false
 	self._targetCamera = false
 
@@ -79,6 +84,14 @@ function CameraService:init()
 
 	self.neck.MaxVelocity = 1 / 3
 
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
+	self.constants = shared.constants
+
+	---@type ClientApplication
+	local application = self.diContainer:resolve("Application")
+	self.playerService = application.services.playerService
+
 	self:activateStartingCamera()
 end
 
@@ -98,9 +111,7 @@ function CameraService:activateDefaultCamera()
 	RunService.RenderStepped:Connect(onRender)
 end
 
-function CameraService:activateAlchemyCamera()
-	
-end
+function CameraService:activateAlchemyCamera() end
 
 function CameraService:toggleTargetCamera()
 	self._targetCamera = not self._targetCamera
@@ -157,19 +168,70 @@ function CameraService:_onRender(dt)
 
 		if self.checkedTarget then
 			if self.currentCheckedTarget and self.currentCheckedTarget ~= self.checkedTarget then
-				local humanoid = self.currentCheckedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
-				if humanoid then
-					humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+				if
+					self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.INTERACT)
+					or self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.LOOT)
+				then
+					warn("loot off")
+					local ui = self.currentCheckedTarget:FindFirstChildOfClass("BillboardGui")
+					if ui then
+						ui.Enabled = false
+					end
+				elseif self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.NPC) then
+					warn("NPC off")
+					local humanoid = self.currentCheckedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
+					if humanoid then
+						humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+					end
 				end
 			end
 
-			local distance = (self.checkedTarget.HumanoidRootPart.Position - self.character.HumanoidRootPart.Position).Magnitude
+			local distance = (self.checkedTarget.PrimaryPart.Position - self.character.HumanoidRootPart.Position).Magnitude
 			if distance < 10 then
-				local humanoid = self.checkedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
-				if humanoid then
-					humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.Viewer
+				if
+					self.checkedTarget:HasTag(self.constants.PLAYER_STATES.INTERACT)
+					or self.checkedTarget:HasTag(self.constants.PLAYER_STATES.LOOT)
+				then
+					warn("loot on")
+					local ui = self.checkedTarget:FindFirstChildOfClass("BillboardGui")
+					if ui then
+						ui.Enabled = true
+					end
+
+					self.playerService:setPlayerState(
+						self.checkedTarget:HasTag(self.constants.PLAYER_STATES.INTERACT) and "Interact" or "Loot"
+					)
 					self.currentCheckedTarget = self.checkedTarget
+				elseif self.checkedTarget:HasTag(self.constants.PLAYER_STATES.NPC) then
+					warn("NPC on")
+					local humanoid = self.checkedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
+					if humanoid then
+						humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.Viewer
+						self.currentCheckedTarget = self.checkedTarget
+						self.playerService:setPlayerState("NPC")
+					end
 				end
+			end
+		else
+			if self.currentCheckedTarget then
+				if
+					self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.INTERACT)
+					or self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.LOOT)
+				then
+					warn("loot off")
+					local ui = self.currentCheckedTarget:FindFirstChildOfClass("BillboardGui")
+					if ui then
+						ui.Enabled = false
+					end
+				elseif self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.NPC) then
+					warn("NPC off")
+					local humanoid = self.currentCheckedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
+					if humanoid then
+						humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+					end
+				end
+
+				self.currentCheckedTarget = nil
 			end
 		end
 	else
