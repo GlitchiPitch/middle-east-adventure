@@ -1,4 +1,4 @@
----@class ClothEntity
+---@class ClothEntity : ItemEntity
 local Cloth = {}
 Cloth.__index = Cloth
 

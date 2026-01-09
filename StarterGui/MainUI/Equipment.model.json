@@ -1,0 +1,374 @@
+{
+    "className": "Frame",
+    "children": [
+        {
+            "className": "UIAspectRatioConstraint"
+        },
+        {
+            "className": "Frame",
+            "name": "1",
+            "children": [
+                {
+                    "className": "UICorner"
+                },
+                {
+                    "className": "UIStroke",
+                    "children": [
+                        {
+                            "className": "UIGradient"
+                        }
+                    ]
+                },
+                {
+                    "className": "UIGradient"
+                },
+                {
+                    "className": "Frame",
+                    "name": "Durability",
+                    "children": [
+                        {
+                            "className": "Frame",
+                            "name": "Bar",
+                            "children": [
+                                {
+                                    "className": "UICorner"
+                                }
+                            ]
+                        },
+                        {
+                            "className": "Frame",
+                            "name": "Marker",
+                            "children": [
+                                {
+                                    "className": "UIGradient"
+                                }
+                            ]
+                        },
+                        {
+                            "className": "UICorner"
+                        }
+                    ]
+                },
+                {
+                    "className": "ImageLabel",
+                    "name": "ItemImage"
+                },
+                {
+                    "className": "Frame",
+                    "name": "SlotIndex",
+                    "children": [
+                        {
+                            "className": "UICorner"
+                        },
+                        {
+                            "className": "UIStroke"
+                        },
+                        {
+                            "className": "UIPadding"
+                        }
+                    ]
+                },
+                {
+                    "className": "TextLabel",
+                    "name": "DataLabel",
+                    "children": [
+                        {
+                            "className": "UIStroke",
+                            "children": [
+                                {
+                                    "className": "UIGradient"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "className": "Frame",
+            "name": "2",
+            "children": [
+                {
+                    "className": "UICorner"
+                },
+                {
+                    "className": "UIStroke",
+                    "children": [
+                        {
+                            "className": "UIGradient"
+                        }
+                    ]
+                },
+                {
+                    "className": "UIGradient"
+                },
+                {
+                    "className": "Frame",
+                    "name": "Durability",
+                    "children": [
+                        {
+                            "className": "Frame",
+                            "name": "Bar",
+                            "children": [
+                                {
+                                    "className": "UICorner"
+                                }
+                            ]
+                        },
+                        {
+                            "className": "Frame",
+                            "name": "Marker",
+                            "children": [
+                                {
+                                    "className": "UIGradient"
+                                }
+                            ]
+                        },
+                        {
+                            "className": "UICorner"
+                        }
+                    ]
+                },
+                {
+                    "className": "ImageLabel",
+                    "name": "ItemImage"
+                },
+                {
+                    "className": "Frame",
+                    "name": "SlotIndex",
+                    "children": [
+                        {
+                            "className": "UICorner"
+                        },
+                        {
+                            "className": "UIStroke"
+                        },
+                        {
+                            "className": "UIPadding"
+                        }
+                    ]
+                },
+                {
+                    "className": "TextLabel",
+                    "name": "DataLabel",
+                    "children": [
+                        {
+                            "className": "UIStroke",
+                            "children": [
+                                {
+                                    "className": "UIGradient"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "className": "Frame",
+            "name": "3",
+            "children": [
+                {
+                    "className": "UICorner"
+                },
+                {
+                    "className": "UIStroke",
+                    "children": [
+                        {
+                            "className": "UIGradient"
+                        }
+                    ]
+                },
+                {
+                    "className": "UIGradient"
+                },
+                {
+                    "className": "Frame",
+                    "name": "Durability",
+                    "children": [
+                        {
+                            "className": "Frame",
+                            "name": "Bar",
+                            "children": [
+                                {
+                                    "className": "UICorner"
+                                }
+                            ]
+                        },
+                        {
+                            "className": "Frame",
+                            "name": "Marker",
+                            "children": [
+                                {
+                                    "className": "UIGradient"
+                                }
+                            ]
+                        },
+                        {
+                            "className": "UICorner"
+                        }
+                    ]
+                },
+                {
+                    "className": "ImageLabel",
+                    "name": "ItemImage"
+                },
+                {
+                    "className": "Frame",
+                    "name": "SlotIndex",
+                    "children": [
+                        {
+                            "className": "UICorner"
+                        },
+                        {
+                            "className": "UIStroke"
+                        },
+                        {
+                            "className": "UIPadding"
+                        }
+                    ]
+                },
+                {
+                    "className": "TextLabel",
+                    "name": "DataLabel",
+                    "children": [
+                        {
+                            "className": "UIStroke",
+                            "children": [
+                                {
+                                    "className": "UIGradient"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "className": "Frame",
+            "name": "4",
+            "children": [
+                {
+                    "className": "UICorner"
+                },
+                {
+                    "className": "UIStroke",
+                    "children": [
+                        {
+                            "className": "UIGradient"
+                        }
+                    ]
+                },
+                {
+                    "className": "UIGradient"
+                },
+                {
+                    "className": "Frame",
+                    "name": "Durability",
+                    "children": [
+                        {
+                            "className": "Frame",
+                            "name": "Bar",
+                            "children": [
+                                {
+                                    "className": "UICorner"
+                                }
+                            ]
+                        },
+                        {
+                            "className": "Frame",
+                            "name": "Marker",
+                            "children": [
+                                {
+                                    "className": "UIGradient"
+                                }
+                            ]
+                        },
+                        {
+                            "className": "UICorner"
+                        }
+                    ]
+                },
+                {
+                    "className": "ImageLabel",
+                    "name": "ItemImage"
+                },
+                {
+                    "className": "Frame",
+                    "name": "SlotIndex",
+                    "children": [
+                        {
+                            "className": "UICorner"
+                        },
+                        {
+                            "className": "UIStroke"
+                        },
+                        {
+                            "className": "UIPadding"
+                        }
+                    ]
+                },
+                {
+                    "className": "TextLabel",
+                    "name": "DataLabel",
+                    "children": [
+                        {
+                            "className": "UIStroke",
+                            "children": [
+                                {
+                                    "className": "UIGradient"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "className": "Frame",
+            "name": "Inventory",
+            "children": [
+                {
+                    "className": "UICorner"
+                },
+                {
+                    "className": "UIStroke",
+                    "children": [
+                        {
+                            "className": "UIGradient"
+                        }
+                    ]
+                },
+                {
+                    "className": "ImageLabel"
+                },
+                {
+                    "className": "UIGradient"
+                }
+            ]
+        },
+        {
+            "className": "Frame",
+            "name": "Action",
+            "children": [
+                {
+                    "className": "UICorner"
+                },
+                {
+                    "className": "UIStroke",
+                    "children": [
+                        {
+                            "className": "UIGradient"
+                        }
+                    ]
+                },
+                {
+                    "className": "UIGradient"
+                },
+                {
+                    "className": "ImageLabel"
+                }
+            ]
+        }
+    ]
+}

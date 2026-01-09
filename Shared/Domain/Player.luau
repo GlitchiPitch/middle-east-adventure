@@ -11,17 +11,17 @@ Player.__index = Player
 ---@param player Player
 ---@return PlayerEntity
 function Player.new(player)
-    local self = setmetatable({}, Player)
-    self._instance = player
+	local self = setmetatable({}, Player)
+	self._instance = player
 
-    self.attributes = nil
-    self.inventory = nil
-    self.equipment = nil
-    self.skills = nil
-    self.stats = nil
+	self.attributes = nil
+	self.inventory = nil
+	self.equipment = nil
+	self.skills = nil
+	self.stats = nil
 
-    self.state = ""
-    return self
+	self.state = ""
+	return self
 end
 
 ---@class playerData
@@ -33,28 +33,41 @@ end
 
 ---@param playerData playerData
 function Player:fromData(playerData)
-    for i, v in playerData do
-        self[i] = v
-    end
+	for i, v in playerData do
+		self[i] = v
+	end
 end
 
 function Player:toData()
-    return {
-        inventory = self.inventory:toData(),
-        skills = self.skills:toData(),
-        stats = self.stats:toData(),
-        equipment = self.equipment:toData(),
-    }
+	return {
+		inventory = self.inventory:toData(),
+		skills = self.skills:toData(),
+		stats = self.stats:toData(),
+		equipment = self.equipment:toData(),
+	}
 end
 
-
 function Player:getData()
-    return {
-        inventory = self.inventory,
-        equipment = self.equipment,
-        skills = self.skills,
-        stats = self.stats,
-    }
+	return {
+		inventory = self.inventory,
+		equipment = self.equipment,
+		skills = self.skills,
+		stats = self.stats,
+	}
+end
+
+---@param state boolean
+function Player:toggleRobloxControl(state)
+	if not self.controlModule then
+		local PlayerModule = require(self._instance.PlayerScripts:WaitForChild("PlayerModule"))
+		self.controlModule = PlayerModule:GetControls()
+	end
+
+	if state then
+		self.controlModule:Enable()
+	else
+		self.controlModule:Disable()
+	end
 end
 
 return Player

@@ -7,16 +7,17 @@ local Services = require(script.Services)
 local Presentation = {}
 Presentation.__index = Presentation
 
+---@param diContainer DIContainer
 ---@return Presentation
-function Presentation.new()
+function Presentation.new(diContainer)
     local self = setmetatable({}, Presentation)
-    self.ui = UI.new()
-    self.services = Services.new()
+    self.ui = UI.new(diContainer)
+    self.services = Services.new(diContainer)
     return self
 end
 
 function Presentation:init()
-    
+    self.ui:init()
 end
 
 return Presentation

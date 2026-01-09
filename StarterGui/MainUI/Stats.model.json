@@ -1,0 +1,83 @@
+{
+    "className": "Frame",
+    "children": [
+        {
+            "className": "UIAspectRatioConstraint"
+        },
+        {
+            "className": "UIListLayout"
+        },
+        {
+            "className": "Frame",
+            "name": "Health",
+            "children": [
+                {
+                    "className": "UICorner"
+                },
+                {
+                    "className": "UIPadding"
+                },
+                {
+                    "className": "UIStroke"
+                },
+                {
+                    "className": "Frame",
+                    "name": "Bar",
+                    "children": [
+                        {
+                            "className": "UICorner"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "className": "Frame",
+            "name": "Stamina",
+            "children": [
+                {
+                    "className": "UICorner"
+                },
+                {
+                    "className": "UIPadding"
+                },
+                {
+                    "className": "UIStroke"
+                },
+                {
+                    "className": "Frame",
+                    "name": "Bar",
+                    "children": [
+                        {
+                            "className": "UICorner"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "className": "Frame",
+            "name": "Mana",
+            "children": [
+                {
+                    "className": "UICorner"
+                },
+                {
+                    "className": "UIPadding"
+                },
+                {
+                    "className": "UIStroke"
+                },
+                {
+                    "className": "Frame",
+                    "name": "Bar",
+                    "children": [
+                        {
+                            "className": "UICorner"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

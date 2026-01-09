@@ -11,7 +11,7 @@ local SprintService = require(script.SprintService)
 ---@field inventoryService ClientApplicationInventoryService
 ---@field toolService ClientToolService
 ---@field animationService AnimationService
----@field camerService CameraService
+---@field cameraService CameraService
 ---@field inputService InputService
 ---@field sprintService SprintService
 local Services = {}
@@ -25,7 +25,7 @@ function Services.new(diContainer)
 	self.inventoryService = InventoryService.new(diContainer)
 	self.toolService = ToolService.new(diContainer)
 	self.animationService = AnimationService.new(diContainer)
-	self.camerService = CameraService.new()
+	self.cameraService = CameraService.new()
 	self.inputService = InputService.new(diContainer)
 	self.sprintService = SprintService.new(diContainer)
 	return self

@@ -13,7 +13,6 @@ function CameraService.new()
 	self._targetCamera = false
 
 	-- you can mess with these settings
-	self.canToggleMouse = { allowed = true, activationkey = Enum.KeyCode.F } -- lets you move your mouse around in firstperson
 	self.sensitivity = 0.6 -- anything higher would make looking up and down harder; recommend anything between 0~1
 	self.smoothness = 0.05 -- recommend anything between 0~1
 	self.fieldOfView = 80 -- fov
@@ -28,7 +27,6 @@ function CameraService.new()
 
 	self.running = true
 	self.target = nil
-	self.cameraMode = "Freecam"
 	self.lockOnInfo = {
 		range = 100, -- The range of the lock on
 		speed = 20, -- The speed of which the lock on camera is moving
@@ -62,11 +60,8 @@ function CameraService.new()
 end
 
 function CameraService:init()
-	---@param deltaTime number
-	local function onRender(deltaTime)
-		self:_onRender(deltaTime)
-	end
-	self.mouse.Icon = "http://www.roblox.com/asset/?id=569021388" -- replaces mouse icon
+	self.cam.CameraType = Enum.CameraType.Scriptable
+	UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 
 	self.character = self.player.Character or self.player.CharacterAdded:wait()
 	self.head = self.character:WaitForChild("Head")
@@ -83,6 +78,22 @@ function CameraService:init()
 	self.waistOrgnC0 = self.waist.C0 --[Get the base C0 to manipulate off of.]
 
 	self.neck.MaxVelocity = 1 / 3
+
+	self:activateStartingCamera()
+end
+
+function CameraService:activateStartingCamera()
+	self.cam.CFrame =
+		CFrame.new(self.humanoidRootPart.Position - Vector3.new(0, -5, -10), self.humanoidRootPart.Position)
+end
+
+function CameraService:activateDefaultCamera()
+	---@param deltaTime number
+	local function onRender(deltaTime)
+		self:_onRender(deltaTime)
+	end
+
+	self.mouse.Icon = "http://www.roblox.com/asset/?id=569021388" -- replaces mouse icon
 
 	RunService.RenderStepped:Connect(onRender)
 end
@@ -111,12 +122,11 @@ function CameraService:_onRender(dt)
 
 	if not self._targetCamera then
 		if self.running then
-			self.camPos = self.camPos + (self.targetCamPos - self.camPos) * 0.20
-			self.angleX = self.angleX + (self.targetAngleX - self.angleX) * 0.30
+			self.camPos = self.camPos + (self.targetCamPos - self.camPos) * 0.2
+			self.angleX = self.angleX + (self.targetAngleX - self.angleX) * 0.3
 			local dist = self.targetAngleY - self.angleY
 			dist = math.abs(dist) > 180 and dist - (dist / math.abs(dist)) * 360 or dist
-			self.angleY = (self.angleY + dist * 0.35) % 360
-			self.cam.CameraType = Enum.CameraType.Scriptable
+			self.angleY = (self.angleY + dist * 0.3) % 360
 
 			self.cam.CFrame = CFrame.new(self.head.Position)
 				* CFrame.Angles(0, math.rad(self.angleY), 0)
@@ -327,15 +337,6 @@ function CameraService:_followCharacterToCursor()
 			),
 		self.updateSpeed / 2
 	)
-	-- if TurnCharacterToMouse == true then
-	-- 	Hum.AutoRotate = false
-	-- 	Core.CFrame = Core.CFrame:lerp(
-	-- 		CFrame.new(Core.Position, Vector3.new(Mouse.Hit.Position.X, Core.Position.Y, Mouse.Hit.Position.Z)),
-	-- 		UpdateSpeed / 2
-	-- 	)
-	-- else
-	-- 	Hum.AutoRotate = true
-	-- end
 end
 
 return CameraService

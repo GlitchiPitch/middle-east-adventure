@@ -1,0 +1,57 @@
+{
+    "className": "Frame",
+    "children": [
+        {
+            "className": "UIStroke",
+            "children": [
+                {
+                    "className": "UIGradient"
+                }
+            ]
+        },
+        {
+            "className": "UICorner"
+        },
+        {
+            "className": "UIAspectRatioConstraint"
+        },
+        {
+            "className": "Frame",
+            "name": "Content",
+            "children": [
+                {
+                    "className": "UIStroke"
+                },
+                {
+                    "className": "UICorner"
+                },
+                {
+                    "className": "UIAspectRatioConstraint"
+                }
+            ]
+        },
+        {
+            "className": "Frame",
+            "name": "Inventory",
+            "children": [
+                {
+                    "className": "UICorner"
+                },
+                {
+                    "className": "UIStroke",
+                    "children": [
+                        {
+                            "className": "UIGradient"
+                        }
+                    ]
+                },
+                {
+                    "className": "UIGradient"
+                },
+                {
+                    "className": "UIAspectRatioConstraint"
+                }
+            ]
+        }
+    ]
+}

@@ -1,53 +1,61 @@
-# Changelog
+# Changelog - Middle East Adventure RPG
 
-## \[v1.0.5] - Project Analysis & Roadmap (2026-01-08)
+All notable changes to this project will be documented in this file.
 
-### Added
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-* **Project Analysis**: Comprehensive analysis of Middle East Adventure RPG project structure
-* **TODO.md**: Created detailed development roadmap with 15 major implementation tasks
-* **Documentation**: Translated project documentation to English
-
-### Project Foundation (Established)
-
-* **Clean Architecture**: Client/Server/Shared layer separation implemented
-* **Domain Entities**: Basic structure for Player, Inventory, Equipment, Skills, Stats
-* **Service Framework**: Service architecture with dependency injection
-* **Weapon System**: Comprehensive weapon data with stats, requirements, and damage types
-* **UI Framework**: Basic UI components (InventoryUI, CombatUI, StatsUI)
-* **Data Persistence**: Player data storage structure in DataStore
-* **Remote Events**: Event-driven communication system between client and server
-
-### Technical Infrastructure
-
-* **Type Definitions**: Comprehensive type system for game entities
-* **Constants**: Game configuration and remote event constants
-* **Dependency Injection**: DIContainer for service management
-* **Configuration**: Game settings and UI tween configurations
-
-## [v1.0.6] - Animation & Input Systems (2026-01-08)
+## [1.0.10] - 2026-01-09
 
 ### Added
-- **AnimationService**: Comprehensive animation system for character movements and combat
-- **ToolService**: Tool and weapon management system for client-side interactions
-- **CameraService**: Camera controls moved to Application layer for better architecture
-- **InputService**: Input handling system moved to Application layer
-- **Ragdoll Handler**: Server-side physics handler for character ragdoll effects
-- **Shared Assets**: Animation assets folder with combat and idle animations
+- Equipment key bindings (1,2,3,4) with EventBus integration
+- EquippedSlotsService foundation for equipment slot management
+- Modular input handler methods in InputService
+- Enhanced PlayerService with equipment data integration
 
-### Enhanced
-- **Domain Entities**: Improved Player entity with state management and proper initialization
-- **Service Architecture**: Restructured services between Application and Presentation layers
-- **UI Components**: Enhanced StatsUI and other UI elements with better integration
+### Changed
+- Refactored InputService with cleaner modular architecture and equipment key support
+- Enhanced PlayerService to support equipment domain entities
+- Updated service initialization with improved EventBus integration
+- Improved domain models for OneHanded, TwoHanded, Cloth equipment types
 
-### Technical Improvements
-- **Dependency Injection**: Better service initialization and dependency management
-- **Event Handling**: Improved remote event connections and player data synchronization
-- **Type Safety**: Enhanced type definitions for better code reliability
+### Fixed
+- Equipment system integration with player data structures
 
-### Next Steps
+### Development
+- Equipment system foundation solidified
+- Input handling architecture improved for extensibility
 
-* Begin implementation of core game systems (Combat, Hunting, Fishing, Alchemy, Smithing)
-* Complete domain entity implementations
-* Enhance UI components with full functionality
-* Implement player progression and save/load systems
+## [1.0.9] - 2026-01-08
+
+### Added
+- EquippedSlotsService for equipment slot management with keyboard shortcuts
+- EventBus service for inter-service communication
+- Equipment key bindings (1,2,3,4) in client configuration
+- New domain entities: OneHanded, TwoHanded, Cloth weapons/armor
+
+### Changed
+- Refactored InputService with modular handler methods and equipment key support
+- Replaced Sword domain with specialized weapon/armor domain entities
+- Enhanced service initialization with EventBus integration
+
+### Development
+- Equipment system foundation implemented
+- Domain architecture expanded for different equipment types
+
+## [1.0.6] - 2026-01-XX
+
+### Added
+- Initial camera service implementation with basic lock-on functionality
+- Core architecture setup with Client/Server/Shared separation
+- Domain entities foundation (Player, Inventory, Equipment, Skills, Stats)
+- Basic service structure for all game systems
+
+### Changed
+- Project restructuring with Clean Architecture principles
+- Improved code organization and maintainability
+
+### Development
+- Comprehensive project analysis completed
+- Development roadmap established with 15 major implementation tasks
+- Initial TODO.md created for task tracking

@@ -63,4 +63,10 @@ function PlayerService:getPlayerEquipment()
 	return playerEntity.equipment
 end
 
+---@param state boolean
+function PlayerService:toggleRobloxControl(state)
+	local playerEntity = self:getPlayerEntity()
+	playerEntity:toggleRobloxControl(state)
+end
+
 return PlayerService

@@ -29,8 +29,9 @@ function Application:init()
 		local application = self.diContainer:resolve("Application")
 		application.services.toolService:checkCharacterTool()
 		application.services.animationService:setupAnimationToCharacter()
-		application.services.camerService:init()
+		application.services.cameraService:init()
 		application.services.sprintService:init()
+		application.services.playerService:toggleRobloxControl(false)
 	end
 
 	remoteEventService:connectToEvents({

@@ -1,0 +1,11 @@
+{
+    "className": "Frame",
+    "children": [
+        {
+            "className": "UIAspectRatioConstraint"
+        },
+        {
+            "className": "TextLabel"
+        }
+    ]
+}

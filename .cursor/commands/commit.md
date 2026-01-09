@@ -8,7 +8,7 @@
 
 * Check and update CHANGELOG.md
 * Update TODO.md
-* Verify other documents in docs/ are up to date
+* Verify other documents in .dev/ are up to date
 
 ### 2. Game Version Update
 

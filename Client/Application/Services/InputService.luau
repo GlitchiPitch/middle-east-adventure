@@ -30,7 +30,6 @@ function InputService:init()
 	self._inputChangedConn = UserInputService.InputChanged:Connect(onInputChanged)
 end
 
-
 ---@param input InputObject
 ---@param gameProccessed any
 function InputService:_inputBegan(input, gameProccessed)
@@ -59,7 +58,7 @@ function InputService:_inputBegan(input, gameProccessed)
 	elseif input.KeyCode == config.Client.Control.FreeMouse then
 		application.services.cameraService:toggleFreeMouse()
 	elseif input.KeyCode == config.Client.Control.TargetCamera then
-		application.services.camerService:toggleTargetCamera()
+		application.services.cameraService:toggleTargetCamera()
 	end
 
 	if input.KeyCode == config.Client.Control.RunKey then
@@ -104,7 +103,7 @@ function InputService:_inputChanged(input, gameProccessed)
 	local application = self.diContainer:resolve("Application")
 
 	if input.UserInputType == Enum.UserInputType.MouseMovement then
-		application.services.camerService:mouseMovement(input)
+		application.services.cameraService:mouseMovement(input)
 	end
 end
 

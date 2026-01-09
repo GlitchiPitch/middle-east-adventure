@@ -1,62 +1,92 @@
+---@class rings
+---@field left RingEntity
+---@field right RingEntity
+
 ---@class EquipmentEntity
+---@field cloth ClothEntity
+---@field rings rings
+---@field amulet AmuletEntity
+---@field slots table<Enum.KeyCode, ItemEntity>
 local Equipment = {}
 Equipment.__index = Equipment
 
 function Equipment.new()
-    local self = setmetatable({}, Equipment)
-    self.slots = {
-        head = nil,
-        body = nil,
-        boots = nil,
-        ring = {
-            left = nil,
-            right = nil,
-        },
-        amulet = nil,
-        gloves = nil,
-    }
-    return self
+	local self = setmetatable({}, Equipment)
+	self.cloth = nil
+	self.rings = {
+		left = nil,
+		right = nil,
+	}
+	self.amulet = nil
+	self.slots = {
+		[Enum.KeyCode.One] = nil,
+		[Enum.KeyCode.Two] = nil,
+		[Enum.KeyCode.Three] = nil,
+		[Enum.KeyCode.Four] = nil,
+	}
+	return self
 end
 
----@class equipdableItem
----@field itemType '"head"' | '"body"' | '"boots"' | '"ring"' | '"amulet"' | '"gloves"'
+---@param ring RingEntity
+function Equipment:equipRing(ring)
+	local sides = {
+		"left",
+		"right",
+	}
 
----@param item equipdableItem
-function Equipment:equip(item)
-    if item.itemType == "ring" then
-        local freeHand
-        if not self.slots.ring.left then
-            freeHand = "left"
-        elseif not self.slots.ring.right then
-            freeHand = "right"
-        end
+	local freeSide
+	for _, side in sides do
+		if not self.rings[side] then
+			freeSide = side
+			break
+		end
+	end
 
-        if freeHand then
-            self.slots.ring[freeHand] = item
-        end
-    else
-
-        if self.slots[item.itemType] and self.slots[item.itemType] == item then
-            self.slots[item.itemType] = nil
-            return
-        end
-
-        if self.slots[item.itemType] then
-            -- self.slots[item.itemType]:unequip()
-            self.slots[item.itemType] = nil
-        end
-
-        self.slots[item.itemType] = item
-        -- self.slots[item.itemType]:equip()
-    end
+	freeSide = freeSide or "left"
+	self.rings[freeSide] = ring
 end
 
-function Equipment:calculateBoosts()
-    
+---@param amulet AmuletEntity
+function Equipment:equipAmulet(amulet)
+	self.amulet = amulet
 end
+
+---@param item ItemEntity
+function Equipment:equipSlot(item)
+	local keys = {
+		Enum.KeyCode.One,
+		Enum.KeyCode.Two,
+		Enum.KeyCode.Three,
+		Enum.KeyCode.Four,
+	}
+
+	local freeSlot
+
+	for _, key in keys do
+		if not self.slots[key] then
+			freeSlot = key
+			break
+		end
+	end
+
+	freeSlot = freeSlot or Enum.KeyCode.One
+	self.slots[freeSlot] = item
+end
+
+---@param cloth ClothEntity
+function Equipment:equipCloth(cloth)
+	self.cloth = cloth
+end
+
+function Equipment:calculateBoosts() end
 
 function Equipment:toData()
-    return {}
+	return {
+		cloth = self.cloth,
+		rings = self.rings,
+		amulet = self.amulet,
+		slots = self.slots,
+	}
 end
 
 return Equipment

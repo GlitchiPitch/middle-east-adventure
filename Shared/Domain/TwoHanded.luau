@@ -1,4 +1,4 @@
----@class TwoHandedEntity
+---@class TwoHandedEntity : ItemEntity
 local TwoHanded = {}
 TwoHanded.__index = TwoHanded
 
