@@ -98,6 +98,10 @@ function CameraService:activateDefaultCamera()
 	RunService.RenderStepped:Connect(onRender)
 end
 
+function CameraService:activateAlchemyCamera()
+	
+end
+
 function CameraService:toggleTargetCamera()
 	self._targetCamera = not self._targetCamera
 end

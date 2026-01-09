@@ -24,10 +24,13 @@ end
 
 ---@param newData table
 function PlayerService:updatePlayerData(newData)
+	warn(newData)
 	---@type ClientInfrastructure
 	local infrastructure = self.diContainer:resolve("Infrastructure")
 	---@type SharedDomain
 	local domain = self.diContainer:resolve("Domain")
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
 
 	newData.inventory = domain.Inventory.new(newData.inventory)
 	newData.skills = domain.Skills.new(newData.skills)
@@ -35,6 +38,7 @@ function PlayerService:updatePlayerData(newData)
 	newData.equipment = domain.Equipment.new()
 
 	infrastructure.playerRepository:updatePlayerEntity(newData)
+	shared.eventBus:fire("updatePlayerData")
 end
 
 ---@return PlayerEntity

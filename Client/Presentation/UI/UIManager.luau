@@ -48,8 +48,8 @@ function UIManager:setCurrentScreen(name)
 		self:hideUI(self._currentScreen)
 	end
 
-    self._currentScreen = name
-    self:showUI(name)
+	self._currentScreen = name
+	self:showUI(name)
 end
 
 ---@param name _uiNames

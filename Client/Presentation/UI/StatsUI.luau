@@ -8,41 +8,41 @@ local StatsUI = {}
 StatsUI.__index = StatsUI
 
 ---@param diContainer DIContainer
----@param statsUI Frame
 ---@return StatsUI
-function StatsUI.new(diContainer, statsUI)
-    local self = setmetatable({}, StatsUI)
-    self._instance = statsUI
-    self.diContainer = diContainer
-    self:_registerUI()
-    return self
+function StatsUI.new(diContainer)
+	local self = setmetatable({}, StatsUI)
+	self.diContainer = diContainer
+	return self
 end
 
-function StatsUI:_registerUI()
-    self.healthBar = self._instance.HealthBar
-    self.manaBar = self._instance.ManaBar
-    self.staminaBar = self._instance.StaminaBar
+function StatsUI:init()
+	---@type Presentation
+	local presentation = self.diContainer:resolve("Presentation")
+	local primary = presentation.ui.uiManager.primary
+	self.healthBar = primary.Stats.Health
+	self.manaBar = primary.Stats.Mana
+	self.staminaBar = primary.Stats.Stamina
 end
 
----@param statsData statsData
-function StatsUI:updateUI(statsData)
-    ---@type Shared
-    local shared = self.diContainer:resolve("Shared")
-    ---@type ClientApplication
-    local application = self.diContainer:resolve("Application")
-    -- local playerEntity = 
-
-    for i, v in {
-        [statsData.stamina] = self.staminaBar,
-        [statsData.health] = self.healthBar,
-        [statsData.mana] = self.manaBar,
-    } do
-        local tween = TweenService:Create(
-            v.Bar,
-            shared.config.Client.UpdateBarTweenInfo,
-            { Size = UDim2.fromScale(i / 1) }
-        )
-    end
+function StatsUI:updateUI()
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
+	---@type ClientApplication
+	local application = self.diContainer:resolve("Application")
+	local playerEntity = application.services.playerService:getPlayerEntity()
+    print(playerEntity)
+	for i, v in
+		{
+			stamina = self.staminaBar,
+			health = self.healthBar,
+			mana = self.manaBar,
+		}
+	do
+		local tween = TweenService:Create(v.Bar, shared.config.Client.UpdateBarTweenInfo, {
+			Size = UDim2.fromScale(math.min(1, playerEntity.stats[i].current / playerEntity.stats[i].max), 1),
+		})
+		tween:Play()
+	end
 end
 
 return StatsUI

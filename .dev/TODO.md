@@ -1,23 +1,24 @@
 # Middle East Adventure RPG - Development Tasks
 
-## Current Status (v1.0.10)
+## Current Status (v1.0.11)
 
 ### ✅ Completed Systems
 - **Core Architecture**: Clean Architecture with Client/Server/Shared separation
 - **Client Services**:
   - AnimationService - Complete sword combat animations
-  - CameraService - Enhanced lock-on mechanics with head tracking
-  - InputService - Mouse/keyboard input handling with equipment keys
+  - CameraService - Advanced lock-on system with head tracking and target switching
+  - InputService - Modular input handling with equipment key support via EventBus
   - SprintService - Running mechanics with smooth transitions
   - ToolService - Tool management system
   - EquippedSlotsService - Equipment slot management
+  - PlayerService - Enhanced with equipment domain integration
 - **Domain Models**: Player, Inventory, Equipment, Skills, Stats, OneHanded, TwoHanded, Cloth, Attributes
-- **Shared Infrastructure**: EventBus for service communication
+- **Shared Infrastructure**: EventBus with type-safe event definitions
 - **Shared Assets**: Animation assets and configurations
-- **UI Framework**: Basic UI components (Combat, Inventory, Stats, UIManager)
+- **UI Framework**: Basic UI components (Combat, Inventory, Stats, UIManager) with data binding
 
 ### 🔄 In Progress
-- **Equipment Systems**: Equipment slot foundation completed
+- **Equipment Systems**: Core foundation completed, ready for combat integration
 
 ### 📋 Remaining Tasks
 
@@ -73,19 +74,20 @@
 
 ### Next Development Sprint (v1.1.0)
 **Focus**: Combat System Integration & Inventory Management
-- Complete CombatService implementation on server
-- Integrate equipment system with inventory
-- Connect client combat UI with server combat logic
-- Implement damage calculation and health management
+- Complete CombatService implementation on server side
+- Connect client combat UI with server combat logic and camera lock-on
+- Implement damage calculation and health management system
+- Integrate equipment system with combat mechanics
 - Add inventory persistence and item management
+- Connect StatsUI with real-time player stat updates
 
 ### Project Metrics
-- **Completion**: ~40% (Core systems + Movement + Equipment foundation complete)
+- **Completion**: ~45% (Core systems + Advanced camera + Equipment foundation complete)
 - **Architecture**: ✅ Clean Architecture implemented
-- **Client Systems**: 7/8 services complete
+- **Client Systems**: 8/8 services complete (CameraService fully implemented)
 - **Server Systems**: 0/9 services complete
-- **UI Components**: 4/4 basic components ready
-- **Domain Models**: 8/10 entities complete
+- **UI Components**: 4/4 basic components ready with data binding
+- **Domain Models**: 8/10 entities complete (Stats entity refined)
 
 ### Development Notes
 - Prioritize core gameplay loop (Combat → Inventory → Progression)

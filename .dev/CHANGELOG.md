@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.11] - 2026-01-09
+
+### Added
+- Advanced lock-on camera system with head tracking and target switching
+- EventBus event type definitions for better type safety
+- Equipment key input handling through modular InputService architecture
+
+### Changed
+- Complete CameraService rewrite with sophisticated lock-on mechanics and smooth target tracking
+- Enhanced InputService with cleaner modular structure and equipment key support
+- Improved EventBus with proper event name typing and documentation
+- Updated UI initialization to support new player data update events
+
+### Fixed
+- Corrected typo "posioned" to "poisoned" in Stats domain entity
+- Fixed StatsUI debug print statement for better development experience
+
+### Development
+- Camera system architecture significantly improved for combat gameplay
+- Input handling infrastructure enhanced for equipment management
+- Event-driven architecture strengthened with proper type definitions
+
 ## [1.0.10] - 2026-01-09
 
 ### Added

@@ -19,7 +19,7 @@ function EventBus:getEvent(eventName)
 	return self._events[eventName]
 end
 
----@alias eventName '"PressEquipKey"'
+---@alias eventName '"pressEquipKey"' | '"updatePlayerData"'
 
 ---@param eventName eventName
 ---@param data any
@@ -28,7 +28,7 @@ function EventBus:fire(eventName, data)
 	event:Fire(data)
 end
 
----@param eventName string
+---@param eventName eventName
 ---@param callback function
 ---@return RBXScriptConnection
 function EventBus:connect(eventName, callback)

@@ -66,7 +66,7 @@ function InputService:_inputBegan(input, gameProccessed)
 	end
 
 	if table.find(config.Client.Control.EquippmentKeys, input.KeyCode) then
-		eventBus:fire("PressEquipKey", input.KeyCode.Value)
+		eventBus:fire("pressEquipKey", input.KeyCode.Value)
 	end
 end
 
