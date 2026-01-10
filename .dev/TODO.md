@@ -27,3 +27,7 @@
 - [x] Create UI components
 - [x] Set up alchemy system
 - [x] Implement trading mechanics
+- [x] Create documentation structure (.dev/ folder)
+- [x] Set up CHANGELOG.md and TODO.md
+- [x] Add Dialogs.luau data file
+- [x] Version v1.0.15 released

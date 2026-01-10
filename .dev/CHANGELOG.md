@@ -7,17 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Planned
+- Character customization system
+- Advanced combat mechanics
+- More NPC interactions and quests
+- Mobile performance optimization
+
+## [1.0.15] - 2025-01-10
+
 ### Added
-- Initial project structure with clean architecture
-- Client/Server/Shared modules separation
-- Services for gameplay mechanics (Combat, Inventory, Alchemy, etc.)
-- UI components and presentation layer
+- Dialogs.luau data file for NPC conversations
+- Documentation structure with .dev/ folder
+- CHANGELOG.md and TODO.md for project tracking
 
 ### Changed
 - Updated game version to v1.0.15
+- Various service improvements (Alchemy, Camera, Dialog, Input, Player, Target, Tool)
+- UI enhancements (AlchemyUI, DialogUI, StatsUI, UIManager)
+- Updated Constants.luau and Types.luau
 
 ### Fixed
-- Various bug fixes and improvements
+- Various bug fixes and code improvements
 
 ## [1.0.14] - 2024-01-XX
 - Initial release with core gameplay features
