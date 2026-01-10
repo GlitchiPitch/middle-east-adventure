@@ -6,6 +6,7 @@ local Players = game:GetService("Players")
 ---@field diContainer DIContainer
 ---@field constants Constants
 ---@field playerService ClientApplicationPlayerService
+---@field _cameraState '"Default"' | '"Target"' | '"Alchemy"'
 local CameraService = {}
 CameraService.__index = CameraService
 
@@ -15,7 +16,7 @@ function CameraService.new(diContainer)
 	local self = setmetatable({}, CameraService)
 	self.diContainer = diContainer
 	self._freemouse = false
-	self._targetCamera = false
+	self._cameraState = ""
 
 	-- you can mess with these settings
 	self.sensitivity = 0.6 -- anything higher would make looking up and down harder; recommend anything between 0~1
@@ -100,15 +101,26 @@ function CameraService:activateDefaultCamera()
 
 	self.mouse.Icon = "http://www.roblox.com/asset/?id=569021388" -- replaces mouse icon
 
+	self._cameraState = self.constants.CAMERA_STATES.DEFAULT
+
 	RunService.RenderStepped:Connect(onRender)
 end
 
-function CameraService:activateAlchemyCamera() end
+function CameraService:activateAlchemyCamera(alchemyPotCameraCFrame)
+	self.cam.CFrame = alchemyPotCameraCFrame
+	self._cameraState = self.constants.CAMERA_STATES.ALCHEMY
+end
 
 function CameraService:toggleTargetCamera()
 	local currentTarget = self.targetService:getCurrentTarget()
 	if currentTarget then
-		self._targetCamera = not self._targetCamera
+		if self._cameraState == self.constants.CAMERA_STATES.TARGET then
+			self._cameraState = self.constants.CAMERA_STATES.DEFAULT
+		else
+			self._cameraState = self.constants.CAMERA_STATES.TARGET
+		end
+	else
+		self._cameraState = self.constants.CAMERA_STATES.DEFAULT
 	end
 end
 
@@ -130,83 +142,10 @@ function CameraService:_onRender(dt)
 		return
 	end
 
-	if not self._targetCamera then
-		if self.running then
-			self.camPos = self.camPos + (self.targetCamPos - self.camPos) * 0.2
-			self.angleX = self.angleX + (self.targetAngleX - self.angleX) * 0.3
-			local dist = self.targetAngleY - self.angleY
-			dist = math.abs(dist) > 180 and dist - (dist / math.abs(dist)) * 360 or dist
-			self.angleY = (self.angleY + dist * 0.3) % 360
-
-			self.cam.CFrame = CFrame.new(self.head.Position)
-				* CFrame.Angles(0, math.rad(self.angleY), 0)
-				* CFrame.Angles(math.rad(self.angleX), 0, 0)
-				* self.headOffset -- offset
-		else
-			UserInputService.MouseBehavior = Enum.MouseBehavior.Default
-		end
-
-		if (self.cam.Focus.Position - self.cam.CFrame.Position).Magnitude < 1 then
-			self.running = false
-		else
-			self.running = true
-			if self._freemouse then
-				UserInputService.MouseBehavior = Enum.MouseBehavior.Default
-			else
-				UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
-			end
-		end
-
-		self.cam.FieldOfView = self.fieldOfView
-	else
-		self.target = self.targetService:getCurrentTarget()
-
-		dt = (self.lastDelta + dt) / 2 -- Smooth the delta to prevent fps drops
-		self.lastDelta = dt
-
-		if not self.target then
-			return
-		end
-
-		local distance = (self.target.PrimaryPart.Position - self.character.HumanoidRootPart.Position).Magnitude
-
-		local requiresLineOfSight = self.lockOnInfo.requiresLineOfSight
-		local hasLineOfSight = self.targetService:_isTargetInView()
-		local lineOfSight = (hasLineOfSight and requiresLineOfSight) or not requiresLineOfSight -- Check for line of sight if required
-
-		if not lineOfSight then
-			if not self.lastObstructed then
-				self.lastObstructed = tick()
-			elseif tick() - self.lastObstructed > 1 then
-				self.lastObstructed = nil
-				return
-			end
-		else
-			self.lastObstructed = nil
-		end
-
-		if distance < self.lockOnInfo.range then -- and self.target.Humanoid.Health > 0
-			local targetPosition = Vector3.new(
-				self.target.PrimaryPart.Position.X,
-				self.character.HumanoidRootPart.Position.Y,
-				self.target.PrimaryPart.Position.Z
-			)
-			local newCFrame = CFrame.lookAt(
-				self.character.HumanoidRootPart.Position,
-				targetPosition,
-				self.character.HumanoidRootPart.CFrame.UpVector
-			)
-
-			local offsetX = newCFrame.RightVector * self.lockOnInfo.offset.X
-			local offsetY = newCFrame.UpVector * self.lockOnInfo.offset.Y
-			local offsetZ = newCFrame.LookVector * self.lockOnInfo.offset.Z
-
-			local offset = offsetX + offsetY + offsetZ
-			local cameraPosition = newCFrame.Position + offset
-
-			local targetCFrame = CFrame.lookAt(cameraPosition, self.target.PrimaryPart.Position, newCFrame.UpVector)
-			self.cam.CFrame = self.cam.CFrame:Lerp(targetCFrame, dt * self.lockOnInfo.speed)
-		end
+	if self._cameraState == self.constants.CAMERA_STATES.DEFAULT then
+		self:_defaultCamera()
+	elseif self._cameraState == self.constants.CAMERA_STATES.TARGET then
+		self:_targetCamera(dt)
 	end
 
 	self:_followCharacterToCursor()
@@ -237,6 +176,87 @@ function CameraService:_followCharacterToCursor()
 			),
 		self.updateSpeed / 2
 	)
+end
+
+function CameraService:_targetCamera(dt)
+	self.target = self.targetService:getCurrentTarget()
+
+	dt = (self.lastDelta + dt) / 2 -- Smooth the delta to prevent fps drops
+	self.lastDelta = dt
+
+	if not self.target then
+		return
+	end
+
+	local distance = (self.target.PrimaryPart.Position - self.character.HumanoidRootPart.Position).Magnitude
+
+	local requiresLineOfSight = self.lockOnInfo.requiresLineOfSight
+	local hasLineOfSight = self.targetService:_isTargetInView()
+	local lineOfSight = (hasLineOfSight and requiresLineOfSight) or not requiresLineOfSight -- Check for line of sight if required
+
+	if not lineOfSight then
+		if not self.lastObstructed then
+			self.lastObstructed = tick()
+		elseif tick() - self.lastObstructed > 1 then
+			self.lastObstructed = nil
+			return
+		end
+	else
+		self.lastObstructed = nil
+	end
+
+	if distance < self.lockOnInfo.range then -- and self.target.Humanoid.Health > 0
+		local targetPosition = Vector3.new(
+			self.target.PrimaryPart.Position.X,
+			self.character.HumanoidRootPart.Position.Y,
+			self.target.PrimaryPart.Position.Z
+		)
+		local newCFrame = CFrame.lookAt(
+			self.character.HumanoidRootPart.Position,
+			targetPosition,
+			self.character.HumanoidRootPart.CFrame.UpVector
+		)
+
+		local offsetX = newCFrame.RightVector * self.lockOnInfo.offset.X
+		local offsetY = newCFrame.UpVector * self.lockOnInfo.offset.Y
+		local offsetZ = newCFrame.LookVector * self.lockOnInfo.offset.Z
+
+		local offset = offsetX + offsetY + offsetZ
+		local cameraPosition = newCFrame.Position + offset
+
+		local targetCFrame = CFrame.lookAt(cameraPosition, self.target.PrimaryPart.Position, newCFrame.UpVector)
+		self.cam.CFrame = self.cam.CFrame:Lerp(targetCFrame, dt * self.lockOnInfo.speed)
+	end
+end
+
+function CameraService:_defaultCamera()
+	if self.running then
+		self.camPos = self.camPos + (self.targetCamPos - self.camPos) * 0.2
+		self.angleX = self.angleX + (self.targetAngleX - self.angleX) * 0.3
+		local dist = self.targetAngleY - self.angleY
+		dist = math.abs(dist) > 180 and dist - (dist / math.abs(dist)) * 360 or dist
+		self.angleY = (self.angleY + dist * 0.3) % 360
+
+		self.cam.CFrame = CFrame.new(self.head.Position)
+			* CFrame.Angles(0, math.rad(self.angleY), 0)
+			* CFrame.Angles(math.rad(self.angleX), 0, 0)
+			* self.headOffset -- offset
+	else
+		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+	end
+
+	if (self.cam.Focus.Position - self.cam.CFrame.Position).Magnitude < 1 then
+		self.running = false
+	else
+		self.running = true
+		if self._freemouse then
+			UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+		else
+			UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
+		end
+	end
+
+	self.cam.FieldOfView = self.fieldOfView
 end
 
 return CameraService

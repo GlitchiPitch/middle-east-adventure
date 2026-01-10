@@ -7,6 +7,7 @@ local FishingService = require(script.FishingService)
 local HuntingService = require(script.HuntingService)
 local AlchemyService = require(script.AlchemyService)
 local CombatService = require(script.CombatService)
+local ToolService = require(script.ToolService)
 
 ---@class ServerApplicationServices
 ---@field inventoryService ServerApplicationInventoryService
@@ -18,6 +19,7 @@ local CombatService = require(script.CombatService)
 ---@field huntingService ServerApplicationHuntingService
 ---@field alchemyService ServerApplicationAlchemyService
 ---@field combatService ServerApplicationCombatService
+---@field toolService ServerToolService
 local Services = {}
 Services.__index = Services
 
@@ -34,7 +36,12 @@ function Services.new(diContainer)
     self.huntingService = HuntingService.new()
     self.alchemyService = AlchemyService.new()
     self.combatService = CombatService.new()
+    self.toolService = ToolService.new(diContainer)
     return self
+end
+
+function Services:init()
+    self.toolService:init()
 end
 
 return Services

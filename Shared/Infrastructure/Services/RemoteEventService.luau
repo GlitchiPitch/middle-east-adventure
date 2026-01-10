@@ -24,22 +24,21 @@ function RemoteEventService:connectToEvents(connectData)
     end
 end
 
-
 if RunService:IsServer() then
     ---@param player Player
     ---@param eventData eventData
     function RemoteEventService:fireClient(player, eventData)
-        if not self:_validateEvent(eventData.eventName) then
-            return
-        end
+        -- if not self:_validateEvent(eventData.eventName) then
+        --     return
+        -- end
         self.remoteEvent:FireClient(player, eventData)
     end
 else
     ---@param eventData eventData
     function RemoteEventService:fireServer(eventData)
-        if not self:_validateEvent(eventData.eventName) then
-            return
-        end
+        -- if not self:_validateEvent(eventData.eventName) then
+        --     return
+        -- end
         self.remoteEvent:FireServer(eventData)
     end
 end

@@ -1,6 +1,6 @@
 # Middle East Adventure RPG - Development Tasks
 
-## Current Status (v1.0.13)
+## Current Status (v1.0.14)
 
 ### ✅ Completed Systems
 - **Core Architecture**: Clean Architecture with Client/Server/Shared separation
@@ -19,7 +19,7 @@
 
 ### 🔄 In Progress
 - **Equipment Systems**: Core foundation completed, ready for combat integration
-- **World Interaction Systems**: Foundation services implemented (InteractService, LootService, DialogService)
+- **World Interaction Systems**: InteractService enhanced with alchemy integration, LootService and DialogService foundation ready
 
 ### 📋 Remaining Tasks
 
@@ -83,15 +83,16 @@
 - Connect StatsUI with real-time player stat updates
 
 ### Project Metrics
-- **Completion**: ~52% (Target detection system modularized, architecture improved)
+- **Completion**: ~55% (Alchemy interaction system implemented, world interactions expanded)
 - **Architecture**: ✅ Clean Architecture implemented + service modularization
-- **Client Systems**: 13/13 services complete (TargetService added)
-- **Server Systems**: 0/9 services complete
-- **UI Components**: 4/4 basic components ready with data binding
+- **Client Systems**: 13/13 services complete (Alchemy integration added)
+- **Server Systems**: 1/9 services complete (ToolService implemented)
+- **UI Components**: 5/4 basic components ready (AlchemyUI added)
 - **Domain Models**: 8/10 entities complete (Stats entity refined)
 
 ### Development Notes
-- TargetService modularization completed - camera and target systems now properly separated
+- Alchemy interaction system implemented - world interactions expanding beyond basic services
+- Server-side ToolService foundation established for future tool mechanics
 - Next focus: Combat System Integration (CombatService server implementation)
 - Prioritize core gameplay loop (Combat → Inventory → Progression)
 - Maintain Clean Architecture principles with service separation

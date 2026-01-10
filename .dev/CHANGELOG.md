@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.14] - 2026-01-10
+
+### Added
+- Alchemy interaction system with InteractService integration
+- AlchemyUI component for potion crafting interface
+- Server-side ToolService implementation
+- ALCHEMY camera state for specialized camera control
+- Enhanced interaction types (ALCHEMY, LOOT) in Constants
+
+### Changed
+- InteractService integrated with TargetService for object interaction
+- CameraService extended with ALCHEMY camera state support
+- Constants.luau updated with new interaction and camera state definitions
+- AlchemyService client implementation with pot interaction mechanics
+
+### Development
+- World interaction systems expanded with alchemy mechanics
+- Camera state management enhanced for different interaction types
+- Server architecture extended with ToolService foundation
+
 ## [1.0.13] - 2026-01-10
 
 ### Added

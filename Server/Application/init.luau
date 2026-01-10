@@ -50,6 +50,10 @@ function Application:init()
 		[shared.constants.REMOTE_EVENTS.CLICK_INVENTORY_ITEM] = function(player, eventData)
 			self.services.inventoryService:clickItem(player, eventData.data)
 		end,
+
+		[shared.constants.REMOTE_EVENTS.TOOL_ACTIVATED] = function(player, eventData)
+			print(player, eventData)
+		end,
 	})
 
 	Players.PlayerRemoving:Connect(onPlayerRemoving)

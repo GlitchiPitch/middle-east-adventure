@@ -5,6 +5,10 @@ local Players = game:GetService("Players")
 ---@field debounce boolean
 ---@field attackIndex number
 ---@field lastTime number
+---@field playerService ClientApplicationPlayerService
+---@field animationService AnimationService
+---@field constants Constants
+---@field remoteEventService RemoteEventService
 local ToolService = {}
 ToolService.__index = ToolService
 
@@ -22,6 +26,18 @@ function ToolService.new(diContainer)
 	self.maxCombo = 4 -- @TODO: get value from animationService
 
 	return self
+end
+
+function ToolService:init()
+	---@type ClientApplication
+	local application = self.diContainer:resolve("Application")
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
+
+	self.constants = shared.constants
+	self.remoteEventService = shared.remoteEventService
+	self.playerService = application.services.playerService
+	self.animationService = application.services.animationService
 end
 
 function ToolService:checkCharacterTool()
@@ -43,20 +59,16 @@ function ToolService:checkCharacterTool()
 end
 
 function ToolService:_setupTool(currentTool)
-	---@type ClientApplication
-	local application = self.diContainer:resolve("Application")
 	self._currentTool = currentTool
-
-	application.services.playerService:setPlayerState("Weapon")
-	application.services.animationService:playAnimation("OneHandedIdle")
+	self.playerService:setPlayerState("Weapon")
+	self.animationService:playAnimation("OneHandedIdle")
 end
 
 function ToolService:_removeTool()
 	self._currentTool = nil
-	---@type ClientApplication
-	local application = self.diContainer:resolve("Application")
-	application.services.playerService:setPlayerState("")
-	application.services.animationService:stopAnimation("OneHandedIdle")
+	self.lastTime = nil
+	self.playerService:setPlayerState("")
+	self.animationService:stopAnimation("OneHandedIdle")
 end
 
 function ToolService:activated()
@@ -65,10 +77,6 @@ function ToolService:activated()
 	end
 
 	self.debounce = true
-
-	---@type ClientApplication
-	local application = self.diContainer:resolve("Application")
-	local animationService = application.services.animationService
 
 	if self.lastTime == nil then
 		print("First TIme")
@@ -84,25 +92,27 @@ function ToolService:activated()
 
 	self.lastTime = os.time()
 
-	if animationService.animTracks["OneHanded" .. self.attackIndex] then
-		animationService.animTracks["OneHanded" .. self.attackIndex]:Play()
-		task.wait(animationService.animTracks["OneHanded" .. self.attackIndex].Length)
+	if self.animationService.animTracks["OneHanded" .. self.attackIndex] then
+		self.animationService.animTracks["OneHanded" .. self.attackIndex]:Play()
+		task.wait(self.animationService.animTracks["OneHanded" .. self.attackIndex].Length)
 	else
 		task.wait(0.5)
 	end
+
+	self.remoteEventService:fireServer({
+		eventName = self.constants.REMOTE_EVENTS.TOOL_ACTIVATED,
+		data = {},
+	})
 
 	self.debounce = false
 end
 
 ---@param setBlock boolean
 function ToolService:block(setBlock)
-	---@type ClientApplication
-	local application = self.diContainer:resolve("Application")
-	local animationService = application.services.animationService
 	if setBlock then
-		animationService:playAnimation("OneHandedBlock")
+		self.animationService:playAnimation("OneHandedBlock")
 	else
-		animationService:stopAnimation("OneHandedBlock")
+		self.animationService:stopAnimation("OneHandedBlock")
 	end
 end
 

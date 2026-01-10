@@ -40,7 +40,7 @@ function Services.new(diContainer)
 	self.sprintService = SprintService.new(diContainer)
 	self.lootService = LootService.new()
 	self.dialogService = DialogService.new()
-	self.interactService = InteractService.new()
+	self.interactService = InteractService.new(diContainer)
 	self.alchemyService = AlchemyService.new()
 	self.targetService = TargetService.new(diContainer)
 	return self
@@ -50,6 +50,7 @@ function Services:init()
 	self.animationService:init()
 	self.inputService:init()
 	self.targetService:init()
+	self.toolService:init()
 end
 
 return Services
