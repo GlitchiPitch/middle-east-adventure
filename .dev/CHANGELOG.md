@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.13] - 2026-01-10
+
+### Added
+- TargetService - Dedicated target detection and management service
+- TargetService configuration in Shared/Config.luau
+
+### Changed
+- CameraService refactored to use TargetService for target detection
+- Extracted target detection logic from CameraService to dedicated service
+- Improved separation of concerns between camera control and target management
+
+### Development
+- Architecture improved with better service separation
+- Target detection system modularized for reusability
+
 ## [1.0.12] - 2026-01-09
 
 ### Added

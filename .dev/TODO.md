@@ -1,6 +1,6 @@
 # Middle East Adventure RPG - Development Tasks
 
-## Current Status (v1.0.12)
+## Current Status (v1.0.13)
 
 ### ✅ Completed Systems
 - **Core Architecture**: Clean Architecture with Client/Server/Shared separation
@@ -83,15 +83,17 @@
 - Connect StatsUI with real-time player stat updates
 
 ### Project Metrics
-- **Completion**: ~50% (World interaction systems foundation + UI components added)
-- **Architecture**: ✅ Clean Architecture implemented
-- **Client Systems**: 12/12 services complete (World interaction services added)
+- **Completion**: ~52% (Target detection system modularized, architecture improved)
+- **Architecture**: ✅ Clean Architecture implemented + service modularization
+- **Client Systems**: 13/13 services complete (TargetService added)
 - **Server Systems**: 0/9 services complete
 - **UI Components**: 4/4 basic components ready with data binding
 - **Domain Models**: 8/10 entities complete (Stats entity refined)
 
 ### Development Notes
+- TargetService modularization completed - camera and target systems now properly separated
+- Next focus: Combat System Integration (CombatService server implementation)
 - Prioritize core gameplay loop (Combat → Inventory → Progression)
-- Maintain Clean Architecture principles
+- Maintain Clean Architecture principles with service separation
 - Focus on gameplay polish over feature creep
 - Regular testing and balancing required

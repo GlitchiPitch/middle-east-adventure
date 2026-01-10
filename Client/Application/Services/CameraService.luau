@@ -32,17 +32,6 @@ function CameraService.new(diContainer)
 
 	self.running = true
 	self.target = nil
-	self.lockOnInfo = {
-		range = 100, -- The range of the lock on
-		speed = 20, -- The speed of which the lock on camera is moving
-		offset = Vector3.new(3, 4, -9), -- The camera offset when using lock on
-		lockOnPlayers = true, -- Lock on player in the world
-		requiresLineOfSight = true, -- If the characer needs line of sight with target to use lock on.
-		obstructionBreakTime = 0.5, -- The time without line of sight that takes to exit the lock on.
-		switchDebounce = 0.3, -- The debounce or cooldown of switching targets
-		switchSens = 5, -- How sensetive the switching should be
-		switchRange = 50, -- How far away you can switch target
-	}
 
 	self.lastDelta = 0
 	self.lastObstructed = nil
@@ -91,6 +80,9 @@ function CameraService:init()
 	---@type ClientApplication
 	local application = self.diContainer:resolve("Application")
 	self.playerService = application.services.playerService
+	self.targetService = application.services.targetService
+
+	self.lockOnInfo = shared.config.Client.TargetService
 
 	self:activateStartingCamera()
 end
@@ -114,7 +106,10 @@ end
 function CameraService:activateAlchemyCamera() end
 
 function CameraService:toggleTargetCamera()
-	self._targetCamera = not self._targetCamera
+	local currentTarget = self.targetService:getCurrentTarget()
+	if currentTarget then
+		self._targetCamera = not self._targetCamera
+	end
 end
 
 function CameraService:toggleFreeMouse()
@@ -163,79 +158,8 @@ function CameraService:_onRender(dt)
 		end
 
 		self.cam.FieldOfView = self.fieldOfView
-
-		self.checkedTarget = self:_getTargetsClosestCrosshair()
-
-		if self.checkedTarget then
-			if self.currentCheckedTarget and self.currentCheckedTarget ~= self.checkedTarget then
-				if
-					self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.INTERACT)
-					or self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.LOOT)
-				then
-					warn("loot off")
-					local ui = self.currentCheckedTarget:FindFirstChildOfClass("BillboardGui")
-					if ui then
-						ui.Enabled = false
-					end
-				elseif self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.NPC) then
-					warn("NPC off")
-					local humanoid = self.currentCheckedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
-					if humanoid then
-						humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
-					end
-				end
-			end
-
-			local distance = (self.checkedTarget.PrimaryPart.Position - self.character.HumanoidRootPart.Position).Magnitude
-			if distance < 10 then
-				if
-					self.checkedTarget:HasTag(self.constants.PLAYER_STATES.INTERACT)
-					or self.checkedTarget:HasTag(self.constants.PLAYER_STATES.LOOT)
-				then
-					warn("loot on")
-					local ui = self.checkedTarget:FindFirstChildOfClass("BillboardGui")
-					if ui then
-						ui.Enabled = true
-					end
-
-					self.playerService:setPlayerState(
-						self.checkedTarget:HasTag(self.constants.PLAYER_STATES.INTERACT) and "Interact" or "Loot"
-					)
-					self.currentCheckedTarget = self.checkedTarget
-				elseif self.checkedTarget:HasTag(self.constants.PLAYER_STATES.NPC) then
-					warn("NPC on")
-					local humanoid = self.checkedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
-					if humanoid then
-						humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.Viewer
-						self.currentCheckedTarget = self.checkedTarget
-						self.playerService:setPlayerState("NPC")
-					end
-				end
-			end
-		else
-			if self.currentCheckedTarget then
-				if
-					self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.INTERACT)
-					or self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.LOOT)
-				then
-					warn("loot off")
-					local ui = self.currentCheckedTarget:FindFirstChildOfClass("BillboardGui")
-					if ui then
-						ui.Enabled = false
-					end
-				elseif self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.NPC) then
-					warn("NPC off")
-					local humanoid = self.currentCheckedTarget:FindFirstChildOfClass("Humanoid") :: Humanoid
-					if humanoid then
-						humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
-					end
-				end
-
-				self.currentCheckedTarget = nil
-			end
-		end
 	else
-		self.target = self:_getTargetsClosestCrosshair()
+		self.target = self.targetService:getCurrentTarget()
 
 		dt = (self.lastDelta + dt) / 2 -- Smooth the delta to prevent fps drops
 		self.lastDelta = dt
@@ -244,10 +168,10 @@ function CameraService:_onRender(dt)
 			return
 		end
 
-		local distance = (self.target.HumanoidRootPart.Position - self.character.HumanoidRootPart.Position).Magnitude
+		local distance = (self.target.PrimaryPart.Position - self.character.HumanoidRootPart.Position).Magnitude
 
 		local requiresLineOfSight = self.lockOnInfo.requiresLineOfSight
-		local hasLineOfSight = self:_isTargetInView()
+		local hasLineOfSight = self.targetService:_isTargetInView()
 		local lineOfSight = (hasLineOfSight and requiresLineOfSight) or not requiresLineOfSight -- Check for line of sight if required
 
 		if not lineOfSight then
@@ -261,11 +185,11 @@ function CameraService:_onRender(dt)
 			self.lastObstructed = nil
 		end
 
-		if distance < self.lockOnInfo.range and self.target.Humanoid.Health > 0 then
+		if distance < self.lockOnInfo.range then -- and self.target.Humanoid.Health > 0
 			local targetPosition = Vector3.new(
-				self.target.HumanoidRootPart.Position.X,
+				self.target.PrimaryPart.Position.X,
 				self.character.HumanoidRootPart.Position.Y,
-				self.target.HumanoidRootPart.Position.Z
+				self.target.PrimaryPart.Position.Z
 			)
 			local newCFrame = CFrame.lookAt(
 				self.character.HumanoidRootPart.Position,
@@ -280,102 +204,12 @@ function CameraService:_onRender(dt)
 			local offset = offsetX + offsetY + offsetZ
 			local cameraPosition = newCFrame.Position + offset
 
-			local targetCFrame =
-				CFrame.lookAt(cameraPosition, self.target.HumanoidRootPart.Position, newCFrame.UpVector)
+			local targetCFrame = CFrame.lookAt(cameraPosition, self.target.PrimaryPart.Position, newCFrame.UpVector)
 			self.cam.CFrame = self.cam.CFrame:Lerp(targetCFrame, dt * self.lockOnInfo.speed)
-			if tick() - self.lastTime > self.lockOnInfo.switchDebounce then
-				local mouseDeltaX = UserInputService:GetMouseDelta().X
-
-				if mouseDeltaX > self.lockOnInfo.switchSens or mouseDeltaX < -self.lockOnInfo.switchSens then
-					local _, rightTarget, leftTarget = self:_getTargetsClosestCrosshair()
-
-					if mouseDeltaX > self.lockOnInfo.switchSens and rightTarget and self:_isTargetInView() then -- Determine the direction of the mouse and switching target accordingly
-						self.target = rightTarget
-					elseif mouseDeltaX < -self.lockOnInfo.switchSens and leftTarget and self:_isTargetInView() then
-						self.target = leftTarget
-					end
-				end
-
-				self.lastTime = tick()
-			end
 		end
 	end
 
 	self:_followCharacterToCursor()
-end
-
-function CameraService:_getTargetsInRange()
-	local targets = {}
-
-	for _, part in
-		pairs(workspace:GetPartBoundsInRadius(self.character.HumanoidRootPart.Position, self.lockOnInfo.range))
-	do
-		if part:IsA("BasePart") and part.Parent:FindFirstChild("Humanoid") then
-			if game.Players:GetPlayerFromCharacter(part.Parent) then
-				if self.lockOnInfo.lockOnPlayers == true then
-					if not table.find(targets, part.Parent) then
-						table.insert(targets, part.Parent)
-					end
-				end
-			else
-				if not table.find(targets, part.Parent) then
-					table.insert(targets, part.Parent)
-				end
-			end
-		end
-	end
-
-	return targets
-end
-
-function CameraService:_getTargetsClosestCrosshair()
-	local targets = self:_getTargetsInRange()
-
-	local nearest = 1
-	self.target = nil
-
-	for _, char in targets do
-		if char and char ~= self.character then
-			local distance = (char.HumanoidRootPart.Position - self.character.HumanoidRootPart.Position).Magnitude
-
-			local cameraToTarget = (char.HumanoidRootPart.Position - self.cam.CFrame.Position).Unit
-			local cameraLook = self.cam.CFrame.LookVector
-
-			local dotProduct = cameraToTarget:Dot(cameraLook)
-			local difference = math.abs(1 - dotProduct)
-
-			if distance < self.lockOnInfo.range and dotProduct > 0.5 then
-				if difference < nearest then
-					nearest = difference
-					self.target = char
-				end
-			end
-		end
-	end
-
-	return self.target
-end
-
-function CameraService:_isTargetInView()
-	local excludedCharacters = self:_getTargetsInRange()
-	table.remove(excludedCharacters, table.find(excludedCharacters, self.target))
-
-	local rayParams = RaycastParams.new()
-	rayParams.FilterType = Enum.RaycastFilterType.Exclude
-	rayParams.FilterDescendantsInstances = excludedCharacters
-
-	local origin = self.character.HumanoidRootPart.Position
-	local direction = (self.target.HumanoidRootPart.Position - origin).Unit
-
-	local ray = workspace:Raycast(origin, direction * self.lockOnInfo.range, rayParams)
-
-	if ray then
-		if ray.Instance.Parent == self.target then
-			return true
-		end
-	end
-
-	return false
 end
 
 function CameraService:_followCharacterToCursor()

@@ -9,6 +9,7 @@ local LootService = require(script.LootService)
 local DialogService = require(script.DialogService)
 local InteractService = require(script.InteractService)
 local AlchemyService = require(script.AlchemyService)
+local TargetService = require(script.TargetService)
 
 ---@class ClientApplicationServices
 ---@field playerService ClientApplicationPlayerService
@@ -22,6 +23,7 @@ local AlchemyService = require(script.AlchemyService)
 ---@field dialogService DialogService
 ---@field interactService ClientInteractService
 ---@field alchemyService ClientAlchemyService
+---@field targetService TargetService
 local Services = {}
 Services.__index = Services
 
@@ -40,12 +42,14 @@ function Services.new(diContainer)
 	self.dialogService = DialogService.new()
 	self.interactService = InteractService.new()
 	self.alchemyService = AlchemyService.new()
+	self.targetService = TargetService.new(diContainer)
 	return self
 end
 
 function Services:init()
 	self.animationService:init()
 	self.inputService:init()
+	self.targetService:init()
 end
 
 return Services
