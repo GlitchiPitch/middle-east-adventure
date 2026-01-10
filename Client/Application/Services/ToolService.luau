@@ -9,6 +9,7 @@ local Players = game:GetService("Players")
 ---@field animationService AnimationService
 ---@field constants Constants
 ---@field remoteEventService RemoteEventService
+---@field isEquipped boolean
 local ToolService = {}
 ToolService.__index = ToolService
 
@@ -19,7 +20,7 @@ function ToolService.new(diContainer)
 	self.diContainer = diContainer
 	self._currentTool = nil
 	self.player = Players.LocalPlayer
-
+	self.isEquipped = false
 	self.debounce = false
 	self.attackIndex = 1
 	self.lastTime = nil
@@ -59,19 +60,23 @@ function ToolService:checkCharacterTool()
 end
 
 function ToolService:_setupTool(currentTool)
+	self.isEquipped = true
 	self._currentTool = currentTool
-	self.playerService:setPlayerState("Weapon")
 	self.animationService:playAnimation("OneHandedIdle")
 end
 
 function ToolService:_removeTool()
 	self._currentTool = nil
 	self.lastTime = nil
-	self.playerService:setPlayerState("")
+	self.isEquipped = false
 	self.animationService:stopAnimation("OneHandedIdle")
 end
 
 function ToolService:activated()
+	if not self.isEquipped then
+		return
+	end
+	
 	if self.debounce == true then
 		return
 	end

@@ -2,6 +2,7 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 ---@class TargetService
 ---@field diContainer DIContainer
+---@field playerService ClientApplicationPlayerService
 local TargetService = {}
 TargetService.__index = TargetService
 
@@ -14,7 +15,7 @@ function TargetService.new(diContainer)
 	self.currentCheckedTarget = nil
 	self.player = Players.LocalPlayer
 	self.cam = game.Workspace.CurrentCamera
-	
+
 	return self
 end
 
@@ -29,7 +30,11 @@ function TargetService:init()
 	local shared = self.diContainer:resolve("Shared")
 	self.constants = shared.constants
 
-    self.lockOnInfo = shared.config.Client.TargetService
+	---@type ClientApplication
+	local application = self.diContainer:resolve("Application")
+
+	self.lockOnInfo = shared.config.Client.TargetService
+	self.playerService = application.services.playerService
 
 	RunService.RenderStepped:Connect(onRender)
 end
@@ -39,6 +44,15 @@ function TargetService:getCurrentTarget()
 end
 
 function TargetService:_onRender()
+	local playerState = self.playerService:getPlayerState()
+	if playerState == self.constants.PLAYER_STATES.ALCHEMY then
+		if self.currentCheckedTarget and self.currentCheckedTarget ~= self.checkedTarget then
+			self:_toogleTargetView(false)
+			self.currentCheckedTarget = nil
+		end
+		return
+	end
+
 	self.checkedTarget = self:_getTargetsClosestCrosshair()
 	if self.checkedTarget then
 		if self.currentCheckedTarget and self.currentCheckedTarget ~= self.checkedTarget then
@@ -48,10 +62,12 @@ function TargetService:_onRender()
 
 		self.currentCheckedTarget = self.checkedTarget
 		self:_toogleTargetView(true)
+		self:_setPlayerStateByTarget()
 	else
 		if self.currentCheckedTarget then
 			self:_toogleTargetView(false)
 			self.currentCheckedTarget = nil
+			self:_setPlayerStateByTarget()
 		end
 	end
 end
@@ -90,12 +106,28 @@ function TargetService:_toogleTargetView(state)
 	end
 end
 
+function TargetService:_setPlayerStateByTarget()
+	if self.currentCheckedTarget then
+		if self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.INTERACT) then
+			self.playerService:setPlayerState("Interact")
+		elseif self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.LOOT) then
+			self.playerService:setPlayerState("Loot")
+		elseif self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.NPC) then
+			self.playerService:setPlayerState("NPC")
+		else
+			self.playerService:setPlayerState("")
+		end
+	else
+		self.playerService:setPlayerState("")
+	end
+end
+
 function TargetService:_getTargetsInRange()
 	local targets = {}
+	local partsInRadius =
+		workspace:GetPartBoundsInRadius(self.character.HumanoidRootPart.Position, self.lockOnInfo.range)
 
-	for _, part in
-		pairs(workspace:GetPartBoundsInRadius(self.character.HumanoidRootPart.Position, self.lockOnInfo.range))
-	do
+	for _, part in partsInRadius do
 		if part:IsA("BasePart") then
 			if game.Players:GetPlayerFromCharacter(part.Parent) then
 				if self.lockOnInfo.lockOnPlayers == true then
@@ -106,6 +138,7 @@ function TargetService:_getTargetsInRange()
 			elseif
 				part.Parent:HasTag(self.constants.PLAYER_STATES.NPC)
 				or part.Parent:HasTag(self.constants.PLAYER_STATES.LOOT)
+				or part.Parent:HasTag(self.constants.PLAYER_STATES.INTERACT)
 			then
 				if not table.find(targets, part.Parent) then
 					table.insert(targets, part.Parent)

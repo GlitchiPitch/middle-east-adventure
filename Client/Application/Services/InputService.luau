@@ -1,6 +1,16 @@
 local UserInputService = game:GetService("UserInputService")
 ---@class InputService
 ---@field diContainer DIContainer
+---@field config Config
+---@field eventBus EventBus
+---@field playerService ClientApplicationPlayerService
+---@field lootService ClientLootService
+---@field dialogService DialogService
+---@field alchemyService ClientAlchemyService
+---@field toolService ClientToolService
+---@field interactService ClientInteractService
+---@field sprintService SprintService
+---@field cameraService CameraService
 local InputService = {}
 InputService.__index = InputService
 
@@ -25,6 +35,21 @@ function InputService:init()
 		self:_inputChanged(input, gameProccessed)
 	end
 
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
+	---@type ClientApplication
+	local application = self.diContainer:resolve("Application")
+	self.config = shared.config
+	self.eventBus = shared.eventBus
+	self.playerService = application.services.playerService
+	self.lootService = application.services.lootService
+	self.dialogService = application.services.dialogService
+	self.interactService = application.services.interactService
+	self.sprintService = application.services.sprintService
+	self.cameraService = application.services.cameraService
+	self.toolService = application.services.toolService
+	self.alchemyService = application.services.alchemyService
+
 	self._inputBeganConn = UserInputService.InputBegan:Connect(onInputBegan)
 	self._inputEndedConn = UserInputService.InputEnded:Connect(onInputEnded)
 	self._inputChangedConn = UserInputService.InputChanged:Connect(onInputChanged)
@@ -37,40 +62,41 @@ function InputService:_inputBegan(input, gameProccessed)
 		return
 	end
 
-	---@type Shared
-	local shared = self.diContainer:resolve("Shared")
-	---@type ClientApplication
-	local application = self.diContainer:resolve("Application")
-	local config = shared.config
-	local eventBus = shared.eventBus
+	local playerState = self.playerService:getPlayerState()
+	if input.UserInputType == self.config.Client.Control.MainAction then
+		
+		if self.alchemyService.isActive then
+			return
+		end
 
-	local playerState = application.services.playerService:getPlayerState()
-	if input.UserInputType == config.Client.Control.MainAction then
-		if playerState == "Weapon" then
-			application.services.toolService:activated()
-		elseif playerState == "Loot" then
-			application.services.lootService:pickupLoot()
+		if self.toolService.isEquipped then
+			self.toolService:activated()
+			return
+		end
+
+		if playerState == "Loot" then
+			self.lootService:pickupLoot()
 		elseif playerState == "NPC" then
-			application.services.dialogService:activateDialog()
+			self.dialogService:activateDialog()
 		elseif playerState == "Interact" then
-			application.services.interactService:activate()
+			self.interactService:activate()
 		end
-	elseif input.UserInputType == config.Client.Control.SecondAction then
-		if playerState == "Weapon" then
-			application.services.toolService:block(true)
+	elseif input.UserInputType == self.config.Client.Control.SecondAction then
+		if self.toolService.isEquipped then
+			self.toolService:block(true)
 		end
-	elseif input.KeyCode == config.Client.Control.FreeMouse then
-		application.services.cameraService:toggleFreeMouse()
-	elseif input.KeyCode == config.Client.Control.TargetCamera then
-		application.services.cameraService:toggleTargetCamera()
+	elseif input.KeyCode == self.config.Client.Control.FreeMouse then
+		self.cameraService:toggleFreeMouse()
+	elseif input.KeyCode == self.config.Client.Control.TargetCamera then
+		self.cameraService:toggleTargetCamera()
 	end
 
-	if input.KeyCode == config.Client.Control.RunKey then
-		application.services.sprintService:run()
+	if input.KeyCode == self.config.Client.Control.RunKey then
+		self.sprintService:run()
 	end
 
-	if table.find(config.Client.Control.EquippmentKeys, input.KeyCode) then
-		eventBus:fire("pressEquipKey", input.KeyCode.Value)
+	if table.find(self.config.Client.Control.EquippmentKeys, input.KeyCode) then
+		self.eventBus:fire("pressEquipKey", input.KeyCode.Value)
 	end
 end
 
@@ -79,22 +105,14 @@ function InputService:_inputEnded(input, gameProccessed)
 		return
 	end
 
-	---@type Shared
-	local shared = self.diContainer:resolve("Shared")
-	---@type ClientApplication
-	local application = self.diContainer:resolve("Application")
-	local config = shared.config
-
-	if input.UserInputType == config.Client.Control.SecondAction then
-		-- animTracks.oneHandedBlock:Stop()
-		local playerState = application.services.playerService:getPlayerState()
-		if playerState == "Weapon" then
-			application.services.toolService:block(false)
+	if input.UserInputType == self.config.Client.Control.SecondAction then
+		if self.toolService.isEquipped then
+			self.toolService:block(false)
 		end
 	end
 
-	if input.KeyCode == config.Client.Control.RunKey then
-		application.services.sprintService:walk()
+	if input.KeyCode == self.config.Client.Control.RunKey then
+		self.sprintService:walk()
 	end
 end
 
@@ -103,11 +121,8 @@ function InputService:_inputChanged(input, gameProccessed)
 		return
 	end
 
-	---@type ClientApplication
-	local application = self.diContainer:resolve("Application")
-
 	if input.UserInputType == Enum.UserInputType.MouseMovement then
-		application.services.cameraService:mouseMovement(input)
+		self.cameraService:mouseMovement(input)
 	end
 end
 

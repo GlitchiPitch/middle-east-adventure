@@ -30,7 +30,6 @@ function StatsUI:updateUI()
 	---@type ClientApplication
 	local application = self.diContainer:resolve("Application")
 	local playerEntity = application.services.playerService:getPlayerEntity()
-    print(playerEntity)
 	for i, v in
 		{
 			stamina = self.staminaBar,

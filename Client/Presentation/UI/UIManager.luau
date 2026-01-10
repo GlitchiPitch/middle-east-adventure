@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 -- local CollectionService = game:GetService("CollectionService")
 --
----@alias _uiNames '"inventory"' | '"combat"' | '"startingScreen"' | '"misc"' | '"primary"' | '"trade"'
+---@alias _uiNames '"inventory"' | '"combat"' | '"startingScreen"' | '"misc"' | '"primary"' | '"trade"' | '"alchemy"' | '"dialog"'
 
 ---@class UIManager
 ---@field _mainUI ScreenGui
@@ -9,7 +9,9 @@ local Players = game:GetService("Players")
 ---@field _currentScreen Folder
 ---@field inventory Folder
 ---@field primary Folder
+---@field alchemy Folder
 ---@field trade Folder
+---@field dialog Folder
 ---@field misc Folder
 local UIManager = {}
 UIManager.__index = UIManager
@@ -21,9 +23,11 @@ function UIManager.new()
 	self._mainUI = self.player.PlayerGui:WaitForChild("MainUI")
 	self.startingScreen = self._mainUI.StartingScreen
 	self.inventory = self._mainUI.Inventory
+	self.alchemy = self._mainUI.Alchemy
 	self.primary = self._mainUI.Primary
 	self.trade = self._mainUI.Trade
 	self.misc = self._mainUI.Misc
+	self.dialog = self._mainUI.Dialog
 	self._currentScreen = nil
 
 	return self

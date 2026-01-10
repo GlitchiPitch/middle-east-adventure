@@ -1,17 +1,23 @@
+local CollectionService = game:GetService("CollectionService")
 -- local TweenService = game:GetService("TweenService")
 -- local Debris = game:GetService("Debris")
 
 ---@class DialogService
+---@field diContainer DIContainer
+---@field constants Constants
+---@field eventBus EventBus
+---@field dialogs Dialogs
+---@field targetService TargetService
 local DialogService = {}
 DialogService.__index = DialogService
 
+---@param diContainer DIContainer
 ---@return DialogService
-function DialogService.new()
+function DialogService.new(diContainer)
 	local self = setmetatable({}, DialogService)
+	self.diContainer = diContainer
 	self.config = {
 		INTERACTION_DISTANCE = 16, --// distance (in studs) of how far players must be in order to engage in conversation with an NPC
-		ONLY_CAPS = true, --// whether or not all dialog will be forced to capitalization
-		HIDE_BODY = true, --// whether or not the body will be hidden when a rig is being used as a character
 		MAIN_COLOR = Color3.fromRGB(46, 255, 255), --// main color of dialog
 		SECONDARY_COLOR = Color3.fromRGB(255, 109, 192), --// secondary color of dialog
 	}
@@ -21,64 +27,94 @@ end
 --// This function is meant to be called whenever the player joins the game.
 --// It's used for initializing the dialog system!
 function DialogService:init()
-	self.Player = game.Players.LocalPlayer
-	self.Character = self.Player.Character or self.Player.CharacterAdded:Wait()
-	self.Humanoid = self.Character:WaitForChild("Humanoid")
+	self.player = game.Players.LocalPlayer
+	self._characterCache = {}
 
-	self.CharacterCache = {}
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
+	self.eventBus = shared.eventBus
+	self.constants = shared.constants
+	self.dialogs = shared.data.Dialogs
+
+	---@type ClientApplication
+	local application = self.diContainer:resolve("Application")
+	self.targetService = application.services.targetService
+
+	local function onCharacterAdded()
+		self.character = self.player.Character
+		self.humanoid = self.character:WaitForChild("Humanoid")
+	end
+
+	---@param npc Model
+	local function onAdded(npc)
+		if npc:IsDescendantOf(workspace) then
+			self:setupCharacterWithDialog(npc)
+		end
+	end
+
+	---@param npc Model
+	local function onRemoved(npc) end
 
 	--// Update character stuff when needed
-	self.Player.CharacterAdded:Connect(function()
-		self.Character = self.Player.Character
-		self.Humanoid = self.Character:WaitForChild("Humanoid")
-	end)
 
-	--// Add dialog modules & work to add more if there's ever any added by the server/client
-	for _, dialogModule in pairs(workspace:GetDescendants()) do
-		self:setupCharacterWithDialog(dialogModule)
+	if self.player.Character then
+		onCharacterAdded()
 	end
-	workspace.DescendantAdded:Connect(function(dialogModule)
-		self:setupCharacterWithDialog(dialogModule)
-	end)
+
+	for _, v in CollectionService:GetTagged(self.constants.PLAYER_STATES.NPC) do
+		onAdded(v)
+	end
+
+	CollectionService:GetInstanceAddedSignal(self.constants.PLAYER_STATES.NPC):Connect(onAdded)
+	CollectionService:GetInstanceRemovedSignal(self.constants.PLAYER_STATES.NPC):Connect(onRemoved)
+	self.player.CharacterAdded:Connect(onCharacterAdded)
+end
+
+---@param npc Model
+function DialogService:setupCharacterWithDialog(npc)
+	local npcDialog = self.dialogs[npc.Name] or self.dialogs.SimpleNpc
+	local humanoid = npc.Humanoid :: Humanoid
+	local function _onDied()
+		self.eventBus:fire("deleteDialog", {})
+		self._characterCache[npc].diedConn:Disconnect()
+		self._characterCache[npc] = nil
+	end
+
+	self._characterCache[npc] = {
+		dialogData = npcDialog,
+		npc = npc,
+		diedConn = humanoid.Died:Connect(_onDied),
+	}
+
+	self.eventBus:fire("setupDialog", {
+		dialogData = npcDialog,
+		npc = npc,
+	})
 end
 
 function DialogService:activateDialog()
-	
+	local npc = self.targetService:getCurrentTarget()
+	if npc.Humanoid and npc.Humanoid.Health <= 0 then
+		return
+	end
+
+	self.eventBus:fire("showDialog", {
+		npc = npc,
+	})
 end
 
---// This function processes dialog modules & adds functionality onto them for whenever they're added to workspace!
-function DialogService:setupCharacterWithDialog(dialogModule)
-	-- local NPC = dialogModule.Parent
-	-- if dialogModule:IsA("ModuleScript") and dialogModule.Name == "Dialog" and NPC:IsA("Model") then
-	-- 	-- local dialogInfo = require(dialogModule)
-	-- end
+function DialogService:finishDialog(npc)
+	self.eventBus:fire("finishDialog", {
+		npc = npc,
+	})
 end
 
--- --// helpful function for darkening colors (or brightening them for when percentdarker is negative lol)
--- local function DarkenColor(color, percentDarker)
--- 	percentDarker = 100 - percentDarker
--- 	local h, s, v = Color3.toHSV(color)
--- 	return Color3.fromHSV(h, s, math.clamp(v * (percentDarker / 100), 0, 1))
--- end
-
--- --// Create a new dialog instance
--- function DialogService:activateDialog(dialogModule)
--- 	if self.Humanoid and self.Humanoid.Health > 0 then
--- 		return
--- 	end
 -- 	local Dialog = {}
 
 -- 	--// Fetch dialog/NPC info
 -- 	local NPC = dialogModule.Parent
 -- 	local dialogInfo = require(dialogModule)
 -- 	local dialogConfig = dialogInfo.Config or {}
-
-	
--- 	--// Prevent player from walking around
--- 	local humanoid = DialogService.Humanoid
--- 	local originalSpeed = humanoid.WalkSpeed
--- 	humanoid.WalkSpeed = 0
--- 	humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, false)
 
 -- 	--// Cleanup when player dies (there are two connections because I'm paranoid :3)
 -- 	humanoid.Died:Connect(function()
@@ -121,225 +157,6 @@ end
 -- 		DialogService.CharacterCache[data.Name].Expressions = data.Expressions
 -- 	end
 
--- 	--// Function for loading dialog onto the UI\
--- 	function Dialog:CreateDialog(data)
--- 		if not dialogUI.Parent then
--- 			return
--- 		end
--- 		data.Text = data.Text or "Uhhhhhhh"
--- 		data.Character = data.Character or NPC.Name
--- 		dialogContainer.Continue.Interactable = false
-
--- 		--// Change characters if needed
--- 		if Dialog.CurrentCharacter and Dialog.CurrentCharacter ~= data.Character then
--- 			TweenService:Create(dialogUI.CharacterHolder, TweenInfo.new(0.3), { Position = UDim2.fromScale(1.5, 0.4) })
--- 				:Play()
--- 			TweenService:Create(
--- 				dialogUI.CharacterBackground,
--- 				TweenInfo.new(0.25),
--- 				{ Rotation = 90, Position = UDim2.fromScale(1.35, 0.475) }
--- 			):Play()
--- 			task.wait(0.25)
--- 			worldModel:ClearAllChildren()
--- 			dialogUI.CharacterHolder.Sprite.Visible = false
--- 		end
-
--- 		--// Add character to cache if it isn't there already
--- 		if not DialogService.CharacterCache[data.Character] then
--- 			local data = {
--- 				Name = NPC.Name,
--- 				Rig = dialogConfig.Rig,
--- 				Expressions = dialogConfig.Expressions,
--- 			}
--- 			if not data.Rig and not data.Expressions then
--- 				data.Rig = NPC
--- 			end
--- 			Dialog:CreateCharacter(data)
--- 		end
-
--- 		--// Function for adding sprites cuz this code is used twice
--- 		local function AddSprite(expressionInfo)
--- 			Dialog.CurrentExpression = data.Expression
--- 			dialogUI.CharacterHolder.Sprite.Visible = true
--- 			dialogUI.CharacterHolder.Sprite.ResampleMode = (
--- 				expressionInfo.Antialiasing and Enum.ResamplerMode.Default or Enum.ResamplerMode.Pixelated
--- 			)
--- 			dialogUI.CharacterHolder.Sprite.Size = UDim2.fromScale(1, 1)
--- 				+ (expressionInfo.SizeOffset or UDim2.fromScale())
--- 			dialogUI.CharacterHolder.Sprite.Position = UDim2.fromScale(0.5, 0.5)
--- 				+ (expressionInfo.PositionOffset or UDim2.fromScale())
--- 			dialogUI.CharacterHolder.Sprite.Image = expressionInfo.Textures[1]
--- 			game.ContentProvider:PreloadAsync(expressionInfo.Textures)
--- 			task.spawn(function()
--- 				local i = 0
--- 				while
--- 					task.wait(expressionInfo.Framerate / 60)
--- 					and data.Expression == Dialog.CurrentExpression
--- 					and data.Character == Dialog.CurrentCharacter
--- 					and dialogUI.Parent
--- 				do
--- 					local texture = expressionInfo.Textures[(i % #expressionInfo.Textures) + 1]
--- 					if texture then
--- 						dialogUI.CharacterHolder.Sprite.Image = texture
--- 					end
--- 					i += 1
--- 				end
--- 			end)
--- 		end
-
--- 		--// Add character rig to viewport if needed
--- 		if Dialog.CurrentCharacter ~= data.Character then
--- 			local characterInfo = DialogService.CharacterCache[data.Character]
--- 			if characterInfo.Expressions then
--- 				if data.Expression then
--- 					local expressionInfo = characterInfo.Expressions[data.Expression]
--- 					if expressionInfo then
--- 						AddSprite(expressionInfo)
--- 					else
--- 						warn(
--- 							"no expression found while using expression-based character! did you spell the expression wrong?"
--- 						)
--- 					end
--- 				else
--- 					warn(
--- 						"no expression given while using expression-based character! did you forget to state one to be used?"
--- 					)
--- 				end
--- 			elseif characterInfo.Rig then
--- 				local rig = characterInfo.Rig:Clone()
--- 				if not rig.PrimaryPart then
--- 					rig.PrimaryPart = rig:FindFirstChild("HumanoidRootPart") or rig:FindFirstChildOfClass("BasePart")
--- 				end
-
--- 				--// Get rid of scripts before anything
--- 				for _, thing in pairs(rig:GetDescendants()) do
--- 					if thing:IsA("Script") or thing:IsA("LocalScript") then
--- 						thing.Enabled = false
--- 						thing:Destroy()
--- 					end
--- 				end
-
--- 				--// Continue on with editing rig properties
--- 				rig:SetPrimaryPartCFrame(CFrame.new())
--- 				rig.Name = "Rig"
--- 				rig.Parent = worldModel
-
--- 				--// Create camera for viewing rig
--- 				local camera = Instance.new("Camera")
--- 				camera.Parent = dialogUI.CharacterHolder
--- 				camera.FieldOfView = 15
--- 				camera.CFrame = rig.Head.CFrame * CFrame.Angles(0, math.rad(180 + 30), 0) * CFrame.new(0, 0, 10)
-
--- 				--// Hide body if needed
--- 				if config.HIDE_BODY then
--- 					camera.CFrame *= CFrame.new(-0.2, 0.225, 0)
--- 					camera.FieldOfView = 12.5
--- 					local validAttachments = {
--- 						"NeckAttachment",
--- 						"FaceFrontAttachment",
--- 						"FaceCenterAttachment",
--- 						"FaceFrontAttachment",
--- 						"HairAttachment",
--- 						"HatAttachment",
--- 					}
-
--- 					for _, thing in pairs(rig:GetChildren()) do
--- 						if thing:IsA("BasePart") and thing.Name ~= "Head" then
--- 							thing:Destroy()
--- 						elseif thing:IsA("Accessory") then
--- 							local handle = thing:FindFirstChild("Handle")
--- 							if handle then
--- 								local didFindValidAttachment = false
--- 								for _, attachmentName in pairs(validAttachments) do
--- 									if handle:FindFirstChild(attachmentName) then
--- 										didFindValidAttachment = true
--- 										break
--- 									end
--- 								end
--- 								if not didFindValidAttachment then
--- 									thing:Destroy()
--- 								end
--- 							end
--- 						end
--- 					end
--- 				end
-
--- 				dialogUI.CharacterHolder.CurrentCamera = camera
--- 			end
--- 		end
-
--- 		--// Some stuff for expressions & pos/size offsets
--- 		if Dialog.CurrentCharacter == data.Character and Dialog.CurrentExpression ~= data.Expression then
--- 			local characterInfo = DialogService.CharacterCache[data.Character]
--- 			if characterInfo.Expressions and data.Expression then
--- 				local expressionInfo = characterInfo.Expressions[data.Expression]
--- 				if expressionInfo then
--- 					AddSprite(expressionInfo)
--- 				end
--- 			end
--- 		end
-
--- 		--// Show character holder
--- 		TweenService:Create(dialogUI.CharacterHolder, TweenInfo.new(0.4), { Position = UDim2.fromScale(1, 0.4) }):Play()
--- 		TweenService:Create(
--- 			dialogUI.CharacterBackground,
--- 			TweenInfo.new(0.4),
--- 			{ Rotation = 75, Position = UDim2.fromScale(1, 0.475) }
--- 		):Play()
-
--- 		--// Setup connection that's used for detecting when the dialog UI is clicked
--- 		local clickConnection = dialogContainer.Continue.MouseButton1Click:Connect(function()
--- 			Dialog.FinishedReading = true
--- 		end)
-
--- 		--// Cancel dialog tweens if they exist
--- 		if Dialog.TextTweens then
--- 			for _, tween in pairs(Dialog.TextTweens) do
--- 				tween:Cancel()
--- 				tween = nil
--- 			end
--- 		end
-
--- 		--// Set dialog properties
--- 		dialogContainer.Label.Text = (config.ONLY_CAPS and data.Text:upper() or data.Text)
--- 		dialogContainer.Continue.Text = (config.ONLY_CAPS and data.Text:upper() or data.Text)
--- 		dialogContainer.Label.TextTransparency = 1
--- 		dialogContainer.Continue.TextTransparency = 1
-
--- 		--// Tweening
--- 		Dialog.TextTweens = {}
--- 		Dialog.TextTweens.Label =
--- 			TweenService:Create(dialogContainer.Label, TweenInfo.new(0.25), { TextTransparency = 0 }):Play()
--- 		Dialog.TextTweens.Continue =
--- 			TweenService:Create(dialogContainer.Continue, TweenInfo.new(0.25), { TextTransparency = 0 }):Play()
-
--- 		--// Callback if necessary
--- 		if data.Callback then
--- 			data.Callback()
--- 		end
-
--- 		--// Other stuff
--- 		Dialog.CurrentCharacter = data.Character
--- 		dialogContainer.Continue.Interactable = true
-
--- 		--// Yield
--- 		repeat
--- 			task.wait()
--- 		until Dialog.FinishedReading or not dialogUI.Parent
-
--- 		--// Failsafe stuff
--- 		if Dialog.Destroyed or not dialogUI.Parent then
--- 			return
--- 		end
--- 		Dialog.FinishedReading = nil
-
--- 		--// Cleanup
--- 		clickConnection:Disconnect()
--- 		clickConnection = nil
--- 		dialogContainer.Label.Text = ""
--- 		dialogContainer.Continue.Text = ""
--- 	end
-
 -- 	function Dialog:Cleanup()
 -- 		if not Dialog.Destroyed then
 -- 			Dialog.Destroyed = true
@@ -365,3 +182,10 @@ end
 -- end
 
 return DialogService
+
+-- --// helpful function for darkening colors (or brightening them for when percentdarker is negative lol)
+-- local function DarkenColor(color, percentDarker)
+-- 	percentDarker = 100 - percentDarker
+-- 	local h, s, v = Color3.toHSV(color)
+-- 	return Color3.fromHSV(h, s, math.clamp(v * (percentDarker / 100), 0, 1))
+-- end

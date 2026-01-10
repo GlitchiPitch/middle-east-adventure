@@ -37,7 +37,7 @@ function Recipe:_setup()
 
 	for _, slot in self.ingredientsFrame:GetChildren() do
 		if slot:IsA("TextButton") then
-			local ingredientData = self.ingredients[v.Name]
+			local ingredientData = self.ingredients[tonumber(slot.Name)]
 			if ingredientData then
 				slot.IngredientImage.Image = ingredientData.image
 				slot.WaterImage.ImageColor3 = ingredientData.waterColor
@@ -67,13 +67,37 @@ function Recipe:_hide()
 end
 
 ---@class AlchemyUI
+---@field diContainer DIContainer
+---@field recipesFrame Frame
+---@field inventoryFrame Frame
+---@field recipesContainer ScrollingFrame
+---@field recipeTemplate Frame
 local AlchemyUI = {}
 AlchemyUI.__index = AlchemyUI
 
+---@param diContainer DIContainer
 ---@return AlchemyUI
-function AlchemyUI.new()
+function AlchemyUI.new(diContainer)
 	local self = setmetatable({}, AlchemyUI)
+	self.diContainer = diContainer
 	return self
+end
+
+function AlchemyUI:init()
+	---@type Presentation
+	local presentation = self.diContainer:resolve("Presentation")
+	local alchemy = presentation.ui.uiManager.alchemy
+	self.inventoryFrame = alchemy.Inventory
+	self.inventoryContainer = self.inventoryFrame.ScrollingFrame
+	self.inventorySlotTemplate = self.inventoryContainer.Template
+
+	self.recipesFrame = alchemy.Recipes
+	self.recipesContainer = self.recipesFrame.ScrollingFrame
+	self.recipeTemplate = self.recipesContainer.Template
+end
+
+function AlchemyUI:updatePlayerRecipes()
+	
 end
 
 ---@param recipe RecipeEntity

@@ -15,8 +15,8 @@ CameraService.__index = CameraService
 function CameraService.new(diContainer)
 	local self = setmetatable({}, CameraService)
 	self.diContainer = diContainer
-	self._freemouse = false
 	self._cameraState = ""
+	self._freemouse = false
 
 	-- you can mess with these settings
 	self.sensitivity = 0.6 -- anything higher would make looking up and down harder; recommend anything between 0~1
@@ -31,14 +31,11 @@ function CameraService.new(diContainer)
 	self.angleX, self.targetAngleX = 0, 0
 	self.angleY, self.targetAngleY = 0, 0
 
-	self.running = true
 	self.target = nil
 
 	self.lastDelta = 0
 	self.lastObstructed = nil
 	self.lastTime = 0
-	self.checkedTarget = nil
-	self.currentCheckedTarget = nil
 
 	self.charAngle = CFrame.Angles --[Storing these as variables so I dont have to type them out.]
 	self.aSin = math.asin
@@ -56,7 +53,7 @@ end
 
 function CameraService:init()
 	self.cam.CameraType = Enum.CameraType.Scriptable
-	UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+	self:_toggleFreeMouse()
 
 	self.character = self.player.Character or self.player.CharacterAdded:wait()
 	self.head = self.character:WaitForChild("Head")
@@ -99,9 +96,10 @@ function CameraService:activateDefaultCamera()
 		self:_onRender(deltaTime)
 	end
 
-	self.mouse.Icon = "http://www.roblox.com/asset/?id=569021388" -- replaces mouse icon
+	
 
 	self._cameraState = self.constants.CAMERA_STATES.DEFAULT
+	self:_toggleFreeMouse()
 
 	RunService.RenderStepped:Connect(onRender)
 end
@@ -109,6 +107,7 @@ end
 function CameraService:activateAlchemyCamera(alchemyPotCameraCFrame)
 	self.cam.CFrame = alchemyPotCameraCFrame
 	self._cameraState = self.constants.CAMERA_STATES.ALCHEMY
+	self:_toggleFreeMouse()
 end
 
 function CameraService:toggleTargetCamera()
@@ -124,8 +123,15 @@ function CameraService:toggleTargetCamera()
 	end
 end
 
-function CameraService:toggleFreeMouse()
-	self.freemouse = not self.freemouse
+function CameraService:_toggleFreeMouse()
+	self._freemouse = not self._freemouse
+	if self._freemouse then
+		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+		self.mouse.Icon = "" -- replaces mouse icon
+	else
+		UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
+		self.mouse.Icon = "http://www.roblox.com/asset/?id=569021388" -- replaces mouse icon
+	end
 end
 
 ---@param input InputObject
@@ -190,20 +196,20 @@ function CameraService:_targetCamera(dt)
 
 	local distance = (self.target.PrimaryPart.Position - self.character.HumanoidRootPart.Position).Magnitude
 
-	local requiresLineOfSight = self.lockOnInfo.requiresLineOfSight
-	local hasLineOfSight = self.targetService:_isTargetInView()
-	local lineOfSight = (hasLineOfSight and requiresLineOfSight) or not requiresLineOfSight -- Check for line of sight if required
+	-- local requiresLineOfSight = self.lockOnInfo.requiresLineOfSight
+	-- local hasLineOfSight = self.targetService:_isTargetInView()
+	-- local lineOfSight = (hasLineOfSight and requiresLineOfSight) or not requiresLineOfSight -- Check for line of sight if required
 
-	if not lineOfSight then
-		if not self.lastObstructed then
-			self.lastObstructed = tick()
-		elseif tick() - self.lastObstructed > 1 then
-			self.lastObstructed = nil
-			return
-		end
-	else
-		self.lastObstructed = nil
-	end
+	-- if not lineOfSight then
+	-- 	if not self.lastObstructed then
+	-- 		self.lastObstructed = tick()
+	-- 	elseif tick() - self.lastObstructed > 1 then
+	-- 		self.lastObstructed = nil
+	-- 		return
+	-- 	end
+	-- else
+	-- 	self.lastObstructed = nil
+	-- end
 
 	if distance < self.lockOnInfo.range then -- and self.target.Humanoid.Health > 0
 		local targetPosition = Vector3.new(
@@ -230,31 +236,16 @@ function CameraService:_targetCamera(dt)
 end
 
 function CameraService:_defaultCamera()
-	if self.running then
-		self.camPos = self.camPos + (self.targetCamPos - self.camPos) * 0.2
-		self.angleX = self.angleX + (self.targetAngleX - self.angleX) * 0.3
-		local dist = self.targetAngleY - self.angleY
-		dist = math.abs(dist) > 180 and dist - (dist / math.abs(dist)) * 360 or dist
-		self.angleY = (self.angleY + dist * 0.3) % 360
+	self.camPos = self.camPos + (self.targetCamPos - self.camPos) * 0.2
+	self.angleX = self.angleX + (self.targetAngleX - self.angleX) * 0.3
+	local dist = self.targetAngleY - self.angleY
+	dist = math.abs(dist) > 180 and dist - (dist / math.abs(dist)) * 360 or dist
+	self.angleY = (self.angleY + dist * 0.3) % 360
 
-		self.cam.CFrame = CFrame.new(self.head.Position)
-			* CFrame.Angles(0, math.rad(self.angleY), 0)
-			* CFrame.Angles(math.rad(self.angleX), 0, 0)
-			* self.headOffset -- offset
-	else
-		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
-	end
-
-	if (self.cam.Focus.Position - self.cam.CFrame.Position).Magnitude < 1 then
-		self.running = false
-	else
-		self.running = true
-		if self._freemouse then
-			UserInputService.MouseBehavior = Enum.MouseBehavior.Default
-		else
-			UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
-		end
-	end
+	self.cam.CFrame = CFrame.new(self.head.Position)
+		* CFrame.Angles(0, math.rad(self.angleY), 0)
+		* CFrame.Angles(math.rad(self.angleX), 0, 0)
+		* self.headOffset -- offset
 
 	self.cam.FieldOfView = self.fieldOfView
 end

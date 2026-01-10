@@ -11,22 +11,46 @@ Presentation.__index = Presentation
 ---@param diContainer DIContainer
 ---@return Presentation
 function Presentation.new(diContainer)
-    local self = setmetatable({}, Presentation)
-    self.diContainer = diContainer
-    self.ui = UI.new(diContainer)
-    self.services = Services.new(diContainer)
-    return self
+	local self = setmetatable({}, Presentation)
+	self.diContainer = diContainer
+	self.ui = UI.new(diContainer)
+	self.services = Services.new(diContainer)
+	return self
 end
 
 function Presentation:init()
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
+	shared.eventBus:connect("updatePlayerData", function()
+		self.ui.statsUI:updateUI()
+        self.ui.alchemyUI:updatePlayerRecipes()
+	end)
 
-    ---@type Shared
-    local shared = self.diContainer:resolve("Shared")
-    shared.eventBus:connect("updatePlayerData", function()
-        self.ui.statsUI:updateUI()
+
+
+	shared.eventBus:connect("setAlchemyMode", function(data)
+		if data.isActive then
+			self.ui.uiManager:setCurrentScreen("alchemy")
+		else
+			self.ui.uiManager:setCurrentScreen("primary")
+		end
+	end)
+
+    shared.eventBus:connect("setupDialog", function(data)
+        self.ui.dialogUI:createDialog(data)
     end)
 
-    self.ui:init()
+    shared.eventBus:connect("showDialog", function(data)
+        self.ui.dialogUI:showDialog(data)
+        self.ui.uiManager:setCurrentScreen("dialog")
+    end)
+
+    shared.eventBus:connect("finishDialog", function(_)
+        self.ui.dialogUI:hideDialog()
+        self.ui.uiManager:setCurrentScreen("primary")
+    end)
+
+	self.ui:init()
 end
 
 return Presentation

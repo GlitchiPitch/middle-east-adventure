@@ -1,83 +1,74 @@
 local TweenService = game:GetService("TweenService")
 ---@class DialogUI
+---@field diContainer DIContainer
+---@field bottom Frame
+---@field characterHolder ViewportFrame
+---@field _characterCFrame CFrame
+---@field _dialogsCache table
 local DialogUI = {}
 DialogUI.__index = DialogUI
 
+---@param diContainer DIContainer
 ---@return DialogUI
-function DialogUI.new()
-    local self = setmetatable({}, DialogUI)
-    return self
+function DialogUI.new(diContainer)
+	local self = setmetatable({}, DialogUI)
+	self.diContainer = diContainer
+	self._dialogsCache = {}
+	return self
 end
 
 function DialogUI:init()
-    
-	self.UI = Instance.new("ScreenGui")
-	self.UI.Name = "MiamiDialog"
-	self.UI.IgnoreGuiInset = true
-	self.UI.ResetOnSpawn = false
-	self.UI.Parent = self.Player.PlayerGui
-
+	---@type Presentation
+	local presentation = self.diContainer:resolve("Presentation")
+	local dialogUI = presentation.ui.uiManager.dialog
+	self.bottom = dialogUI.Bottom
+	self.characterHolder = dialogUI.CharacterHolder
+	self._characterCFrame = self.characterHolder:GetAttribute("CharacterCFrame")
 end
 
-function DialogUI:showDialog()
-    --// Create dialog UI
-	local dialogUI = script.DialogMain:Clone()
-	dialogUI.Parent = self.UI
+---@class createDialogData
+---@field dialogData table
+---@field npc Model
 
-	--// Set dialog container properties n stuff
-	local dialogContainer = dialogUI.Bars.Bottom.DialogContainer
-	dialogContainer.Label.TextColor3 = Color3.new(0.95, 0.95, 1) --DarkenColor(config.MAIN_COLOR, -90)
-	dialogContainer.Continue.TextColor3 = DarkenColor(config.MAIN_COLOR, 50)
+---@param data createDialogData
+function DialogUI:createDialog(data)
+	self._dialogsCache[data.npc] = {
+		dialogData = data.dialogData,
+		npc = data.npc,
+	}
 
-	--// Set text sizes
-	dialogContainer.Label.TextSize = dialogContainer.Label.AbsoluteSize.Y / 5
-	dialogContainer.Continue.TextSize = dialogContainer.Continue.AbsoluteSize.Y / 5
-	dialogContainer.Label.Text = ""
-	dialogContainer.Continue.Text = ""
+	--// Add character rig to viewport if needed
 
-	--// Set general dialog properties
-	dialogUI.Bars.Top.Size = UDim2.fromScale(1, 0)
-	dialogUI.Bars.Bottom.Size = UDim2.fromScale(1, 0)
-	dialogUI.CharacterBackground.Position = UDim2.fromScale(1.35, 0.475)
-	dialogUI.CharacterBackground.Color.BackgroundColor3 = config.SECONDARY_COLOR
-	dialogUI.CharacterBackground.Rotation = 90
-	dialogUI.CharacterHolder.Position = UDim2.fromScale(1.5, 0.4)
-	dialogUI.CharacterHolder.Rotation = 5
+	-- --// Cleanup
+	-- clickConnection:Disconnect()
+	-- clickConnection = nil
+	-- dialogContainer.Label.Text = ""
+	-- dialogContainer.Continue.Text = ""
+end
 
-	--// Setup viewport stuff
-	local worldModel = Instance.new("WorldModel")
-	worldModel.Parent = dialogUI.CharacterHolder
-	-- DialogService.Character.Archivable = true
+---@class showDialogData
+---@field npc Model
 
-	--// Tween stuff
-	TweenService:Create(dialogUI.Bars.Top, TweenInfo.new(0.25), { Size = UDim2.fromScale(1, 0.225) }):Play()
-	TweenService:Create(dialogUI.Bars.Bottom, TweenInfo.new(0.25), { Size = UDim2.fromScale(1, 0.3) }):Play()
-	TweenService:Create(
-		dialogUI.CharacterBackground.Color,
-		TweenInfo.new(1.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut, -1, true),
-		{ BackgroundColor3 = config.MAIN_COLOR }
-	):Play()
-	TweenService:Create(
-		dialogUI.CharacterHolder,
-		TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
-		{ Rotation = -dialogUI.CharacterHolder.Rotation }
-	):Play()
-	TweenService:Create(
-		dialogContainer.Label,
-		TweenInfo.new(0.875, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut, -1, true),
-		{ Position = UDim2.fromOffset(-6, -6) }
-	):Play()
-	TweenService:Create(
-		dialogContainer.Label,
-		TweenInfo.new(3.5, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut, -1, true),
-		{ TextColor3 = config.MAIN_COLOR }
-	):Play()
-	TweenService:Create(
-		dialogContainer.Continue,
-		TweenInfo.new(3.5, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut, -1, true),
-		{ TextColor3 = config.SECONDARY_COLOR }
-	):Play()
+---@param data showDialogData
+function DialogUI:showDialog(data)
+	local dialogData = self._dialogsCache[data.npc]
+	if dialogData then
+		local rig = dialogData.npc:Clone()
 
+		self.characterHolder.WorldModel:ClearAllChildren()
+		--// Continue on with editing rig properties
+		rig:PivotTo(self._characterCFrame)
+		rig.Parent = self.characterHolder.WorldModel
+		-- TweenService:Create(self.characterHolder, TweenInfo.new(0.4), { Position = UDim2.fromScale(1, 0.4) }):Play()
+
+		self.bottom.TextLabel.Text = data.Text
+	else
+		warn("not found")
+	end
+end
+
+function DialogUI:hideDialog()
+	self.characterHolder.WorldModel:ClearAllChildren()
 end
 
 return DialogUI

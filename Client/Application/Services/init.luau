@@ -39,9 +39,9 @@ function Services.new(diContainer)
 	self.inputService = InputService.new(diContainer)
 	self.sprintService = SprintService.new(diContainer)
 	self.lootService = LootService.new()
-	self.dialogService = DialogService.new()
+	self.dialogService = DialogService.new(diContainer)
 	self.interactService = InteractService.new(diContainer)
-	self.alchemyService = AlchemyService.new()
+	self.alchemyService = AlchemyService.new(diContainer)
 	self.targetService = TargetService.new(diContainer)
 	return self
 end
@@ -51,6 +51,9 @@ function Services:init()
 	self.inputService:init()
 	self.targetService:init()
 	self.toolService:init()
+	self.interactService:init()
+	self.alchemyService:init()
+	self.dialogService:init()
 end
 
 return Services

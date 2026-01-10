@@ -10,6 +10,7 @@ local Constants = {
 
 	PLAYER_STATES = {
 		INTERACT = "Interact",
+		ALCHEMY = "Alchemy",
 		LOOT = "Loot",
 		NPC = "NPC",
 		WEAPON = "Weapon",

@@ -19,7 +19,8 @@ function EventBus:getEvent(eventName)
 	return self._events[eventName]
 end
 
----@alias eventName '"pressEquipKey"' | '"updatePlayerData"'
+---@alias dialogName '"finishDialog"' | '"setupDialog"' | '"showDialog"' | '"deleteDialog"'
+---@alias eventName '"pressEquipKey"' | '"updatePlayerData"' | '"setAlchemyMode"' | dialogName
 
 ---@param eventName eventName
 ---@param data any
