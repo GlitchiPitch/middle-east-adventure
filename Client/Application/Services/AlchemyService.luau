@@ -35,7 +35,7 @@ end
 function AlchemyService:start(alchemyPot)
 	self.isActive = true
 	self._alchemyPot = alchemyPot
-	self.cameraService:activateAlchemyCamera(self.alchemyPot.CameraPart.CFrame)
+	self.cameraService:activateAlchemyCamera(self._alchemyPot.CameraPart.CFrame)
 	self.eventBus:fire("setAlchemyMode", { isActive = self.isActive })
 	self.playerService:toggleRobloxControl(false)
 	self.playerService:setPlayerState(self.constants.PLAYER_STATES.ALCHEMY)

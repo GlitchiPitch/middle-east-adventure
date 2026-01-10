@@ -26,8 +26,6 @@ function Presentation:init()
         self.ui.alchemyUI:updatePlayerRecipes()
 	end)
 
-
-
 	shared.eventBus:connect("setAlchemyMode", function(data)
 		if data.isActive then
 			self.ui.uiManager:setCurrentScreen("alchemy")
@@ -35,10 +33,6 @@ function Presentation:init()
 			self.ui.uiManager:setCurrentScreen("primary")
 		end
 	end)
-
-    shared.eventBus:connect("setupDialog", function(data)
-        self.ui.dialogUI:createDialog(data)
-    end)
 
     shared.eventBus:connect("showDialog", function(data)
         self.ui.dialogUI:showDialog(data)

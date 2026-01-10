@@ -37,6 +37,7 @@ function UI:init()
 	self.uiManager:init()
 	self.startingScreen:init()
 	self.statsUI:init()
+	self.dialogUI:init()
 end
 
 return UI

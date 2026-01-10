@@ -30,4 +30,6 @@
 - [x] Create documentation structure (.dev/ folder)
 - [x] Set up CHANGELOG.md and TODO.md
 - [x] Add Dialogs.luau data file
-- [x] Version v1.0.15 released
+- [x] Enhance dialog system with cycling conversations
+- [x] Improve NPC interaction mechanics
+- [x] Version v1.0.16 released
