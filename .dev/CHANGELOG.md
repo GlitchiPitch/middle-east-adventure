@@ -24,6 +24,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Various bug fixes and code improvements across services
 
+## \[1.0.20] - 2026-01-11
+
+### Added
+
+* Comprehensive food item system with various consumables and effects
+* Extensive potion system with recipes, effects, and alchemy requirements
+* Detailed resource database including mushrooms, herbs, and crafting materials
+* Enhanced item data structures with costs, effects, and crafting recipes
+
+### Changed
+
+* Expanded Food.luau with banana, ham, rice, fish, and other food items
+* Updated Potion.luau with healing potions, mana potions, transformation potions, and antidotes
+* Enhanced Resource.luau with complete mushroom, herb, and miscellaneous item collections
+* Improved item data organization and accessibility
+
+### Fixed
+
+* Item data consistency and structure improvements
+* Recipe and effect data validation
+
 ## \[Unreleased]
 
 ### Planned
