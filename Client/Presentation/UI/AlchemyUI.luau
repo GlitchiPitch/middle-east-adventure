@@ -72,6 +72,8 @@ end
 ---@field inventoryFrame Frame
 ---@field recipesContainer ScrollingFrame
 ---@field recipeTemplate Frame
+---@field closeButton TextButton
+---@field alchemyService ClientAlchemyService
 local AlchemyUI = {}
 AlchemyUI.__index = AlchemyUI
 
@@ -84,6 +86,10 @@ function AlchemyUI.new(diContainer)
 end
 
 function AlchemyUI:init()
+	---@type ClientApplication
+	local application = self.diContainer:resolve("Application")
+	self.alchemyService = application.services.alchemyService
+
 	---@type Presentation
 	local presentation = self.diContainer:resolve("Presentation")
 	local alchemy = presentation.ui.uiManager.alchemy
@@ -94,10 +100,21 @@ function AlchemyUI:init()
 	self.recipesFrame = alchemy.Recipes
 	self.recipesContainer = self.recipesFrame.ScrollingFrame
 	self.recipeTemplate = self.recipesContainer.Template
+
+	self.closeButton = alchemy.Menu.Close
+
+	self:_setup()
 end
 
 function AlchemyUI:updatePlayerRecipes()
 	
+end
+
+function AlchemyUI:_setup()
+	local function onClick()
+		self.alchemyService:finish()
+	end
+	self.closeButton.MouseButton1Click:Connect(onClick)
 end
 
 ---@param recipe RecipeEntity

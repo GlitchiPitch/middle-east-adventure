@@ -1,3 +1,4 @@
+local StarterGui = game:GetService("StarterGui")
 ---@class ClientApplicationInventoryService
 ---@field diContainer DIContainer
 local InventoryService = {}
@@ -9,6 +10,10 @@ function InventoryService.new(diContainer)
     local self = setmetatable({}, InventoryService)
     self.diContainer = diContainer
     return self
+end
+
+function InventoryService:init()
+    StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
 end
 
 function InventoryService:clickItem(itemData)

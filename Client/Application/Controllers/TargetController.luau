@@ -2,7 +2,7 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 ---@class TargetController
 ---@field diContainer DIContainer
----@field playerService ClientApplicationPlayerService
+---@field playerService ClientPlayerService
 local TargetController = {}
 TargetController.__index = TargetController
 

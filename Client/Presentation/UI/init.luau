@@ -42,6 +42,7 @@ function UI:init()
 	self.statsUI:init()
 	self.dialogUI:init()
 	self.smithUI:init()
+	self.alchemyUI:init()
 end
 
 return UI

@@ -15,6 +15,8 @@ local Constants = {
 		LOOT = "Loot",
 		NPC = "NPC",
 		WEAPON = "Weapon",
+		LECTERN = "Lectern",
+		CHEST = "Chest",
 	},
 
 	ATTRIBUTES = {
@@ -24,6 +26,9 @@ local Constants = {
 	INTERACT_TYPES = {
 		ALCHEMY = "Alchemy",
 		LOOT = "Loot",
+		SMITH = "Smith",
+		LECTERN = "Lectern",
+		CHEST = "Chest",
 	},
 
 	CAMERA_STATES = {
@@ -31,7 +36,9 @@ local Constants = {
 		ALCHEMY = "Alchemy",
 		TARGET = "Target",
 		DIALOG = "Dialog",
-	}
+		SMITH = "Smith",
+		TRADE = "Trade",
+	},
 }
 
 return Constants

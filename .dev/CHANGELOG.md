@@ -33,7 +33,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * More NPC interactions and quests
 * Mobile performance optimization
 
-## \[1.0.16] - 2025-01-10
+## \[1.0.18] - 2026-01-11
+
+### Added
+
+* New service modules: ChestService, LecternService, TradeService
+* Enhanced controller architecture with improved CameraController and TargetController
+* Expanded service functionality across multiple modules
+
+### Changed
+
+* Updated AlchemyService, DialogService, InputService, InteractService, InventoryService
+* Improved LootService, PlayerService, SmithService, and ToolService functionality
+* Enhanced UI components: AlchemyUI, SmithUI, and UIManager
+* Updated Constants.luau and sourcemap.json for better compatibility
+
+### Fixed
+
+* Various bug fixes and performance improvements across services
+* Code optimizations and service integration improvements
+
+## \[1.0.17] - 2025-01-11
 
 ### Added
 

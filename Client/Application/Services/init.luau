@@ -8,9 +8,12 @@ local DialogService = require(script.DialogService)
 local InteractService = require(script.InteractService)
 local AlchemyService = require(script.AlchemyService)
 local SmithService = require(script.SmithService)
+local LecternService = require(script.LecternService)
+local ChestService = require(script.ChestService)
+local TradeService = require(script.TradeService)
 
 ---@class ClientApplicationServices
----@field playerService ClientApplicationPlayerService
+---@field playerService ClientPlayerService
 ---@field inventoryService ClientApplicationInventoryService
 ---@field toolService ClientToolService
 ---@field animationService AnimationService
@@ -20,6 +23,9 @@ local SmithService = require(script.SmithService)
 ---@field interactService ClientInteractService
 ---@field alchemyService ClientAlchemyService
 ---@field smithService ClientSmithService
+---@field lecternService LecternService
+---@field chestService ClientChestService
+---@field tradeService ClientTradeService
 local Services = {}
 Services.__index = Services
 
@@ -32,11 +38,14 @@ function Services.new(diContainer)
 	self.toolService = ToolService.new(diContainer)
 	self.animationService = AnimationService.new(diContainer)
 	self.inputService = InputService.new(diContainer)
-	self.lootService = LootService.new()
+	self.lootService = LootService.new(diContainer)
 	self.dialogService = DialogService.new(diContainer)
 	self.interactService = InteractService.new(diContainer)
 	self.alchemyService = AlchemyService.new(diContainer)
 	self.smithService = SmithService.new(diContainer)
+	self.lecternService = LecternService.new(diContainer)
+	self.chestService = ChestService.new(diContainer)
+	self.tradeService = TradeService.new(diContainer)
 	return self
 end
 
@@ -48,6 +57,10 @@ function Services:init()
 	self.alchemyService:init()
 	self.dialogService:init()
 	self.smithService:init()
+	self.inventoryService:init()
+	self.lecternService:init()
+	self.tradeService:init()
+	self.chestService:init()
 end
 
 return Services

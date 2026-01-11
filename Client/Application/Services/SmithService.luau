@@ -2,7 +2,7 @@
 ---@field diContainer DIContainer
 ---@field eventBus EventBus
 ---@field cameraController CameraController
----@field playerService ClientApplicationPlayerService
+---@field playerService ClientPlayerService
 ---@field constants Constants
 ---@field isActive boolean
 ---@field _blacksmith Model
@@ -35,10 +35,8 @@ function SmithService:start(blacksmith)
 	self.isActive = true
 	self._blacksmith = blacksmith
 
-	self.cameraController:activateAlchemyCamera(self._alchemyPot.CameraPart.CFrame)
+	self.cameraController:activateSmithCamera(self._blacksmith.CameraPart1.CFrame)
 	self.eventBus:fire("setSmithMode", { isActive = self.isActive })
-	self.playerService:toggleRobloxControl(false)
-	self.playerService:setPlayerState(self.constants.PLAYER_STATES.SMITH)
 end
 
 function SmithService:finish()
@@ -46,6 +44,7 @@ function SmithService:finish()
 
 	self.eventBus:fire("setSmithMode", { isActive = self.isActive })
 	self.playerService:toggleRobloxControl(true)
+	self.cameraController:activateDefaultCamera()
 	self.playerService:setPlayerState("")
 end
 

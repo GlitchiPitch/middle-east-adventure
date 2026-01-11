@@ -3,7 +3,7 @@
 ---@field diContainer DIContainer
 ---@field eventBus EventBus
 ---@field cameraController CameraController
----@field playerService ClientApplicationPlayerService
+---@field playerService ClientPlayerService
 ---@field constants Constants
 ---@field isActive boolean
 local AlchemyService = {}
@@ -37,8 +37,6 @@ function AlchemyService:start(alchemyPot)
 	self._alchemyPot = alchemyPot
 	self.cameraController:activateAlchemyCamera(self._alchemyPot.CameraPart.CFrame)
 	self.eventBus:fire("setAlchemyMode", { isActive = self.isActive })
-	self.playerService:toggleRobloxControl(false)
-	self.playerService:setPlayerState(self.constants.PLAYER_STATES.ALCHEMY)
 end
 
 function AlchemyService:finish()
@@ -46,6 +44,7 @@ function AlchemyService:finish()
 	self._alchemyPot = nil
 	self.eventBus:fire("setAlchemyMode", { isActive = self.isActive })
 	self.playerService:toggleRobloxControl(true)
+	self.cameraController:activateDefaultCamera()
 	self.playerService:setPlayerState("")
 end
 

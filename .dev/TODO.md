@@ -8,11 +8,15 @@
 - [ ] Add more NPC interactions and quests
 - [ ] Optimize performance for mobile devices
 
-### Next Development Steps (v1.0.18)
-- [ ] Enhance smithing UI with crafting recipes and materials
-- [ ] Improve controller responsiveness and camera controls
-- [ ] Add smithing animations and sound effects
-- [ ] Test smithing system integration with inventory
+### Next Development Steps (v1.0.19)
+- [ ] Implement character customization system
+- [ ] Add advanced combat mechanics and animations
+- [ ] Expand NPC interactions with new quest types
+- [ ] Optimize mobile performance and responsiveness
+- [ ] Enhance UI/UX with improved visual feedback
+- [ ] Integrate ChestService with inventory system
+- [ ] Add LecternService for reading/interaction mechanics
+- [ ] Test TradeService integration with economy system
 
 ### Medium Priority
 - [ ] Enhance UI/UX design
@@ -40,5 +44,9 @@
 - [x] Improve NPC interaction mechanics
 - [x] Implement smithing/blacksmithing system
 - [x] Restructure services into Controllers architecture
+- [x] Add ChestService, LecternService, TradeService
+- [x] Enhance controller architecture (CameraController, TargetController)
+- [x] Improve service integration and functionality across all modules
 - [x] Version v1.0.16 released
 - [x] Version v1.0.17 released
+- [x] Version v1.0.18 released

@@ -5,7 +5,7 @@ local Players = game:GetService("Players")
 ---@class CameraController
 ---@field diContainer DIContainer
 ---@field constants Constants
----@field playerService ClientApplicationPlayerService
+---@field playerService ClientPlayerService
 ---@field _cameraState '"Default"' | '"Target"' | '"Alchemy"'
 local CameraController = {}
 CameraController.__index = CameraController
@@ -53,7 +53,7 @@ end
 
 function CameraController:init()
 	self.cam.CameraType = Enum.CameraType.Scriptable
-	self:_toggleFreeMouse()
+	self:_toggleFreeMouse(true)
 
 	self.character = self.player.Character or self.player.CharacterAdded:wait()
 	self.head = self.character:WaitForChild("Head")
@@ -99,21 +99,38 @@ end
 
 function CameraController:activateDefaultCamera()
 	self._cameraState = self.constants.CAMERA_STATES.DEFAULT
-	self:_toggleFreeMouse()
+	self:_toggleFreeMouse(false)
 end
 
-function CameraController:activateAlchemyCamera(alchemyPotCameraCFrame)
-	self.cam.CFrame = alchemyPotCameraCFrame
+---@param cameraCFrame CFrame
+function CameraController:activateAlchemyCamera(cameraCFrame)
+	self.cam.CFrame = cameraCFrame
 	if self._cameraState ~= self.constants.CAMERA_STATES.ALCHEMY then
 		self._cameraState = self.constants.CAMERA_STATES.ALCHEMY
-		self:_toggleFreeMouse()
+		self:_toggleFreeMouse(true)
 	end
 end
 
 function CameraController:activateDialogCamera()
 	if self._cameraState ~= self.constants.CAMERA_STATES.DIALOG then
 		self._cameraState = self.constants.CAMERA_STATES.DIALOG
-		self:_toggleFreeMouse()
+		self:_toggleFreeMouse(true)
+	end
+end
+
+function CameraController:activateTradeCamera()
+	if self._cameraState ~= self.constants.CAMERA_STATES.TRADE then
+		self._cameraState = self.constants.CAMERA_STATES.TRADE
+		self:_toggleFreeMouse(true)
+	end
+end
+
+---@param cameraCFrame CFrame
+function CameraController:activateSmithCamera(cameraCFrame)
+	self.cam.CFrame = cameraCFrame
+	if self._cameraState ~= self.constants.CAMERA_STATES.SMITH then
+		self._cameraState = self.constants.CAMERA_STATES.SMITH
+		self:_toggleFreeMouse(true)
 	end
 end
 
@@ -130,8 +147,9 @@ function CameraController:toggleTargetCamera()
 	end
 end
 
-function CameraController:_toggleFreeMouse()
-	self._freemouse = not self._freemouse
+---@param state boolean
+function CameraController:_toggleFreeMouse(state)
+	self._freemouse = state
 	if self._freemouse then
 		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 		self.mouse.Icon = "" -- replaces mouse icon

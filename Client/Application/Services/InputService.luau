@@ -3,8 +3,7 @@ local UserInputService = game:GetService("UserInputService")
 ---@field diContainer DIContainer
 ---@field config Config
 ---@field eventBus EventBus
----@field playerService ClientApplicationPlayerService
----@field lootService ClientLootService
+---@field playerService ClientPlayerService
 ---@field dialogService DialogService
 ---@field alchemyService ClientAlchemyService
 ---@field toolService ClientToolService
@@ -42,12 +41,14 @@ function InputService:init()
 	self.config = shared.config
 	self.eventBus = shared.eventBus
 	self.playerService = application.services.playerService
-	self.lootService = application.services.lootService
+
 	self.dialogService = application.services.dialogService
 	self.interactService = application.services.interactService
 	self.sprintController = application.controllers.sprintController
 	self.cameraController = application.controllers.cameraController
 	self.toolService = application.services.toolService
+
+	--@TODO: current block input method is not correct need refactor
 	self.alchemyService = application.services.alchemyService
 	self.smithService = application.services.smithService
 
@@ -74,9 +75,7 @@ function InputService:_inputBegan(input, gameProccessed)
 			return
 		end
 
-		if playerState == "Loot" then
-			self.lootService:pickupLoot()
-		elseif playerState == "NPC" then
+		if playerState == "NPC" then
 			self.dialogService:activateDialog()
 		elseif playerState == "Interact" then
 			self.interactService:activate()

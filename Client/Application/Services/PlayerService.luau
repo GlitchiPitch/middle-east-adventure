@@ -1,10 +1,11 @@
----@class ClientApplicationPlayerService
+local PathfindingService = game:GetService("PathfindingService")
+---@class ClientPlayerService
 ---@field diContainer DIContainer
 local PlayerService = {}
 PlayerService.__index = PlayerService
 
 ---@param diContainer DIContainer
----@return ClientApplicationPlayerService
+---@return ClientPlayerService
 function PlayerService.new(diContainer)
 	local self = setmetatable({}, PlayerService)
 	self.diContainer = diContainer
@@ -70,6 +71,56 @@ end
 function PlayerService:toggleRobloxControl(state)
 	local playerEntity = self:getPlayerEntity()
 	playerEntity:toggleRobloxControl(state)
+end
+
+---@param interactModel Model
+function PlayerService:moveTo(interactModel)
+	local playerEntity = self:getPlayerEntity()
+	local humanoid = playerEntity._instance.Character.Humanoid
+	local humanoidRootPart = playerEntity._instance.Character.HumanoidRootPart
+	local playerPoint = interactModel.PlayerPoint
+	local path = PathfindingService:CreatePath()
+	path:ComputeAsync(humanoidRootPart.Position, playerPoint.Position)
+	local way = path:GetWaypoints()
+	local currentPoint = 1
+	local _moveConn
+	local _blockPathConn
+	---@param reached boolean
+	local function onFinished(reached)
+		if reached then
+			currentPoint += 1
+			if way[currentPoint] then
+				humanoid:MoveTo(way[currentPoint].Position)
+			else
+				_moveConn:Disconnect()
+				_blockPathConn:Disconnect()
+				playerEntity._instance.Character:PivotTo(
+					CFrame.new(humanoidRootPart.Position, interactModel.PrimaryPart.Position)
+				)
+			end
+		else
+			humanoid:MoveTo(way[currentPoint].Position)
+		end
+	end
+
+	-- When the path is blocked...
+	local function OnPathBlocked(blockedWaypointIdx)
+		-- Check if the obstacle is further down the path
+		if blockedWaypointIdx > currentPoint then
+			-- Recompute the path
+			path:ComputeAsync(humanoidRootPart.Position, playerPoint.Position)
+			if path.Status == Enum.PathStatus.Success then
+				humanoid:MoveTo(way[currentPoint].Position)
+			else
+				warn("path not found")
+			end
+		end
+	end
+
+	_blockPathConn = path.Blocked:Connect(OnPathBlocked)
+
+	humanoid:MoveTo(way[currentPoint].Position)
+	_moveConn = humanoid.MoveToFinished:Connect(onFinished)
 end
 
 return PlayerService

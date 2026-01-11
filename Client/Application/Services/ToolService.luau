@@ -5,7 +5,7 @@ local Players = game:GetService("Players")
 ---@field debounce boolean
 ---@field attackIndex number
 ---@field lastTime number
----@field playerService ClientApplicationPlayerService
+---@field playerService ClientPlayerService
 ---@field animationService AnimationService
 ---@field constants Constants
 ---@field remoteEventService RemoteEventService
@@ -76,7 +76,7 @@ function ToolService:activated()
 	if not self.isEquipped then
 		return
 	end
-	
+
 	if self.debounce == true then
 		return
 	end

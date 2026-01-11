@@ -7,7 +7,7 @@ local CollectionService = game:GetService("CollectionService")
 ---@field dialogs Dialogs
 ---@field targetController TargetController
 ---@field cameraController CameraController
----@field playerService ClientApplicationPlayerService
+---@field playerService ClientPlayerService
 ---@field dialogsCache table
 local DialogService = {}
 DialogService.__index = DialogService
