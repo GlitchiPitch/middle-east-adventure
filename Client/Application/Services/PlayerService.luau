@@ -25,7 +25,6 @@ end
 
 ---@param newData table
 function PlayerService:updatePlayerData(newData)
-	warn(newData)
 	---@type ClientInfrastructure
 	local infrastructure = self.diContainer:resolve("Infrastructure")
 	---@type SharedDomain

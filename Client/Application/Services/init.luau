@@ -61,6 +61,8 @@ function Services:init()
 	self.lecternService:init()
 	self.tradeService:init()
 	self.chestService:init()
+	self.animationService:init()
+	self.lootService:init()
 end
 
 return Services

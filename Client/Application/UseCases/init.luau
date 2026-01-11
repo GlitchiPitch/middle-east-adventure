@@ -14,6 +14,28 @@ function ClickInventoryItem.new(remoteEventService, constants)
 	return self
 end
 
+---@class ClientPickupLoot
+local PickupLoot = {}
+PickupLoot.__index = PickupLoot
+
+---@param remoteEventService RemoteEventService
+---@param constants Constants
+---@return ClientPickupLoot
+function PickupLoot.new(remoteEventService, constants)
+	local self = setmetatable({}, PickupLoot)
+	self.remoteEventService = remoteEventService
+	self.constants = constants
+	return self
+end
+
+---@param command any
+function PickupLoot:execute(command)
+	self.remoteEventService:fireServer({
+		eventName = self.constants.REMOTE_EVENTS.PICKUP_LOOT,
+		data = command,
+	})
+end
+
 ---@param command ClickInventoryItemCommand
 function ClickInventoryItem:execute(command)
 	self.remoteEventService:fireServer({
@@ -39,6 +61,8 @@ function UseCases:init()
 	---@type Shared
 	local shared = self.diContainer:resolve("Shared")
 	self.clickInventoryItem = ClickInventoryItem.new(shared.remoteEventService, shared.constants)
+	self.pickupLoot = PickupLoot.new(shared.remoteEventService, shared.constants)
+	
 end
 
 return UseCases

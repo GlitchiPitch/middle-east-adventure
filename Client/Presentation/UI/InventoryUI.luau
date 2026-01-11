@@ -82,7 +82,7 @@ end
 function InventoryUI:updateInventory()
 	local playerEntity = self.playerService:getPlayerEntity()
 	local inventoryData = playerEntity.inventory:toData()
-	warn("inventoryData", inventoryData)
+
 	for i, v in inventoryData do
 		local itemSlot = self.itemsContainer:FindFirstChild(i)
 		if not itemSlot then

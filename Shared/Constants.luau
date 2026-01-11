@@ -6,6 +6,7 @@ local Constants = {
 		UPDATE_PLAYER_DATA = "UpdatePlayerData",
 		CLICK_INVENTORY_ITEM = "ClickInventoryItem",
 		TOOL_ACTIVATED = "ToolActivated",
+		PICKUP_LOOT = "PickupLoot",
 	},
 
 	PLAYER_STATES = {

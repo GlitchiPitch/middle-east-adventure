@@ -22,6 +22,8 @@ function AnimationService:init()
 	self.oneHandedIdle = animations.OneHandedIdle
 	self.oneHandedBlock = animations.OneHandedBlock
 
+	self.pickupLoot = animations.PickupLoot
+
 	self.OneHandedAnimations = {
 		animations.OneHandednSlash1,
 		animations.OneHandednSlash2,
@@ -40,6 +42,9 @@ function AnimationService:setupAnimationToCharacter()
 	self.animTracks.OneHandedBlock = character.Humanoid.Animator:LoadAnimation(self.oneHandedBlock) :: AnimationTrack
 	self.animTracks.OneHandedBlock.Looped = true
 	self.animTracks.OneHandedBlock.Priority = Enum.AnimationPriority.Action2
+
+	self.animTracks.PickupLoot = character.Humanoid.Animator:LoadAnimation(self.pickupLoot)
+	self.animTracks.PickupLoot.Priority = Enum.AnimationPriority.Action2
 
 	for i, animation in self.OneHandedAnimations do
 		self.animTracks["OneHanded" .. i] = character.Humanoid.Animator:LoadAnimation(animation) :: AnimationTrack

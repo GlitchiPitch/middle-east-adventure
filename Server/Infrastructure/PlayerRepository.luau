@@ -22,11 +22,11 @@ end
 ---@param player Player
 function PlayerRepository:onPlayerRemoving(player)
     if self._players[player.UserId] then
-        ---@type Shared
-        local shared = self.diContainer:resolve("Shared")
-        -- local dataStore = DataStoreService:GetDataStore(shared.config.PlayerDataStoreKey)
+        -- ---@type Shared
+        -- local shared = self.diContainer:resolve("Shared")
+        -- -- local dataStore = DataStoreService:GetDataStore(shared.config.PlayerDataStoreKey)
 
-        local playerData = self._players[player.UserId]:toData()
+        -- local playerData = self._players[player.UserId]:toData()
         local success, _ = pcall(function()
             return {} ---dataStore:SetAsync(player.UserId, playerData)
         end)
@@ -51,8 +51,8 @@ end
 function PlayerRepository:_createPlayerEntity(player)
     ---@type SharedDomain
     local domain = self.diContainer:resolve("Domain")
-    ---@type Shared
-    local shared = self.diContainer:resolve("Shared")
+    -- ---@type Shared
+    -- local shared = self.diContainer:resolve("Shared")
     -- local dataStore = DataStoreService:GetDataStore(shared.config.PlayerDataStoreKey)
 
     local success, result = pcall(function()
@@ -70,7 +70,6 @@ function PlayerRepository:_createPlayerEntity(player)
 
     self._players[player.UserId] = domain.Player.new(player)
     self._players[player.UserId]:fromData(playerData)
-    warn("self._players[player.UserId]", self._players[player.UserId])
 end
 
 return PlayerRepository

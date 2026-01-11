@@ -14,8 +14,6 @@ end
 ---@param player Player
 ---@param itemData table
 function InventoryService:clickItem(player, itemData)
-    warn(player, itemData)
-
     ---@type ServerApplication
     local application = self.diContainer:resolve("Application")
     local playerEntity = application.services.playerService:getPlayerEntity(player)
