@@ -23,6 +23,7 @@
 ---@field statsFrame Frame
 ---@field playerService ClientPlayerService
 ---@field inventoryService ClientInventoryService
+---@field sharedData SharedData
 local InventoryUI = {}
 InventoryUI.__index = InventoryUI
 
@@ -39,9 +40,14 @@ end
 function InventoryUI:init()
 	---@type ClientApplication
 	local application = self.diContainer:resolve("Application")
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
 	---@type Presentation
 	local presentation = self.diContainer:resolve("Presentation")
 	local inventory = presentation.ui.uiManager.inventory
+
+	self.sharedData = shared.data
+	self.itemSlotTemplate = presentation.ui.components.ItemSlotTemplate
 
 	self.playerService = application.services.playerService
 	self.inventoryService = application.services.inventoryService
@@ -70,12 +76,21 @@ function InventoryUI:init()
 	self.attributesFrame = self.statsContainer.Attributes
 	self.defenseFrame = self.statsContainer.Defense
 
-
-    self:_setup()
+	self:_setup()
 end
 
 function InventoryUI:updateInventory()
-    
+	local playerEntity = self.playerService:getPlayerEntity()
+	local inventoryData = playerEntity.inventory:toData()
+	warn("inventoryData", inventoryData)
+	for i, v in inventoryData do
+		local itemSlot = self.itemsContainer:FindFirstChild(i)
+		if not itemSlot then
+			self:_createSlot(i, v)
+		else
+			self:_updateSlot(itemSlot, v)
+		end
+	end
 end
 
 function InventoryUI:_setup()
@@ -83,20 +98,66 @@ function InventoryUI:_setup()
 		self.inventoryService:toggleInventoryView()
 	end
 
+	local buttonMapping = {
+		[self.itemsMenuButton] = self.itemsContainer,
+		[self.magicMenuButton] = self.magicContainer,
+		[self.smithRecipesMenuButton] = self.smithRecipesContainer,
+		[self.potionRecipesMenuButton] = self.potionRecipesContaniner,
+		[self.skillsMenuButton] = self.skillsContainer,
+	}
+
+	local currentFrame = self.itemsContainer
+	currentFrame.Visible = true
+
+	for i: TextButton, v: Frame in buttonMapping do
+		if v ~= currentFrame then
+			v.Visible = false
+		end
+
+		local function _onClick()
+			if currentFrame then
+				if currentFrame ~= v then
+					currentFrame.Visible = false
+					currentFrame = v
+				end
+			else
+				currentFrame = v
+			end
+
+			currentFrame.Visible = true
+		end
+		i.MouseButton1Click:Connect(_onClick)
+	end
+
 	self.closeButton.MouseButton1Click:Connect(onClick)
 end
 
-function InventoryUI:_createSlot(i, itemData)
+function InventoryUI:_createSlot(itemName, itemData)
+	local itemSlot = self.itemSlotTemplate:Clone()
+	local _itemData = self.sharedData:getItemData(itemName)
 
-	local itemSlot = self._slotTemplate:Clone()
 	local function onClick()
-		-- application.services.inventoryService:clickItem(itemData)
+		self.inventoryService:clickItem(itemData)
 	end
 
-	itemSlot.Parent = self._instance
+	itemSlot.Parent = self.itemsContainer
 	itemSlot.Visible = true
-	itemSlot.LayoutOrder = i
+	itemSlot.Name = itemName
+	itemSlot.Body.ItemImage.Image = _itemData.image
+
+	if itemData.amount then
+		itemSlot.Body.DataLabel.Text = itemData.amount
+	else
+		itemSlot.Body.DataLabel.Visible = false
+	end
+
 	itemSlot.MouseButton1Click:Connect(onClick)
+end
+
+function InventoryUI:_updateSlot(itemSlot, itemData)
+	if itemData.amount then
+		itemSlot.Body.DataLabel.Text = itemData.amount
+	end
 end
 
 return InventoryUI

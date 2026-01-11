@@ -2,6 +2,7 @@ local Food = {
 	Banana = {
 		name = "Banana",
 		effect = "Regenerates 1% mana",
+		image = "rbxassetid://12284549846",
 	},
 	Ham = {
 		name = "Ham",

@@ -1,4 +1,6 @@
 ---@class Components
-local Components = {}
+local Components = {
+    ItemSlotTemplate = script.ItemButtonTemplate,
+}
 
 return Components

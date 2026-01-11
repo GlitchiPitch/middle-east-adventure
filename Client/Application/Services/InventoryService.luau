@@ -4,6 +4,8 @@ local StarterGui = game:GetService("StarterGui")
 ---@field eventBus EventBus
 ---@field isActive boolean
 ---@field cameraController CameraController
+---@field playerService ClientPlayerService
+---@field useCases ClientUseCases
 local InventoryService = {}
 InventoryService.__index = InventoryService
 
@@ -23,25 +25,21 @@ function InventoryService:init()
 	local application = self.diContainer:resolve("Application")
 
 	self.eventBus = shared.eventBus
+	self.playerService = application.services.playerService
 	self.cameraController = application.controllers.cameraController
+	self.useCases = application.useCases
+	self.commands = shared.application.commands
 
 	StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
 end
 
 function InventoryService:clickItem(itemData)
-	---@type Shared
-	local shared = self.diContainer:resolve("Shared")
-	local command = shared.application.commands.ClickItemCommand.new(itemData.name)
-	shared.application.useCases.clickItemUseCase:execute(command)
-end
-
-function InventoryService:updateInventory()
+	local command = self.commands.ClickInventoryItemCommand.new(itemData.name)
+	self.useCases.clickInventoryItem:execute(command)
 end
 
 function InventoryService:getInventory()
-	---@type ClientApplication
-	local application = self.diContainer:resolve("Application")
-	local playerEntity = application.services.playerService:getPlayerEntity()
+	local playerEntity = self.playerService:getPlayerEntity()
 	return playerEntity.inventory
 end
 
@@ -49,8 +47,10 @@ function InventoryService:toggleInventoryView()
 	self.isActive = not self.isActive
 	if self.isActive then
 		self.cameraController:activateInventoryCamera()
+		self.playerService:toggleRobloxControl(false)
 	else
 		self.cameraController:activateDefaultCamera()
+		self.playerService:toggleRobloxControl(true)
 	end
 	self.eventBus:fire("toggleInventoryView", { isActive = self.isActive })
 end

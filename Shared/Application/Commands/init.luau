@@ -1,24 +1,22 @@
----@class SharedClickItemCommand
-local ClickItemCommand = {}
-ClickItemCommand.__index = ClickItemCommand
+---@class ClickInventoryItemCommand
+local ClickInventoryItemCommand = {}
 
 ---@param itemName string
----@return SharedClickItemCommand
-function ClickItemCommand.new(itemName)
-    local self = setmetatable({}, ClickItemCommand)
-    self.itemName = itemName
-    return self
+function ClickInventoryItemCommand.new(itemName)
+	return {
+		itemName = itemName,
+	}
 end
 
 ---@class SharedCommands
----@field ClickItemCommand SharedClickItemCommand
+---@field ClickInventoryItemCommand ClickInventoryItemCommand
 local Commands = {}
 Commands.__index = Commands
 
 function Commands.new()
-    local self = setmetatable({}, Commands)
-    self.ClickItemCommand = ClickItemCommand
-    return self
+	local self = setmetatable({}, Commands)
+	self.ClickInventoryItemCommand = ClickInventoryItemCommand
+	return self
 end
 
 return Commands

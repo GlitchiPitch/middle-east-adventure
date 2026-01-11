@@ -24,6 +24,7 @@ function Presentation:init()
 	shared.eventBus:connect("updatePlayerData", function()
 		self.ui.statsUI:updateUI()
 		self.ui.alchemyUI:updatePlayerRecipes()
+		self.ui.inventoryUI:updateInventory()
 	end)
 
 	shared.eventBus:connect("setAlchemyMode", function(data)

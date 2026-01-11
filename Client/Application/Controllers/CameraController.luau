@@ -122,6 +122,7 @@ function CameraController:activateInventoryCamera()
 	if self._cameraState ~= self.constants.CAMERA_STATES.INVENTORY then
 		self._cameraState = self.constants.CAMERA_STATES.INVENTORY
 		self:_toggleFreeMouse(true)
+		-- self.cam.CFrame = CFrame.new(self.head.Position + Vector3.new(0, 2, 5), self.head.Position)
 	end
 end
 

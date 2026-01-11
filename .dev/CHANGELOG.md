@@ -65,6 +65,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Version consistency issues across project files
 * Documentation formatting and links
 
+## [1.0.22] - 2026-01-11
+
+### Added
+
+* Version synchronization and documentation maintenance
+* Enhanced project structure and version tracking
+* Improved commit cycle with automated documentation updates
+
+### Changed
+
+* Updated game version from v1.0.21 to v1.0.22
+* Refined documentation workflow and version management
+* Enhanced project tracking and development planning
+
+### Fixed
+
+* Version consistency across all project files
+* Documentation synchronization issues
+
 ## [Unreleased]
 
 ### Planned

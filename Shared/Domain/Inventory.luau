@@ -19,6 +19,10 @@ function Inventory.new(data)
 	for i, v in data do
 		self[i] = v
 	end
+
+	self.Banana = { amount = 10 }
+	self.PotionOfStamina = { amount = 15 }
+
 	return self
 end
 
@@ -39,7 +43,7 @@ function Inventory:getItem(itemName)
 end
 
 function Inventory:toData()
-	return {}
+	return self
 end
 
 return Inventory

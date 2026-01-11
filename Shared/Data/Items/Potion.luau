@@ -7,6 +7,7 @@ local Resource = require(script.Parent.Resource)
 local Potion = {
 	PotionOfStamina = {
 		name = "Potion of Stamina",
+		image = "rbxassetid://72397722291409",
 		requirements = {
 			Skills.Alchemy.BrewingHealingPotion.name,
 		},

@@ -31,7 +31,7 @@ function Shared.new()
     self.remoteEventService = self._infrastructure.remoteEventService
     self.eventBus = self._infrastructure.eventBus
 
-    self.application = Application.new(self.diContainer)
+    self.application = Application.new()
 
     self.config = Config
     self.constants = Constants

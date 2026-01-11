@@ -41,7 +41,7 @@ function Services.new(diContainer)
 end
 
 function Services:init()
-    self.toolService:init()
+    self.playerService:init()
 end
 
 return Services

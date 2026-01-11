@@ -1,11 +1,13 @@
 local Players = game:GetService("Players")
 local Services = require(script.Services)
 local Controllers = require(script.Controllers)
+local UseCases = require(script.UseCases)
 
 ---@class ClientApplication
 ---@field diContainer DIContainer
 ---@field services ClientApplicationServices
 ---@field controllers ClientControllers
+---@field useCases ClientUseCases
 ---@field player Player
 local Application = {}
 Application.__index = Application
@@ -18,6 +20,7 @@ function Application.new(diContainer)
 	self.player = Players.LocalPlayer
 	self.services = Services.new(diContainer)
 	self.controllers = Controllers.new(diContainer)
+	self.useCases = UseCases.new(diContainer)
 	return self
 end
 
@@ -34,11 +37,9 @@ function Application:init()
 		application.controllers.cameraController:init()
 		application.controllers.sprintController:init()
 		application.services.playerService:toggleRobloxControl(false)
-		application.services.inventoryService:updateInventory()
 	end
 
 	remoteEventService:connectToEvents({
-
 		---@param eventData eventData
 		[shared.constants.REMOTE_EVENTS.UPDATE_PLAYER_DATA] = function(eventData)
 			self.services.playerService:updatePlayerData(eventData.data)
@@ -46,6 +47,7 @@ function Application:init()
 	})
 
 	self.services:init()
+	self.useCases:init()
 	self.controllers:init()
 
 	if self.player.Character then

@@ -8,6 +8,8 @@ local DialogUI = require(script.DialogUI)
 local SmithUI = require(script.SmithUI)
 local EquipmentUI = require(script.EquipmentUI)
 
+local Components = require(script.Components)
+
 ---@class UI
 ---@field combatUI CombatUI
 ---@field inventoryUI InventoryUI
@@ -18,6 +20,7 @@ local EquipmentUI = require(script.EquipmentUI)
 ---@field startingScreen StartingScreen
 ---@field smithUI SmithUI
 ---@field equipmentUI EquipmentUI
+---@field components Components
 local UI = {}
 UI.__index = UI
 
@@ -25,7 +28,7 @@ UI.__index = UI
 ---@return UI
 function UI.new(diContainer)
 	local self = setmetatable({}, UI)
-
+	self.components = Components
 	self.uiManager = UIManager.new()
 	self.startingScreen = StartingScreen.new(diContainer)
 	self.statsUI = StatsUI.new(diContainer)

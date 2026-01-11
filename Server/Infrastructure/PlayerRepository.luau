@@ -70,6 +70,7 @@ function PlayerRepository:_createPlayerEntity(player)
 
     self._players[player.UserId] = domain.Player.new(player)
     self._players[player.UserId]:fromData(playerData)
+    warn("self._players[player.UserId]", self._players[player.UserId])
 end
 
 return PlayerRepository
