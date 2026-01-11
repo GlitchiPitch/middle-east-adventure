@@ -32,6 +32,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Advanced combat mechanics
 * More NPC interactions and quests
 * Mobile performance optimization
+* Enhanced UI/UX improvements
+* Service integrations (Chest, Lectern, Trade)
+
+## \[1.0.19] - 2026-01-11
+
+### Added
+
+* Enhanced service integration framework
+* Improved controller architecture stability
+* Expanded service modules functionality
+
+### Changed
+
+* Updated service communication protocols
+* Enhanced EventBus messaging system
+* Improved service initialization and dependency management
+
+### Fixed
+
+* Service integration bugs and performance issues
+* Controller stability improvements
+* Code optimizations across all modules
 
 ## \[1.0.18] - 2026-01-11
 

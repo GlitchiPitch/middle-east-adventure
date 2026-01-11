@@ -1,4 +1,5 @@
-local Types = require(script.Parent.Parent.Types)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Types = require(ReplicatedStorage.Shared.Types)
 
 local PLAYER_ATTRIBUTES = Types.PLAYER_ATTRIBUTES
 local DAMAGE_TYPE = Types.DAMAGE_TYPE
@@ -353,8 +354,8 @@ local TwoHanded = {
 local Bows = {}
 local Crossbows = {}
 
----@class Weapons
-local Weapons = {
+---@class Weapon
+local Weapon = {
 	OneHanded = OneHanded,
 	TwoHanded = TwoHanded,
 	Bows = Bows,
@@ -363,7 +364,7 @@ local Weapons = {
 
 local _allWeapons = {}
 
-for _, v in Weapons do
+for _, v in Weapon do
 	for j, k in v do
 		_allWeapons[j] = k
 	end
@@ -371,8 +372,8 @@ end
 
 ---@param weaponName string
 ---@return table
-function Weapons:getWeaponData(weaponName)
+function Weapon:getWeaponData(weaponName)
 	return _allWeapons[weaponName]
 end
 
-return Weapons
+return Weapon

@@ -1,19 +1,30 @@
 ---@class SharedData
 local Data = {
-	Weapons = require(script.Weapons),
 	Magic = require(script.Magic),
-	Hunting = require(script.Hunting),
-	Alchemy = require(script.Alchemy),
-	Misc = require(script.Misc),
-	Smith = require(script.Smith),
-	Thief = require(script.Thief),
+	SKills = require(script.Skills),
+	Items = require(script.Items),
 	Dialogs = require(script.Dialogs),
 }
 
 ---@param itemName string
+---@return table
 function Data:getItemData(itemName)
-	local itemData = Data.Weapons:getWeaponData(itemName) or Data.Magic:getMagicData(itemName)
+	local itemData = self.Items:getItemData(itemName)
 	return itemData
+end
+
+function Data:getMagicData()
+	
+end
+
+---@param npcName string
+function Data:getDialogData(npcName)
+	
+end
+
+---@param skillName string
+function Data:getSkillData(skillName)
+	
 end
 
 return Data
