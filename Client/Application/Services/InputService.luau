@@ -9,8 +9,8 @@ local UserInputService = game:GetService("UserInputService")
 ---@field alchemyService ClientAlchemyService
 ---@field toolService ClientToolService
 ---@field interactService ClientInteractService
----@field sprintService SprintService
----@field cameraService CameraService
+---@field sprintController SprintController
+---@field cameraController CameraController
 local InputService = {}
 InputService.__index = InputService
 
@@ -45,10 +45,11 @@ function InputService:init()
 	self.lootService = application.services.lootService
 	self.dialogService = application.services.dialogService
 	self.interactService = application.services.interactService
-	self.sprintService = application.services.sprintService
-	self.cameraService = application.services.cameraService
+	self.sprintController = application.controllers.sprintController
+	self.cameraController = application.controllers.cameraController
 	self.toolService = application.services.toolService
 	self.alchemyService = application.services.alchemyService
+	self.smithService = application.services.smithService
 
 	self._inputBeganConn = UserInputService.InputBegan:Connect(onInputBegan)
 	self._inputEndedConn = UserInputService.InputEnded:Connect(onInputEnded)
@@ -64,8 +65,7 @@ function InputService:_inputBegan(input, gameProccessed)
 
 	local playerState = self.playerService:getPlayerState()
 	if input.UserInputType == self.config.Client.Control.MainAction then
-		
-		if self.alchemyService.isActive then
+		if self.alchemyService.isActive or self.smithService.isActive then
 			return
 		end
 
@@ -86,13 +86,13 @@ function InputService:_inputBegan(input, gameProccessed)
 			self.toolService:block(true)
 		end
 	elseif input.KeyCode == self.config.Client.Control.FreeMouse then
-		self.cameraService:toggleFreeMouse()
+		self.cameraController:toggleFreeMouse()
 	elseif input.KeyCode == self.config.Client.Control.TargetCamera then
-		self.cameraService:toggleTargetCamera()
+		self.cameraController:toggleTargetCamera()
 	end
 
 	if input.KeyCode == self.config.Client.Control.RunKey then
-		self.sprintService:run()
+		self.sprintController:run()
 	end
 
 	if table.find(self.config.Client.Control.EquippmentKeys, input.KeyCode) then
@@ -112,7 +112,7 @@ function InputService:_inputEnded(input, gameProccessed)
 	end
 
 	if input.KeyCode == self.config.Client.Control.RunKey then
-		self.sprintService:walk()
+		self.sprintController:walk()
 	end
 end
 
@@ -122,7 +122,7 @@ function InputService:_inputChanged(input, gameProccessed)
 	end
 
 	if input.UserInputType == Enum.UserInputType.MouseMovement then
-		self.cameraService:mouseMovement(input)
+		self.cameraController:mouseMovement(input)
 	end
 end
 

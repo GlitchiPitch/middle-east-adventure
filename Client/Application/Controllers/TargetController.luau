@@ -1,15 +1,15 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
----@class TargetService
+---@class TargetController
 ---@field diContainer DIContainer
 ---@field playerService ClientApplicationPlayerService
-local TargetService = {}
-TargetService.__index = TargetService
+local TargetController = {}
+TargetController.__index = TargetController
 
 ---@param diContainer DIContainer
----@return TargetService
-function TargetService.new(diContainer)
-	local self = setmetatable({}, TargetService)
+---@return TargetController
+function TargetController.new(diContainer)
+	local self = setmetatable({}, TargetController)
 	self.diContainer = diContainer
 	self.checkedTarget = nil
 	self.currentCheckedTarget = nil
@@ -19,7 +19,7 @@ function TargetService.new(diContainer)
 	return self
 end
 
-function TargetService:init()
+function TargetController:init()
 	local function onRender(_)
 		self:_onRender()
 	end
@@ -33,17 +33,17 @@ function TargetService:init()
 	---@type ClientApplication
 	local application = self.diContainer:resolve("Application")
 
-	self.lockOnInfo = shared.config.Client.TargetService
+	self.lockOnInfo = shared.config.Client.TargetController
 	self.playerService = application.services.playerService
 
 	RunService.RenderStepped:Connect(onRender)
 end
 
-function TargetService:getCurrentTarget()
+function TargetController:getCurrentTarget()
 	return self.currentCheckedTarget
 end
 
-function TargetService:_onRender()
+function TargetController:_onRender()
 	local playerState = self.playerService:getPlayerState()
 	if playerState == self.constants.PLAYER_STATES.ALCHEMY then
 		if self.currentCheckedTarget and self.currentCheckedTarget ~= self.checkedTarget then
@@ -72,7 +72,7 @@ function TargetService:_onRender()
 	end
 end
 
-function TargetService:_toogleTargetView(state)
+function TargetController:_toogleTargetView(state)
 	if state then
 		if
 			self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.INTERACT)
@@ -106,7 +106,7 @@ function TargetService:_toogleTargetView(state)
 	end
 end
 
-function TargetService:_setPlayerStateByTarget()
+function TargetController:_setPlayerStateByTarget()
 	if self.currentCheckedTarget then
 		if self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.INTERACT) then
 			self.playerService:setPlayerState("Interact")
@@ -122,7 +122,7 @@ function TargetService:_setPlayerStateByTarget()
 	end
 end
 
-function TargetService:_getTargetsInRange()
+function TargetController:_getTargetsInRange()
 	local targets = {}
 	local partsInRadius =
 		workspace:GetPartBoundsInRadius(self.character.HumanoidRootPart.Position, self.lockOnInfo.range)
@@ -150,7 +150,7 @@ function TargetService:_getTargetsInRange()
 	return targets
 end
 
-function TargetService:_getTargetsClosestCrosshair()
+function TargetController:_getTargetsClosestCrosshair()
 	local targets = self:_getTargetsInRange()
 
 	local nearest = 1
@@ -178,7 +178,7 @@ function TargetService:_getTargetsClosestCrosshair()
 	return self.target
 end
 
-function TargetService:_isTargetInView()
+function TargetController:_isTargetInView()
 	local excludedCharacters = self:_getTargetsInRange()
 	table.remove(excludedCharacters, table.find(excludedCharacters, self.target))
 
@@ -200,4 +200,4 @@ function TargetService:_isTargetInView()
 	return false
 end
 
-return TargetService
+return TargetController

@@ -1,9 +1,11 @@
 local Players = game:GetService("Players")
 local Services = require(script.Services)
+local Controllers = require(script.Controllers)
 
 ---@class ClientApplication
 ---@field diContainer DIContainer
 ---@field services ClientApplicationServices
+---@field controllers ClientControllers
 ---@field player Player
 local Application = {}
 Application.__index = Application
@@ -15,7 +17,7 @@ function Application.new(diContainer)
 	self.diContainer = diContainer
 	self.player = Players.LocalPlayer
 	self.services = Services.new(diContainer)
-
+	self.controllers = Controllers.new(diContainer)
 	return self
 end
 
@@ -29,8 +31,8 @@ function Application:init()
 		local application = self.diContainer:resolve("Application")
 		application.services.toolService:checkCharacterTool()
 		application.services.animationService:setupAnimationToCharacter()
-		application.services.cameraService:init()
-		application.services.sprintService:init()
+		application.controllers.cameraController:init()
+		application.controllers.sprintController:init()
 		application.services.playerService:toggleRobloxControl(false)
 	end
 
@@ -43,6 +45,7 @@ function Application:init()
 	})
 
 	self.services:init()
+	self.controllers:init()
 
 	if self.player.Character then
 		onCharacterAdded(self.player.Character)

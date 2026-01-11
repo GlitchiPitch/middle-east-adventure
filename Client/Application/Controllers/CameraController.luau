@@ -2,18 +2,18 @@ local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
----@class CameraService
+---@class CameraController
 ---@field diContainer DIContainer
 ---@field constants Constants
 ---@field playerService ClientApplicationPlayerService
 ---@field _cameraState '"Default"' | '"Target"' | '"Alchemy"'
-local CameraService = {}
-CameraService.__index = CameraService
+local CameraController = {}
+CameraController.__index = CameraController
 
 ---@param diContainer DIContainer
----@return CameraService
-function CameraService.new(diContainer)
-	local self = setmetatable({}, CameraService)
+---@return CameraController
+function CameraController.new(diContainer)
+	local self = setmetatable({}, CameraController)
 	self.diContainer = diContainer
 	self._cameraState = ""
 	self._freemouse = false
@@ -51,7 +51,7 @@ function CameraService.new(diContainer)
 	return self
 end
 
-function CameraService:init()
+function CameraController:init()
 	self.cam.CameraType = Enum.CameraType.Scriptable
 	self:_toggleFreeMouse()
 
@@ -78,40 +78,47 @@ function CameraService:init()
 	---@type ClientApplication
 	local application = self.diContainer:resolve("Application")
 	self.playerService = application.services.playerService
-	self.targetService = application.services.targetService
+	self.targetController = application.controllers.targetController
 
-	self.lockOnInfo = shared.config.Client.TargetService
+	self.lockOnInfo = shared.config.Client.TargetController
 
 	self:activateStartingCamera()
-end
 
-function CameraService:activateStartingCamera()
-	self.cam.CFrame =
-		CFrame.new(self.humanoidRootPart.Position - Vector3.new(0, -5, -10), self.humanoidRootPart.Position)
-end
-
-function CameraService:activateDefaultCamera()
 	---@param deltaTime number
 	local function onRender(deltaTime)
 		self:_onRender(deltaTime)
 	end
 
-	
-
-	self._cameraState = self.constants.CAMERA_STATES.DEFAULT
-	self:_toggleFreeMouse()
-
 	RunService.RenderStepped:Connect(onRender)
 end
 
-function CameraService:activateAlchemyCamera(alchemyPotCameraCFrame)
-	self.cam.CFrame = alchemyPotCameraCFrame
-	self._cameraState = self.constants.CAMERA_STATES.ALCHEMY
+function CameraController:activateStartingCamera()
+	self.cam.CFrame =
+		CFrame.new(self.humanoidRootPart.Position - Vector3.new(0, -5, -10), self.humanoidRootPart.Position)
+end
+
+function CameraController:activateDefaultCamera()
+	self._cameraState = self.constants.CAMERA_STATES.DEFAULT
 	self:_toggleFreeMouse()
 end
 
-function CameraService:toggleTargetCamera()
-	local currentTarget = self.targetService:getCurrentTarget()
+function CameraController:activateAlchemyCamera(alchemyPotCameraCFrame)
+	self.cam.CFrame = alchemyPotCameraCFrame
+	if self._cameraState ~= self.constants.CAMERA_STATES.ALCHEMY then
+		self._cameraState = self.constants.CAMERA_STATES.ALCHEMY
+		self:_toggleFreeMouse()
+	end
+end
+
+function CameraController:activateDialogCamera()
+	if self._cameraState ~= self.constants.CAMERA_STATES.DIALOG then
+		self._cameraState = self.constants.CAMERA_STATES.DIALOG
+		self:_toggleFreeMouse()
+	end
+end
+
+function CameraController:toggleTargetCamera()
+	local currentTarget = self.targetController:getCurrentTarget()
 	if currentTarget then
 		if self._cameraState == self.constants.CAMERA_STATES.TARGET then
 			self._cameraState = self.constants.CAMERA_STATES.DEFAULT
@@ -123,7 +130,7 @@ function CameraService:toggleTargetCamera()
 	end
 end
 
-function CameraService:_toggleFreeMouse()
+function CameraController:_toggleFreeMouse()
 	self._freemouse = not self._freemouse
 	if self._freemouse then
 		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
@@ -135,7 +142,7 @@ function CameraService:_toggleFreeMouse()
 end
 
 ---@param input InputObject
-function CameraService:mouseMovement(input)
+function CameraController:mouseMovement(input)
 	local delta = Vector2.new(input.Delta.x / self.sensitivity, input.Delta.y / self.sensitivity) * self.smoothness
 
 	local X = self.targetAngleX - delta.y
@@ -143,7 +150,7 @@ function CameraService:mouseMovement(input)
 	self.targetAngleY = (self.targetAngleY - delta.x) % 360
 end
 
-function CameraService:_onRender(dt)
+function CameraController:_onRender(dt)
 	if not self.character then
 		return
 	end
@@ -157,7 +164,7 @@ function CameraService:_onRender(dt)
 	self:_followCharacterToCursor()
 end
 
-function CameraService:_followCharacterToCursor()
+function CameraController:_followCharacterToCursor()
 	local CamCF = self.cam.CFrame
 	local TrsoLV = self.torso.CFrame.lookVector
 	local HdPos = self.head.CFrame.Position
@@ -184,8 +191,8 @@ function CameraService:_followCharacterToCursor()
 	)
 end
 
-function CameraService:_targetCamera(dt)
-	self.target = self.targetService:getCurrentTarget()
+function CameraController:_targetCamera(dt)
+	self.target = self.targetController:getCurrentTarget()
 
 	dt = (self.lastDelta + dt) / 2 -- Smooth the delta to prevent fps drops
 	self.lastDelta = dt
@@ -197,7 +204,7 @@ function CameraService:_targetCamera(dt)
 	local distance = (self.target.PrimaryPart.Position - self.character.HumanoidRootPart.Position).Magnitude
 
 	-- local requiresLineOfSight = self.lockOnInfo.requiresLineOfSight
-	-- local hasLineOfSight = self.targetService:_isTargetInView()
+	-- local hasLineOfSight = self.targetController:_isTargetInView()
 	-- local lineOfSight = (hasLineOfSight and requiresLineOfSight) or not requiresLineOfSight -- Check for line of sight if required
 
 	-- if not lineOfSight then
@@ -235,7 +242,7 @@ function CameraService:_targetCamera(dt)
 	end
 end
 
-function CameraService:_defaultCamera()
+function CameraController:_defaultCamera()
 	self.camPos = self.camPos + (self.targetCamPos - self.camPos) * 0.2
 	self.angleX = self.angleX + (self.targetAngleX - self.angleX) * 0.3
 	local dist = self.targetAngleY - self.angleY
@@ -250,4 +257,4 @@ function CameraService:_defaultCamera()
 	self.cam.FieldOfView = self.fieldOfView
 end
 
-return CameraService
+return CameraController

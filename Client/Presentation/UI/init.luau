@@ -6,6 +6,7 @@ local StatsUI = require(script.StatsUI)
 local StartingScreen = require(script.StartingScreen)
 local AlchemyUI = require(script.AlchemyUI)
 local DialogUI = require(script.DialogUI)
+local SmithUI = require(script.SmithUI)
 
 ---@class UI
 ---@field combatUI CombatUI
@@ -15,6 +16,7 @@ local DialogUI = require(script.DialogUI)
 ---@field alchemyUI AlchemyUI
 ---@field dialogUI DialogUI
 ---@field startingScreen StartingScreen
+---@field smithUI SmithUI
 local UI = {}
 UI.__index = UI
 
@@ -28,6 +30,7 @@ function UI.new(diContainer)
 	self.statsUI = StatsUI.new(diContainer)
 	self.alchemyUI = AlchemyUI.new(diContainer)
 	self.dialogUI = DialogUI.new(diContainer)
+	self.smithUI = SmithUI.new(diContainer)
 	-- self.combatUI = CombatUI.new()
 	-- self.inventoryUI = InventoryUI.new()
 	return self
@@ -38,6 +41,7 @@ function UI:init()
 	self.startingScreen:init()
 	self.statsUI:init()
 	self.dialogUI:init()
+	self.smithUI:init()
 end
 
 return UI

@@ -1,25 +1,25 @@
----@class ClientAlchemyService
----@field _alchemyPot Model
+---@class ClientSmithService
 ---@field diContainer DIContainer
 ---@field eventBus EventBus
 ---@field cameraController CameraController
 ---@field playerService ClientApplicationPlayerService
 ---@field constants Constants
 ---@field isActive boolean
-local AlchemyService = {}
-AlchemyService.__index = AlchemyService
+---@field _blacksmith Model
+local SmithService = {}
+SmithService.__index = SmithService
 
 ---@param diContainer DIContainer
----@return ClientAlchemyService
-function AlchemyService.new(diContainer)
-	local self = setmetatable({}, AlchemyService)
+---@return ClientSmithService
+function SmithService.new(diContainer)
+	local self = setmetatable({}, SmithService)
 	self.diContainer = diContainer
-	self._alchemyPot = nil
 	self.isActive = false
+	self._blacksmith = nil
 	return self
 end
 
-function AlchemyService:init()
+function SmithService:init()
 	---@type ClientApplication
 	local application = self.diContainer:resolve("Application")
 	---@type Shared
@@ -31,22 +31,22 @@ function AlchemyService:init()
 	self.playerService = application.services.playerService
 end
 
----@param alchemyPot Model
-function AlchemyService:start(alchemyPot)
+function SmithService:start(blacksmith)
 	self.isActive = true
-	self._alchemyPot = alchemyPot
+	self._blacksmith = blacksmith
+
 	self.cameraController:activateAlchemyCamera(self._alchemyPot.CameraPart.CFrame)
-	self.eventBus:fire("setAlchemyMode", { isActive = self.isActive })
+	self.eventBus:fire("setSmithMode", { isActive = self.isActive })
 	self.playerService:toggleRobloxControl(false)
-	self.playerService:setPlayerState(self.constants.PLAYER_STATES.ALCHEMY)
+	self.playerService:setPlayerState(self.constants.PLAYER_STATES.SMITH)
 end
 
-function AlchemyService:finish()
+function SmithService:finish()
 	self.isActive = false
-	self._alchemyPot = nil
-	self.eventBus:fire("setAlchemyMode", { isActive = self.isActive })
+
+	self.eventBus:fire("setSmithMode", { isActive = self.isActive })
 	self.playerService:toggleRobloxControl(true)
 	self.playerService:setPlayerState("")
 end
 
-return AlchemyService
+return SmithService

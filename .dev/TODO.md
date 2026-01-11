@@ -8,6 +8,12 @@
 - [ ] Add more NPC interactions and quests
 - [ ] Optimize performance for mobile devices
 
+### Next Development Steps (v1.0.18)
+- [ ] Enhance smithing UI with crafting recipes and materials
+- [ ] Improve controller responsiveness and camera controls
+- [ ] Add smithing animations and sound effects
+- [ ] Test smithing system integration with inventory
+
 ### Medium Priority
 - [ ] Enhance UI/UX design
 - [ ] Add sound effects and background music
@@ -32,4 +38,7 @@
 - [x] Add Dialogs.luau data file
 - [x] Enhance dialog system with cycling conversations
 - [x] Improve NPC interaction mechanics
+- [x] Implement smithing/blacksmithing system
+- [x] Restructure services into Controllers architecture
 - [x] Version v1.0.16 released
+- [x] Version v1.0.17 released

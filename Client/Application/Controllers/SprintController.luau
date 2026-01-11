@@ -1,15 +1,15 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
----@class SprintService
+---@class SprintController
 ---@field diContainer DIContainer
-local SprintService = {}
-SprintService.__index = SprintService
+local SprintController = {}
+SprintController.__index = SprintController
 
 ---@param diContainer DIContainer
----@return SprintService
-function SprintService.new(diContainer)
-	local self = setmetatable({}, SprintService)
+---@return SprintController
+function SprintController.new(diContainer)
+	local self = setmetatable({}, SprintController)
 	self.player = Players.LocalPlayer
 	self.diContainer = diContainer
 	self.walkSpeed = 13
@@ -22,7 +22,7 @@ function SprintService.new(diContainer)
 	return self
 end
 
-function SprintService:init()
+function SprintController:init()
 	---@type Shared
 	local shared = self.diContainer:resolve("Shared")
 
@@ -50,7 +50,7 @@ function SprintService:init()
 	RunService.RenderStepped:Connect(onRender)
 end
 
-function SprintService:run()
+function SprintController:run()
 	if self.walking and self.canRun then
 		self.running = true
 
@@ -66,7 +66,7 @@ function SprintService:run()
 	end
 end
 
-function SprintService:walk()
+function SprintController:walk()
 	self.running = false
 
 	local walkTween = TweenService:Create(
@@ -80,4 +80,4 @@ function SprintService:walk()
 	self.runTrack:Stop()
 end
 
-return SprintService
+return SprintController

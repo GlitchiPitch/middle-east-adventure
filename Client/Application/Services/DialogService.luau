@@ -5,7 +5,8 @@ local CollectionService = game:GetService("CollectionService")
 ---@field constants Constants
 ---@field eventBus EventBus
 ---@field dialogs Dialogs
----@field targetService TargetService
+---@field targetController TargetController
+---@field cameraController CameraController
 ---@field playerService ClientApplicationPlayerService
 ---@field dialogsCache table
 local DialogService = {}
@@ -30,9 +31,9 @@ function DialogService:init()
 
 	---@type ClientApplication
 	local application = self.diContainer:resolve("Application")
-	self.targetService = application.services.targetService
+	self.targetController = application.controllers.targetController
 	self.playerService = application.services.playerService
-
+	self.cameraController = application.controllers.cameraController
 	---@param npc Model
 	local function onAdded(npc)
 		if npc:IsDescendantOf(workspace) then
@@ -42,7 +43,6 @@ function DialogService:init()
 
 	---@param npc Model
 	local function onRemoved(npc)
-		self.dialogsCache[npc].diedConn:Disconnect()
 		self.dialogsCache[npc] = nil
 	end
 
@@ -66,7 +66,7 @@ function DialogService:setupCharacterWithDialog(npc)
 end
 
 function DialogService:activateDialog()
-	local npc = self.targetService:getCurrentTarget()
+	local npc = self.targetController:getCurrentTarget()
 	if npc.Humanoid and npc.Humanoid.Health <= 0 then
 		return
 	end
@@ -84,6 +84,8 @@ function DialogService:_showDialog(npc)
 	self.eventBus:fire("showDialog", {
 		npc = npc,
 	})
+
+	self.cameraController:activateDialogCamera()
 end
 
 function DialogService:_finishDialog(npc)
@@ -91,6 +93,7 @@ function DialogService:_finishDialog(npc)
 
 	self.dialogsCache[npc].index = 0
 	self.playerService:toggleRobloxControl(true)
+	self.cameraController:activateDefaultCamera()
 end
 
 return DialogService

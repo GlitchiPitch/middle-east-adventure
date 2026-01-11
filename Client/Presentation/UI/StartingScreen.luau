@@ -41,8 +41,8 @@ function StartingScreen:_onPlayClick()
 	---@type Presentation
 	local presentation = self.diContainer:resolve("Presentation")
 
-	application.services.cameraService:activateDefaultCamera()
-    application.services.playerService:toggleRobloxControl(true)
+	application.controllers.cameraController:activateDefaultCamera()
+	application.services.playerService:toggleRobloxControl(true)
 	presentation.ui.uiManager:setCurrentScreen("primary")
 	self.playButtonConn:Disconnect()
 end

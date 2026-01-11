@@ -20,7 +20,7 @@ local Config = {
 		},
 		UpdateBarTweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
 
-		TargetService = {
+		TargetController = {
 			range = 15, -- The range of the lock on
 			speed = 20, -- The speed of which the lock on camera is moving
 			offset = Vector3.new(3, 4, -9), -- The camera offset when using lock on

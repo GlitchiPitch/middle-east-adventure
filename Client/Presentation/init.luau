@@ -23,7 +23,7 @@ function Presentation:init()
 	local shared = self.diContainer:resolve("Shared")
 	shared.eventBus:connect("updatePlayerData", function()
 		self.ui.statsUI:updateUI()
-        self.ui.alchemyUI:updatePlayerRecipes()
+		self.ui.alchemyUI:updatePlayerRecipes()
 	end)
 
 	shared.eventBus:connect("setAlchemyMode", function(data)
@@ -34,15 +34,23 @@ function Presentation:init()
 		end
 	end)
 
-    shared.eventBus:connect("showDialog", function(data)
-        self.ui.dialogUI:showDialog(data)
-        self.ui.uiManager:setCurrentScreen("dialog")
-    end)
+	shared.eventBus:connect("setSmithMode", function(data)
+		if data.isActive then
+			self.ui.uiManager:setCurrentScreen("smith")
+		else
+			self.ui.uiManager:setCurrentScreen("primary")
+		end
+	end)
 
-    shared.eventBus:connect("finishDialog", function(_)
-        self.ui.dialogUI:hideDialog()
-        self.ui.uiManager:setCurrentScreen("primary")
-    end)
+	shared.eventBus:connect("showDialog", function(data)
+		self.ui.dialogUI:showDialog(data)
+		self.ui.uiManager:setCurrentScreen("dialog")
+	end)
+
+	shared.eventBus:connect("finishDialog", function(_)
+		self.ui.dialogUI:hideDialog()
+		self.ui.uiManager:setCurrentScreen("primary")
+	end)
 
 	self.ui:init()
 end

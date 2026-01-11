@@ -20,7 +20,7 @@ function EventBus:getEvent(eventName)
 end
 
 ---@alias dialogName '"finishDialog"' | '"showDialog"'
----@alias eventName '"pressEquipKey"' | '"updatePlayerData"' | '"setAlchemyMode"' | dialogName
+---@alias eventName '"pressEquipKey"' | '"updatePlayerData"' | '"setAlchemyMode"' | '"setSmithMode"' | dialogName
 
 ---@param eventName eventName
 ---@param data any
