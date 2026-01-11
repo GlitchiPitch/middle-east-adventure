@@ -10,7 +10,7 @@ local Config = {
 			FreeMouse = Enum.KeyCode.F,
 			TargetCamera = Enum.KeyCode.E,
 			RunKey = Enum.KeyCode.LeftShift,
-
+			InventoryKey = Enum.KeyCode.I,
 			EquippmentKeys = {
 				One = Enum.KeyCode.One,
 				Two = Enum.KeyCode.Two,

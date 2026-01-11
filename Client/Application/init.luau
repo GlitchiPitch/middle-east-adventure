@@ -34,6 +34,7 @@ function Application:init()
 		application.controllers.cameraController:init()
 		application.controllers.sprintController:init()
 		application.services.playerService:toggleRobloxControl(false)
+		application.services.inventoryService:updateInventory()
 	end
 
 	remoteEventService:connectToEvents({

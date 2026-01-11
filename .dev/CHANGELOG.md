@@ -45,7 +45,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Item data consistency and structure improvements
 * Recipe and effect data validation
 
-## \[Unreleased]
+## [1.0.21] - 2026-01-11
+
+### Added
+
+* Version synchronization across all project files
+* Enhanced project documentation structure
+* Improved CHANGELOG.md formatting and organization
+* Updated TODO.md with detailed task tracking
+
+### Changed
+
+* Synchronized game version from v1.0.20 to v1.0.21 across GameVersion.model.json and README.md
+* Updated project completion status to ~45%
+* Restructured documentation for better maintainability
+
+### Fixed
+
+* Version consistency issues across project files
+* Documentation formatting and links
+
+## [Unreleased]
 
 ### Planned
 

@@ -10,6 +10,7 @@ local UserInputService = game:GetService("UserInputService")
 ---@field interactService ClientInteractService
 ---@field sprintController SprintController
 ---@field cameraController CameraController
+---@field inventoryService ClientInventoryService
 local InputService = {}
 InputService.__index = InputService
 
@@ -47,6 +48,7 @@ function InputService:init()
 	self.sprintController = application.controllers.sprintController
 	self.cameraController = application.controllers.cameraController
 	self.toolService = application.services.toolService
+	self.inventoryService = application.services.inventoryService
 
 	--@TODO: current block input method is not correct need refactor
 	self.alchemyService = application.services.alchemyService
@@ -88,6 +90,8 @@ function InputService:_inputBegan(input, gameProccessed)
 		self.cameraController:toggleFreeMouse()
 	elseif input.KeyCode == self.config.Client.Control.TargetCamera then
 		self.cameraController:toggleTargetCamera()
+	elseif input.KeyCode == self.config.Client.Control.InventoryKey then
+		self.inventoryService:toggleInventoryView()
 	end
 
 	if input.KeyCode == self.config.Client.Control.RunKey then

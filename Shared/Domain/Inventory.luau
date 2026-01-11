@@ -2,14 +2,24 @@
 local Inventory = {}
 Inventory.__index = Inventory
 
----@param data table<string, any>
+---@class inventoryData
+---@field amount number
+---@field data table<string, any>
+
+---@alias itemName string
+
+---@class addInventoryData
+---@field name itemName
+---@field data inventoryData
+
+---@param data table<itemName, inventoryData>
 ---@return InventoryEntity
 function Inventory.new(data)
-    local self = setmetatable({}, Inventory)
-    for i, v in data do
-        self[i] = v
-    end
-    return self
+	local self = setmetatable({}, Inventory)
+	for i, v in data do
+		self[i] = v
+	end
+	return self
 end
 
 --[[
@@ -17,18 +27,19 @@ end
     durability
 ]]
 
----@param item table
+---@param item addInventoryData
 function Inventory:addItem(item)
-    self[item.name] = item
+	self[item.name] = item.data
 end
 
----@param itemName string
+---@param itemName itemName
+---@return inventoryData
 function Inventory:getItem(itemName)
-    return self[itemName]
+	return self[itemName]
 end
 
 function Inventory:toData()
-    return {}
+	return {}
 end
 
 return Inventory

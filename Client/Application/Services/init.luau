@@ -14,7 +14,7 @@ local TradeService = require(script.TradeService)
 
 ---@class ClientApplicationServices
 ---@field playerService ClientPlayerService
----@field inventoryService ClientApplicationInventoryService
+---@field inventoryService ClientInventoryService
 ---@field toolService ClientToolService
 ---@field animationService AnimationService
 ---@field inputService InputService

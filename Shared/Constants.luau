@@ -38,6 +38,7 @@ local Constants = {
 		DIALOG = "Dialog",
 		SMITH = "Smith",
 		TRADE = "Trade",
+		INVENTORY = "Inventory",
 	},
 }
 

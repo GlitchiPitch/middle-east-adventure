@@ -3,6 +3,7 @@ local RunService = game:GetService("RunService")
 ---@class TargetController
 ---@field diContainer DIContainer
 ---@field playerService ClientPlayerService
+---@field eventBus EventBus
 local TargetController = {}
 TargetController.__index = TargetController
 
@@ -29,7 +30,7 @@ function TargetController:init()
 	---@type Shared
 	local shared = self.diContainer:resolve("Shared")
 	self.constants = shared.constants
-
+	self.eventBus = shared.eventBus
 	---@type ClientApplication
 	local application = self.diContainer:resolve("Application")
 
@@ -117,8 +118,11 @@ function TargetController:_setPlayerStateByTarget()
 		else
 			self.playerService:setPlayerState("")
 		end
+		self.eventBus:fire("toggleActionButton", { state = true })
+		
 	else
 		self.playerService:setPlayerState("")
+		self.eventBus:fire("toggleActionButton", { state = false })
 	end
 end
 

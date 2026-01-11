@@ -52,6 +52,18 @@ function Presentation:init()
 		self.ui.uiManager:setCurrentScreen("primary")
 	end)
 
+	shared.eventBus:connect("toggleActionButton", function(data)
+		self.ui.equipmentUI:toggleActionButton(data.state)
+	end)
+
+	shared.eventBus:connect("toggleInventoryView", function(data)
+		if data.isActive then
+			self.ui.uiManager:setCurrentScreen("inventory")
+		else
+			self.ui.uiManager:setCurrentScreen("primary")
+		end
+	end)
+
 	self.ui:init()
 end
 

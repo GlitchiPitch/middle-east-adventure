@@ -2,7 +2,7 @@
 
 An RPG game. A story about a nameless hero who must stop the apocalypse.
 
-**Version:** v1.0.10 | **Status:** In Development | **Completion:** ~40%
+**Version:** v1.0.21 | **Status:** In Development | **Completion:** ~45%
 
 ## Description
 

@@ -118,6 +118,13 @@ function CameraController:activateDialogCamera()
 	end
 end
 
+function CameraController:activateInventoryCamera()
+	if self._cameraState ~= self.constants.CAMERA_STATES.INVENTORY then
+		self._cameraState = self.constants.CAMERA_STATES.INVENTORY
+		self:_toggleFreeMouse(true)
+	end
+end
+
 function CameraController:activateTradeCamera()
 	if self._cameraState ~= self.constants.CAMERA_STATES.TRADE then
 		self._cameraState = self.constants.CAMERA_STATES.TRADE
