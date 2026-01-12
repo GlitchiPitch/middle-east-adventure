@@ -1,5 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Types = require(ReplicatedStorage.Shared.Types)
+local Weapons = require(ReplicatedStorage.Shared.Assets).Weapons
 
 local PLAYER_ATTRIBUTES = Types.PLAYER_ATTRIBUTES
 local DAMAGE_TYPE = Types.DAMAGE_TYPE
@@ -11,6 +12,8 @@ local OneHanded = {
 
 	Club = {
 		name = "Club",
+		image = "rbxassetid://108752402225500",
+		model = Weapons.OneHanded.Club,
 		damage = 15,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 10,
@@ -18,11 +21,12 @@ local OneHanded = {
 		bonus = {},
 		damageType = DAMAGE_TYPE.HIT,
 		price = 10,
-		image = "",
 	},
 
 	RustySword = {
 		name = "Rusty Sword",
+		image = "rbxassetid://107028418502150",
+		model = Weapons.OneHanded.RustySword,
 		damage = 30,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 60,
@@ -33,11 +37,12 @@ local OneHanded = {
 		bonus = {},
 		damageType = DAMAGE_TYPE.BLADE,
 		price = 30,
-		image = "",
 	},
 
 	AssassinDagger = {
 		name = "Assassin's dagger",
+		image = "rbxassetid://78093264551473",
+		model = Weapons.OneHanded.AssassinDagger,
 		damage = 45,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 90,
@@ -48,11 +53,12 @@ local OneHanded = {
 		bonus = {},
 		damageType = DAMAGE_TYPE.BLADE,
 		price = 350,
-		image = "",
 	},
 
 	Sword = {
 		name = "Sword",
+		image = "rbxassetid://76626568418896",
+		model = Weapons.OneHanded.Sword,
 		damage = 50,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 100,
@@ -63,11 +69,12 @@ local OneHanded = {
 		bonus = {},
 		damageType = DAMAGE_TYPE.BLADE,
 		price = 50,
-		image = "",
 	},
 
 	OrcSlayer = {
 		name = "Orc Slayer",
+		image = "rbxassetid://127955169217687",
+		model = Weapons.OneHanded.OrcSlayer,
 		damage = 50,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 100,
@@ -80,11 +87,12 @@ local OneHanded = {
 		},
 		damageType = DAMAGE_TYPE.BLADE,
 		price = 600,
-		image = "",
 	},
 
 	Rapier = {
 		name = "Rapier",
+		image = "rbxassetid://87477214213303",
+		model = Weapons.OneHanded.Rapier,
 		damage = 60,
 		requirement = {
 			[PLAYER_ATTRIBUTES.DEXTERITY] = 120,
@@ -95,11 +103,12 @@ local OneHanded = {
 		bonus = {},
 		damageType = DAMAGE_TYPE.BLADE,
 		price = 800,
-		image = "",
 	},
 
 	AssassinSword = {
 		name = "Assassin's Sword",
+		image = "rbxassetid://72367834015165",
+		model = Weapons.OneHanded.AssassinSword,
 		damage = 70,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 140,
@@ -110,11 +119,12 @@ local OneHanded = {
 		bonus = {},
 		damageType = DAMAGE_TYPE.BLADE,
 		price = 1250,
-		image = "",
 	},
 
 	PaladinSword = {
 		name = "Paladin's Sword",
+		image = "rbxassetid://100950798211589",
+		model = Weapons.OneHanded.PaladinSword,
 		damage = 80,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 160,
@@ -125,11 +135,12 @@ local OneHanded = {
 		bonus = {},
 		damageType = DAMAGE_TYPE.BLADE,
 		price = 8000,
-		image = "",
 	},
 
 	BarbariansSword = {
 		name = "Barbarians Sword",
+		image = "rbxassetid://96117934197882",
+		model = Weapons.OneHanded.BarbariansSword,
 		damage = 85,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 170,
@@ -140,12 +151,12 @@ local OneHanded = {
 		bonus = {},
 		damageType = DAMAGE_TYPE.BLADE,
 		price = 12000,
-		image = "",
 	},
 
 	MasterSword = {
 		name = "Master's Sword",
 		damage = 105,
+		model = Weapons.OneHanded.MasterSword,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 210,
 			skills = {
@@ -160,6 +171,8 @@ local OneHanded = {
 
 	GreatSword = {
 		name = "Great Sword",
+		image = "rbxassetid://123341776606746",
+		model = Weapons.OneHanded.GreatSword,
 		damage = 110,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 220,
@@ -170,13 +183,14 @@ local OneHanded = {
 		bonus = {},
 		damageType = DAMAGE_TYPE.BLADE,
 		price = 30000,
-		image = "",
 	},
 }
 
 local TwoHanded = {
 	BarbedClub = {
 		name = "Barbed club",
+		image = "rbxassetid://76964882407852",
+		model = Weapons.TwoHanded.BarbedClub,
 		damage = 65,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 130,
@@ -190,6 +204,8 @@ local TwoHanded = {
 
 	Halberd = {
 		name = "Halberd",
+		image = "rbxassetid://133879961363701",
+		model = Weapons.TwoHanded.Halberd,
 		damage = 70,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 140,
@@ -203,6 +219,8 @@ local TwoHanded = {
 
 	JaggedAxe = {
 		name = "Jagged Axe",
+		image = "rbxassetid://116080448306548",
+		model = Weapons.TwoHanded.JaggedAxe,
 		damage = 80,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 160,
@@ -216,6 +234,8 @@ local TwoHanded = {
 
 	Cleaver = {
 		name = "Cleaver",
+		image = "rbxassetid://83981418299449",
+		model = Weapons.TwoHanded.Cleaver,
 		damage = 85,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 170,
@@ -229,6 +249,8 @@ local TwoHanded = {
 
 	ExecutionersSword = {
 		name = "Executioner's Sword",
+		image = "rbxassetid://131212985092577",
+		model = Weapons.TwoHanded.ExecutionersSword,
 		damage = 110,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 220,
@@ -242,6 +264,8 @@ local TwoHanded = {
 
 	WarHammer = {
 		name = "War Hammer",
+		image = "rbxassetid://131910227086206",
+		model = Weapons.TwoHanded.WarHammer,
 		damage = 120,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 240,
@@ -256,6 +280,7 @@ local TwoHanded = {
 	DemonSword = {
 		name = "Demon Sword",
 		damage = 135,
+		model = Weapons.TwoHanded.DemonSword,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 666,
 			skills = {
@@ -275,6 +300,7 @@ local TwoHanded = {
 	JudgesStaff = {
 		name = "Judge's Staff",
 		damage = 80,
+		model = Weapons.TwoHanded.JudgesStaff,
 		requirement = {
 			[PLAYER_ATTRIBUTES.STRENGTH] = 160,
 			skills = {
@@ -288,6 +314,7 @@ local TwoHanded = {
 	StaffOfWitchcraft = {
 		name = "Witchcraft Staff",
 		damage = 20,
+		model = Weapons.TwoHanded.StaffOfWitchcraft,
 		requirement = {
 			[PLAYER_ATTRIBUTES.ANCHIENT_KNOWLADGE] = 50,
 			skills = {
@@ -304,6 +331,7 @@ local TwoHanded = {
 	WaterStaff = {
 		name = "Water Staff",
 		damage = 25,
+		model = Weapons.TwoHanded.WaterStaff,
 		requirement = {
 			[PLAYER_ATTRIBUTES.ANCHIENT_KNOWLADGE] = 80,
 			skills = {
@@ -319,6 +347,8 @@ local TwoHanded = {
 
 	StaffOfFire = {
 		name = "Staff of Fire",
+		image = "rbxassetid://83736608003641",
+		model = Weapons.TwoHanded.StaffOfFire,
 		damage = 25,
 		requirement = {
 			[PLAYER_ATTRIBUTES.ANCHIENT_KNOWLADGE] = 50,
@@ -336,6 +366,7 @@ local TwoHanded = {
 	StaffOfDarkness = {
 		name = "Staff of Darkness",
 
+		model = Weapons.TwoHanded.StaffOfDarkness,
 		damage = 25,
 		requirement = {
 			[PLAYER_ATTRIBUTES.ANCHIENT_KNOWLADGE] = 80,
@@ -346,6 +377,22 @@ local TwoHanded = {
 		bonus = {
 			SKILLS.MAGIC.BLACK_MAGICIAN,
 		},
+		damageType = DAMAGE_TYPE.HIT,
+		price = 15000,
+	},
+
+	Mace = {
+		name = "Mace",
+		image = "rbxassetid://127068311362312",
+		model = Weapons.TwoHanded.Mace,
+		damage = 259,
+		requirement = {
+			[PLAYER_ATTRIBUTES.STRENGTH] = 250,
+			skills = {
+				SKILLS.COMBAT.HEAVY_WEAPON_3,
+			},
+		},
+		bonus = {},
 		damageType = DAMAGE_TYPE.HIT,
 		price = 15000,
 	},

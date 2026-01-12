@@ -43,11 +43,11 @@ function AnimationService:setupAnimationToCharacter()
 	self.animTracks.OneHandedBlock = character.Humanoid.Animator:LoadAnimation(self.oneHandedBlock) :: AnimationTrack
 	self.animTracks.OneHandedBlock.Looped = true
 	self.animTracks.OneHandedBlock.Priority = Enum.AnimationPriority.Action2
-	
+
 	self.animTracks.PickupLoot = character.Humanoid.Animator:LoadAnimation(self.pickupLoot)
 	self.animTracks.PickupLoot.Looped = false
 	self.animTracks.PickupLoot.Priority = Enum.AnimationPriority.Action2
-	
+
 	self.animTracks.Lectern = character.Humanoid.Animator:LoadAnimation(self.lectern)
 	self.animTracks.Lectern.Looped = false
 	self.animTracks.Lectern.Priority = Enum.AnimationPriority.Action2

@@ -28,7 +28,7 @@ end
 ---@param keyCodeName string
 function EquipmentService:pressEquipKey(keyCodeName)
 	self.eventBus:fire("pressEquipKey", keyCodeName)
-    self.useCases.
+    self.useCases.equipItem:execute(self.commands.EquipItemCommand.new(keyCodeName))
 end
 
 return EquipmentService

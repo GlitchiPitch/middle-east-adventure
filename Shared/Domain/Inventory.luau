@@ -22,6 +22,10 @@ function Inventory.new(data)
 
 	self.Banana = { amount = 10 }
 	self.PotionOfStamina = { amount = 15 }
+	self.OrcSlayer = { amount = 1 }
+	self.AssassinSword = { amount = 1 }
+	self.JaggedAxe = { amount = 1 }
+	self.WarHammer = { amount = 1 }
 
 	return self
 end

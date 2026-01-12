@@ -51,6 +51,9 @@ function Application:init()
 			self.services.playerService:updatePlayerData(player)
 		end,
 
+		[shared.constants.REMOTE_EVENTS.EQUIP_ITEM] = function(player, eventData)
+			self.services.equipmentService:equipItem(player, eventData.data)
+		end,
 		[shared.constants.REMOTE_EVENTS.TOOL_ACTIVATED] = function(player, eventData)
 			self.services.toolService:activate(player)
 		end,

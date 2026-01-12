@@ -32,11 +32,12 @@ function UseLecternCommand.new(lectern)
 end
 
 ---@class EquipItemCommand
+---@field slotIndex string
 local EquipItemCommand = {}
 
-function EquipItemCommand.new()
+function EquipItemCommand.new(slotIndex)
 	return {
-
+		slotIndex = slotIndex,
 	}
 end
 

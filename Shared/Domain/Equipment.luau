@@ -6,7 +6,8 @@
 ---@field cloth ClothEntity
 ---@field rings rings
 ---@field amulet AmuletEntity
----@field slots table<Enum.KeyCode, ItemEntity>
+---@field slots table<string, string>
+---@field equippedWeapon string
 local Equipment = {}
 Equipment.__index = Equipment
 
@@ -19,19 +20,21 @@ function Equipment.new(data)
 	}
 	self.amulet = data.amulet
 
+	self.equippedWeapon = nil
+
 	self.slots = data.slots
 		or {
-			[Enum.KeyCode.One] = nil,
-			[Enum.KeyCode.Two] = nil,
-			[Enum.KeyCode.Three] = nil,
-			[Enum.KeyCode.Four] = nil,
+			[Enum.KeyCode.One.Name] = nil,
+			[Enum.KeyCode.Two.Name] = nil,
+			[Enum.KeyCode.Three.Name] = nil,
+			[Enum.KeyCode.Four.Name] = nil,
 		}
 
 	return self
 end
 
 ---@param ring RingEntity
-function Equipment:equipRing(ring)
+function Equipment:setRing(ring)
 	local sides = {
 		"left",
 		"right",
@@ -50,12 +53,17 @@ function Equipment:equipRing(ring)
 end
 
 ---@param amulet AmuletEntity
-function Equipment:equipAmulet(amulet)
+function Equipment:setAmulet(amulet)
 	self.amulet = amulet
 end
 
+---@param weaponName string
+function Equipment:equipWeapon(weaponName)
+	self.equippedWeapon = weaponName
+end
+
 ---@param itemName string
-function Equipment:equipSlot(itemName)
+function Equipment:setSlot(itemName)
 	local keys = {
 		Enum.KeyCode.One.Name,
 		Enum.KeyCode.Two.Name,
@@ -76,7 +84,7 @@ function Equipment:equipSlot(itemName)
 	self.slots[freeSlot] = itemName
 end
 
----@param cloth ClothEntity
+---@param cloth string
 function Equipment:equipCloth(cloth)
 	self.cloth = cloth
 end

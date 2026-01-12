@@ -11,6 +11,7 @@ local UserInputService = game:GetService("UserInputService")
 ---@field sprintController SprintController
 ---@field cameraController CameraController
 ---@field inventoryService ClientInventoryService
+---@field equipmentService ClientEquipmentService
 local InputService = {}
 InputService.__index = InputService
 
@@ -49,6 +50,7 @@ function InputService:init()
 	self.cameraController = application.controllers.cameraController
 	self.toolService = application.services.toolService
 	self.inventoryService = application.services.inventoryService
+	self.equipmentService = application.services.equipmentService
 
 	--@TODO: current block input method is not correct need refactor
 	self.alchemyService = application.services.alchemyService
@@ -98,9 +100,8 @@ function InputService:_inputBegan(input, gameProccessed)
 		self.sprintController:run()
 	end
 
-	if table.find(self.config.Client.Control.EquippmentKeys, input.KeyCode.Name) then
-		warn("pressEquipKey")
-		
+	if self.config.Client.Control.EquippmentKeys[input.KeyCode.Name] then
+		self.equipmentService:pressEquipKey(input.KeyCode.Name)
 	end
 end
 

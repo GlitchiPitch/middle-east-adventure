@@ -191,6 +191,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Service dependency injection improvements
 * Code optimizations across multiple service modules
 
+## [1.0.27] - 2026-01-12
+
+### Added
+
+* Comprehensive weapon asset system with 3D models and images for all weapons
+* New EquipmentService for server-side equipment operations and tool management
+* Enhanced Equipment domain with weapon equipping functionality and improved slot management
+* Client-side EquipItem use case for equipment operations
+* Weapon tool equipping mechanics with automatic tool switching
+
+### Changed
+
+* Expanded Weapon.luau data with model references and image assets for all weapon types
+* Refactored Equipment domain with flattened slot structure and equippedWeapon tracking
+* Enhanced service integration across EquipmentService, InventoryService, and PlayerService
+* Updated UseCases architecture with dependency injection for EquipItem functionality
+* Improved weapon data organization with direct asset references
+
+### Fixed
+
+* Equipment slot management and weapon equipping logic
+* Service initialization and dependency injection improvements
+* Tool equipping/un-equipping mechanics for player characters
+
 ## [Unreleased]
 
 ### Planned

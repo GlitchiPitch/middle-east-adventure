@@ -3,7 +3,9 @@ local Mold = {}
 local Misc = {
     Mold = Mold,
     
-	Pickaxe = {},
+	Pickaxe = {
+		image = "rbxassetid://127839083000298",
+	},
 	BlacksmithHammer = {},
 }
 

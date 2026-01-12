@@ -8,6 +8,7 @@ local Constants = {
 		TOOL_ACTIVATED = "ToolActivated",
 		PICKUP_LOOT = "PickupLoot",
 		USE_LECTERN = "UseLectern",
+		EQUIP_ITEM = "EquipItem",
 	},
 
 	PLAYER_STATES = {

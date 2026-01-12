@@ -71,11 +71,33 @@ function UseLectern:execute(command)
 end
 
 ---@class ClientEquipItem
-local EquipItem= {}
+---@field remoteEventService RemoteEventService
+---@field constants Constants
+---@field playerService ClientPlayerService
+local EquipItem = {}
 EquipItem.__index = EquipItem
 
-function EquipItem.new()
-	
+---@param remoteEventService RemoteEventService
+---@param playerService ClientPlayerService
+---@param constants Constants
+---@return ClientEquipItem
+function EquipItem.new(remoteEventService, playerService, constants)
+	local self = setmetatable({}, EquipItem)
+	self.remoteEventService = remoteEventService
+	self.playerService = playerService
+	self.constants = constants
+	return self
+end
+
+---@param command EquipItemCommand
+function EquipItem:execute(command)
+	local playerEntity = self.playerService:getPlayerEntity()
+	if playerEntity.equipment.slots[command.slotIndex] then
+		self.remoteEventService:fireServer({
+			eventName = self.constants.REMOTE_EVENTS.EQUIP_ITEM,
+			data = command,
+		})
+	end
 end
 
 ---@class ClientUseCases
@@ -83,6 +105,7 @@ end
 ---@field clickInventoryItem ClientClickInventoryItem
 ---@field pickupLoot ClientPickupLoot
 ---@field useLectern ClientUseLectern
+---@field equipItem ClientEquipItem
 local UseCases = {}
 UseCases.__index = UseCases
 
@@ -97,9 +120,13 @@ end
 function UseCases:init()
 	---@type Shared
 	local shared = self.diContainer:resolve("Shared")
+	---@type ClientApplication
+	local application = self.diContainer:resolve("Application")
+
 	self.clickInventoryItem = ClickInventoryItem.new(shared.remoteEventService, shared.constants)
 	self.pickupLoot = PickupLoot.new(shared.remoteEventService, shared.constants)
 	self.useLectern = UseLectern.new(shared.remoteEventService, shared.constants)
+	self.equipItem = EquipItem.new(shared.remoteEventService, application.services.playerService, shared.constants)
 end
 
 return UseCases

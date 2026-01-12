@@ -27,7 +27,7 @@ end
 ---@param itemData table
 function InventoryService:clickItem(player, itemData)
 	local playerEntity = self.playerService:getPlayerEntity(player)
-	playerEntity.equipment:equipSlot(itemData.itemName)
+	playerEntity.equipment:setSlot(itemData.itemName)
 end
 
 ---@param playerEntity PlayerEntity

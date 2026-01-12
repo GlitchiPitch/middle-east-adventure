@@ -77,7 +77,7 @@ function ToolService:activated()
 		return
 	end
 
-	if self.debounce == true then
+	if self.debounce then
 		return
 	end
 

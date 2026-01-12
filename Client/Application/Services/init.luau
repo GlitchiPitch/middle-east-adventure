@@ -48,7 +48,7 @@ function Services.new(diContainer)
 	self.lecternService = LecternService.new(diContainer)
 	self.chestService = ChestService.new(diContainer)
 	self.tradeService = TradeService.new(diContainer)
-	self.equipmentService = EquipmentService.new()
+	self.equipmentService = EquipmentService.new(diContainer)
 	return self
 end
 
@@ -66,6 +66,7 @@ function Services:init()
 	self.chestService:init()
 	self.animationService:init()
 	self.lootService:init()
+	self.equipmentService:init()
 end
 
 return Services
