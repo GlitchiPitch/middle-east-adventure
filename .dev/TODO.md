@@ -11,7 +11,16 @@
 - [ ] Add pet/companion system
 - [ ] Create housing/building system
 
-### Next Development Steps (v1.0.25)
+### Completed in v1.0.25
+- [x] Implement AttributesUI component for character stats display
+- [x] Restructure Attributes domain with nested data organization
+- [x] Add lectern usage tracking system
+- [x] Refactor InventoryUI for better separation of concerns
+- [x] Enhance PlayerProgress with usedLectern tracking
+- [x] Update game version from v1.0.24 to v1.0.25 in GameVersion.model.json
+- [x] Add v1.0.25 entry to CHANGELOG.md with detailed changes
+
+### Next Development Steps (v1.0.26)
 - [ ] Implement advanced inventory management system
 - [ ] Add pet/companion system
 - [ ] Create housing/building system

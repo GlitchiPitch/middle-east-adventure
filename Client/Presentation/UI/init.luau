@@ -7,7 +7,7 @@ local AlchemyUI = require(script.AlchemyUI)
 local DialogUI = require(script.DialogUI)
 local SmithUI = require(script.SmithUI)
 local EquipmentUI = require(script.EquipmentUI)
-
+local AttributesUI = require(script.AttributesUI)
 local Components = require(script.Components)
 
 ---@class UI
@@ -21,6 +21,7 @@ local Components = require(script.Components)
 ---@field smithUI SmithUI
 ---@field equipmentUI EquipmentUI
 ---@field components Components
+---@field attributesUI AttributesUI
 local UI = {}
 UI.__index = UI
 
@@ -36,6 +37,7 @@ function UI.new(diContainer)
 	self.dialogUI = DialogUI.new(diContainer)
 	self.smithUI = SmithUI.new(diContainer)
 	self.equipmentUI = EquipmentUI.new(diContainer)
+	self.attributesUI = AttributesUI.new(diContainer)
 	-- self.combatUI = CombatUI.new()
 	self.inventoryUI = InventoryUI.new(diContainer)
 	return self
@@ -50,6 +52,7 @@ function UI:init()
 	self.alchemyUI:init()
 	self.inventoryUI:init()
 	self.equipmentUI:init()
+	self.attributesUI:init()
 end
 
 return UI

@@ -22,9 +22,10 @@ function Presentation:init()
 	---@type Shared
 	local shared = self.diContainer:resolve("Shared")
 	shared.eventBus:connect("updatePlayerData", function()
-		self.ui.statsUI:updateUI()
+		self.ui.statsUI:updateUI() -- @TODO: for stats need to make separated event cuz it called often
 		self.ui.alchemyUI:updatePlayerRecipes()
 		self.ui.inventoryUI:updateInventory()
+		self.ui.attributesUI:update()
 	end)
 
 	shared.eventBus:connect("setAlchemyMode", function(data)

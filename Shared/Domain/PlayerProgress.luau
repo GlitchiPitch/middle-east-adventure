@@ -1,4 +1,5 @@
 ---@class PlayerProgressEntity
+---@field usedLectern string[]
 local PlayerProgress = {}
 PlayerProgress.__index = PlayerProgress
 

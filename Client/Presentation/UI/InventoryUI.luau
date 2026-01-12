@@ -2,10 +2,6 @@
 ---@field _instance Frame
 ---@field diContainer DIContainer
 ---@field goldValue Frame
----@field statsContainer ScrollingFrame
----@field expFrame Frame
----@field attributesFrame Frame
----@field defenseFrame Frame
 ---@field itemsMenuButton TextButton
 ---@field magicMenuButton TextButton
 ---@field smithRecipesMenuButton TextButton
@@ -28,12 +24,10 @@ local InventoryUI = {}
 InventoryUI.__index = InventoryUI
 
 ---@param diContainer DIContainer
----@param inventoryUI Frame
 ---@return InventoryUI
-function InventoryUI.new(diContainer, inventoryUI)
+function InventoryUI.new(diContainer)
 	local self = setmetatable({}, InventoryUI)
 	self.diContainer = diContainer
-	self._instance = inventoryUI
 	return self
 end
 
@@ -54,7 +48,6 @@ function InventoryUI:init()
 
 	self.menuFrame = inventory.Menu
 	self.dataFrame = inventory.Data
-	self.statsFrame = inventory.Stats
 
 	self.closeButton = self.menuFrame.Close
 	self.menuDataFrame = self.dataFrame.Menu
@@ -64,17 +57,14 @@ function InventoryUI:init()
 	self.skillsContainer = self.dataFrame.Skills
 	self.magicContainer = self.dataFrame.Magic
 
+	self.statsFrame = inventory.Attributes
+	self.goldValue = self.statsFrame.GoldValue
+
 	self.itemsMenuButton = self.menuDataFrame.Items
 	self.magicMenuButton = self.menuDataFrame.Magic
 	self.smithRecipesMenuButton = self.menuDataFrame.SmithRecipes
 	self.potionRecipesMenuButton = self.menuDataFrame.PotionRecipes
 	self.skillsMenuButton = self.menuDataFrame.Skills
-
-	self.goldValue = self.statsFrame.GoldValue
-	self.statsContainer = self.statsFrame.ScrollingFrame
-	self.expFrame = self.statsContainer.Exp
-	self.attributesFrame = self.statsContainer.Attributes
-	self.defenseFrame = self.statsContainer.Defense
 
 	self:_setup()
 end
@@ -155,8 +145,14 @@ function InventoryUI:_createSlot(itemName, itemData)
 end
 
 function InventoryUI:_updateSlot(itemSlot, itemData)
+	--@TODO: amount field have all items i think need delete the condition
+	--@TODO: all items wil be in inventory if items is not just amount 0
 	if itemData.amount then
-		itemSlot.Body.DataLabel.Text = itemData.amount
+		if itemData.amount > 0 then
+			itemSlot.Body.DataLabel.Text = itemData.amount
+		else
+			itemSlot:Destroy()
+		end
 	end
 end
 

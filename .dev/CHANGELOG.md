@@ -116,6 +116,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Service integration stability
 * Mobile touch control enhancements
 
+## [1.0.25] - 2026-01-12
+
+### Added
+
+* New AttributesUI component for displaying character attributes, experience, and defense stats
+* Lectern usage tracking system to prevent repeated knowledge gains
+* Ancient knowledge progression when interacting with lecterns
+
+### Changed
+
+* Restructured Attributes domain entity with nested table organization (attributes, exp, defense)
+* Refactored InventoryUI to remove stats integration and focus on inventory management
+* Enhanced PlayerProgress entity with usedLectern tracking
+* Improved inventory slot management with automatic cleanup of zero-amount items
+* Updated UI initialization to include new AttributesUI component
+
+### Fixed
+
+* Removed redundant StarterGui backpack disabling code
+* Improved attribute data structure consistency across the application
+
 ## [1.0.24] - 2026-01-12
 
 ### Added

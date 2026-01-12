@@ -1,4 +1,3 @@
-local StarterGui = game:GetService("StarterGui")
 ---@class ClientInventoryService
 ---@field diContainer DIContainer
 ---@field eventBus EventBus
@@ -29,8 +28,6 @@ function InventoryService:init()
 	self.cameraController = application.controllers.cameraController
 	self.useCases = application.useCases
 	self.commands = shared.application.commands
-
-	StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
 end
 
 function InventoryService:clickItem(itemData)
