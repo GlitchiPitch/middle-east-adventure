@@ -9,6 +9,7 @@
 ---@field Equipment EquipmentEntity
 ---@field PlayerProgress PlayerProgressEntity
 ---@field Attributes AttributesEntity
+---@field Zone ZoneEntity
 local Domain = {}
 Domain.__index = Domain
 
@@ -25,6 +26,7 @@ function Domain.new()
 	self.Cloth = require(script.Cloth)
 	self.PlayerProgress = require(script.PlayerProgress)
 	self.Attributes = require(script.Attributes)
+	self.Zone = require(script.Zone)
 	return self
 end
 

@@ -230,6 +230,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Boss battle encounters
 * Reputation system
 
+## [1.0.28] - 2026-01-12
+
+### Added
+
+* New Zone domain entity for location-based gameplay mechanics
+* Workspace integration with MineZones, MobZones, and PlantsZones folders
+* Enhanced project structure with proper Workspace configuration
+
+### Changed
+
+* Refactored EquipmentService setToolToPlayer method to use equippedWeapon directly
+* Improved PlayerService with automatic backpack cleanup mechanism
+* Updated Domain module to include Zone entity integration
+
+### Fixed
+
+* Equipment tool management and weapon equipping logic improvements
+* Player service initialization and dependency injection enhancements
+
 ## \[1.0.19] - 2026-01-11
 
 ### Added

@@ -1,6 +1,6 @@
 # TODO List
 
-## Project Progress: ~65%
+## Project Progress: ~68%
 
 Major systems implemented:
 
@@ -44,18 +44,28 @@ Next major milestones:
 * \[x] Update game version from v1.0.26 to v1.0.27 in GameVersion.model.json
 * \[x] Add v1.0.27 entry to CHANGELOG.md with weapon and equipment system enhancements
 
-### Next Development Steps (v1.0.28)
+### Completed in v1.0.28
+
+* \[x] Implement Zone domain entity for location-based gameplay mechanics
+* \[x] Add Workspace integration with MineZones, MobZones, and PlantsZones folders
+* \[x] Enhance project structure with proper Workspace configuration
+* \[x] Refactor EquipmentService setToolToPlayer method to use equippedWeapon directly
+* \[x] Improve PlayerService with automatic backpack cleanup mechanism
+* \[x] Update Domain module to include Zone entity integration
+* \[x] Update game version from v1.0.27 to v1.0.28 in GameVersion.model.json
+* \[x] Add v1.0.28 entry to CHANGELOG.md with zone system and equipment improvements
+
+### Next Development Steps (v1.0.29)
 
 * \[ ] Implement advanced inventory management system with sorting and filtering
+* \[ ] Add zone-based gameplay mechanics using the new Zone domain entity
+* \[ ] Create MineZones functionality with mining mechanics and resource gathering
+* \[ ] Implement MobZones with dynamic mob spawning and combat encounters
+* \[ ] Add PlantsZones with gathering and herbalism systems
+* \[ ] Enhance Workspace integration with additional zone types
 * \[ ] Add pet/companion system with AI behaviors and training mechanics
 * \[ ] Create housing/building system with construction mechanics and customization
 * \[ ] Implement advanced magic system with spell casting, effects, and mana management
-* \[ ] Add seasonal events and festivals with time-based activities and rewards
-* \[ ] Create marketplace with player-to-player trading and auction house
-* \[ ] Implement skill specialization trees and talent systems with progression
-* \[ ] Add dungeon crawling mechanics with procedural generation and loot
-* \[ ] Create boss battle encounters with complex AI and multiple phases
-* \[ ] Implement reputation system with faction relationships and consequences
 
 ### Next Development Steps (v1.0.26) - Completed
 

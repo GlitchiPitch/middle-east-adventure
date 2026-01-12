@@ -36,6 +36,11 @@ function PlayerService:onPlayerAdded(player)
 	local function onCharacterAdded(character)
 		self.ragdollHandler:setRagdollToCharacter(character)
 		self:updatePlayerData(player)
+
+		-- crook
+		player.Backpack.ChildAdded:Connect(function(child)
+			child:Destroy()
+		end)
 	end
 
 	self.playerRepository:onPlayerAdded(player)

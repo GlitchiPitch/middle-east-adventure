@@ -39,9 +39,8 @@ function EquipmentService:equipItem(player, command)
 	end
 end
 
----@param weaponName string
 ---@param playerEntity PlayerEntity
-function EquipmentService:setToolToPlayer(playerEntity, weaponName)
+function EquipmentService:setToolToPlayer(playerEntity)
 	local character = playerEntity._instance.Character
 	if playerEntity.equipment.equippedWeapon then
 		local weaponTool = self.assets.Weapons:getWeaponTool(playerEntity.equipment.equippedWeapon)
