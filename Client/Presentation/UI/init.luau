@@ -53,6 +53,15 @@ function UI:init()
 	self.inventoryUI:init()
 	self.equipmentUI:init()
 	self.attributesUI:init()
+	self.equipmentUI:init()
+end
+
+function UI:update()
+	self.statsUI:updateUI() -- @TODO: for stats need to make separated event cuz it called often
+	self.alchemyUI:updatePlayerRecipes()
+	self.inventoryUI:updateInventory()
+	self.attributesUI:update()
+	self.equipmentUI:update()
 end
 
 return UI

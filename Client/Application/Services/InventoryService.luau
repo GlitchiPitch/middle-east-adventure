@@ -30,8 +30,8 @@ function InventoryService:init()
 	self.commands = shared.application.commands
 end
 
-function InventoryService:clickItem(itemData)
-	local command = self.commands.ClickInventoryItemCommand.new(itemData.name)
+function InventoryService:clickItem(itemName)
+	local command = self.commands.ClickInventoryItemCommand.new(itemName)
 	self.useCases.clickInventoryItem:execute(command)
 end
 

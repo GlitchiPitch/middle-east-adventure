@@ -87,6 +87,7 @@ function PlayerService:moveTo(interactModel)
 	local currentPoint = 1
 	local _moveConn
 	local _blockPathConn
+
 	---@param reached boolean
 	local function onFinished(reached)
 		if reached then
@@ -99,6 +100,7 @@ function PlayerService:moveTo(interactModel)
 				playerEntity._instance.Character:PivotTo(
 					CFrame.new(humanoidRootPart.Position, interactModel.PrimaryPart.Position)
 				)
+
 			end
 		else
 			humanoid:MoveTo(way[currentPoint].Position)
@@ -123,6 +125,7 @@ function PlayerService:moveTo(interactModel)
 
 	humanoid:MoveTo(way[currentPoint].Position)
 	_moveConn = humanoid.MoveToFinished:Connect(onFinished)
+
 end
 
 return PlayerService

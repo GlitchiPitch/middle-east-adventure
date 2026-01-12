@@ -11,26 +11,35 @@
 - [ ] Add pet/companion system
 - [ ] Create housing/building system
 
-### Completed in v1.0.25
-- [x] Implement AttributesUI component for character stats display
-- [x] Restructure Attributes domain with nested data organization
-- [x] Add lectern usage tracking system
-- [x] Refactor InventoryUI for better separation of concerns
-- [x] Enhance PlayerProgress with usedLectern tracking
-- [x] Update game version from v1.0.24 to v1.0.25 in GameVersion.model.json
-- [x] Add v1.0.25 entry to CHANGELOG.md with detailed changes
+### Completed in v1.0.26
+- [x] Implement EquipmentService for equipment operations and key bindings
+- [x] Enhance EquipmentUI with real-time display and slot management
+- [x] Restructure Attributes domain with flattened structure
+- [x] Update Equipment domain with improved data organization
+- [x] Expand Weapon data with additional weapon types
+- [x] Improve service integration across InputService, InventoryService, PlayerService
+- [x] Update game version from v1.0.25 to v1.0.26 in GameVersion.model.json
+- [x] Add v1.0.26 entry to CHANGELOG.md with equipment system updates
 
-### Next Development Steps (v1.0.26)
-- [ ] Implement advanced inventory management system
-- [ ] Add pet/companion system
-- [ ] Create housing/building system
-- [ ] Implement advanced magic system with spells
-- [ ] Add seasonal events and festivals
-- [ ] Create marketplace with player trading
-- [ ] Implement skill specialization trees
-- [ ] Add dungeon crawling mechanics
-- [ ] Create boss battle encounters
-- [ ] Implement reputation system
+### Next Development Steps (v1.0.27)
+- [ ] Implement advanced inventory management system with sorting and filtering
+- [ ] Add pet/companion system with AI behaviors
+- [ ] Create housing/building system with construction mechanics
+- [ ] Implement advanced magic system with spell casting and effects
+- [ ] Add seasonal events and festivals with time-based activities
+- [ ] Create marketplace with player-to-player trading
+- [ ] Implement skill specialization trees and talent systems
+- [ ] Add dungeon crawling mechanics with procedural generation
+- [ ] Create boss battle encounters with complex AI
+- [ ] Implement reputation system with faction relationships
+
+### Next Development Steps (v1.0.26) - Completed
+- [x] Implement EquipmentService for equipment operations and key bindings
+- [x] Enhance EquipmentUI with real-time display and slot management
+- [x] Restructure Attributes domain with flattened structure
+- [x] Update Equipment domain with improved data organization
+- [x] Expand Weapon data with additional weapon types
+- [x] Improve service integration across InputService, InventoryService, PlayerService
 
 ### Next Development Steps (v1.0.23) - Completed
 - [x] Implement character customization system

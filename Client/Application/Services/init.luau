@@ -11,6 +11,7 @@ local SmithService = require(script.SmithService)
 local LecternService = require(script.LecternService)
 local ChestService = require(script.ChestService)
 local TradeService = require(script.TradeService)
+local EquipmentService = require(script.EquipmentService)
 
 ---@class ClientApplicationServices
 ---@field playerService ClientPlayerService
@@ -26,6 +27,7 @@ local TradeService = require(script.TradeService)
 ---@field lecternService LecternService
 ---@field chestService ClientChestService
 ---@field tradeService ClientTradeService
+---@field equipmentService ClientEquipmentService
 local Services = {}
 Services.__index = Services
 
@@ -46,6 +48,7 @@ function Services.new(diContainer)
 	self.lecternService = LecternService.new(diContainer)
 	self.chestService = ChestService.new(diContainer)
 	self.tradeService = TradeService.new(diContainer)
+	self.equipmentService = EquipmentService.new()
 	return self
 end
 

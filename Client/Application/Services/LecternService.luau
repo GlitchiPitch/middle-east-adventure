@@ -38,7 +38,6 @@ function LecternService:start(lectern)
 	self.animationService.animTracks.Lectern:Play()
 	task.wait(self.animationService.animTracks.Lectern.Length)
 	self.useCases.useLectern:execute(self.commands.UseLecternCommand.new(lectern))
-	task.wait(1)
 	self:finish()
 end
 

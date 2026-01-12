@@ -47,7 +47,8 @@ function Application:init()
 		---@param player Player
 		---@param eventData eventData
 		[shared.constants.REMOTE_EVENTS.CLICK_INVENTORY_ITEM] = function(player, eventData)
-			self.services.inventoryService:clickItem(player, eventData)
+			self.services.inventoryService:clickItem(player, eventData.data)
+			self.services.playerService:updatePlayerData(player)
 		end,
 
 		[shared.constants.REMOTE_EVENTS.TOOL_ACTIVATED] = function(player, eventData)

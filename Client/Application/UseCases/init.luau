@@ -70,6 +70,14 @@ function UseLectern:execute(command)
 	})
 end
 
+---@class ClientEquipItem
+local EquipItem= {}
+EquipItem.__index = EquipItem
+
+function EquipItem.new()
+	
+end
+
 ---@class ClientUseCases
 ---@field diContainer DIContainer
 ---@field clickInventoryItem ClientClickInventoryItem

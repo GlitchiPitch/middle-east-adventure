@@ -98,8 +98,9 @@ function InputService:_inputBegan(input, gameProccessed)
 		self.sprintController:run()
 	end
 
-	if table.find(self.config.Client.Control.EquippmentKeys, input.KeyCode) then
-		self.eventBus:fire("pressEquipKey", input.KeyCode.Value)
+	if table.find(self.config.Client.Control.EquippmentKeys, input.KeyCode.Name) then
+		warn("pressEquipKey")
+		
 	end
 end
 

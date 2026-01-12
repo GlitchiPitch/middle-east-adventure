@@ -167,15 +167,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Service integration stability enhancements
 * Mobile touch control refinements
 
+## [1.0.26] - 2026-01-12
+
+### Added
+
+* New EquipmentService for handling equipment-related operations and key bindings
+* Enhanced EquipmentUI with real-time equipment display and slot management
+* Equipment slot visualization with item images and key bindings (1-4 keys)
+* Comprehensive equipment system integration with player service
+
+### Changed
+
+* Restructured Attributes domain entity with flattened structure for better performance
+* Removed nested attributes table in favor of direct property access
+* Enhanced Equipment domain with improved data organization
+* Updated Weapon data with expanded weapon types and properties
+* Improved service integration across InputService, InventoryService, and PlayerService
+* Enhanced UI initialization and presentation layer organization
+
+### Fixed
+
+* Equipment slot management and visual updates
+* Service dependency injection improvements
+* Code optimizations across multiple service modules
+
 ## [Unreleased]
 
 ### Planned
 
-* Additional character customization options
-* Advanced quest mechanics and story branches
-* Enhanced multiplayer features
-* Sound system implementation
-* Tutorial and onboarding system
+* Advanced inventory management system implementation
+* Pet/companion system development
+* Housing/building system creation
+* Advanced magic system with spells
+* Seasonal events and festivals
+* Marketplace with player trading
+* Skill specialization trees
+* Dungeon crawling mechanics
+* Boss battle encounters
+* Reputation system
 
 ## \[1.0.19] - 2026-01-11
 

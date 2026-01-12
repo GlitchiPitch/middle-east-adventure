@@ -31,10 +31,20 @@ function UseLecternCommand.new(lectern)
 	}
 end
 
+---@class EquipItemCommand
+local EquipItemCommand = {}
+
+function EquipItemCommand.new()
+	return {
+
+	}
+end
+
 ---@class SharedCommands
 ---@field ClickInventoryItemCommand ClickInventoryItemCommand
 ---@field PickupLootCommand PickupLootCommand
 ---@field UseLecternCommand UseLecternCommand
+---@field EquipItemCommand EquipItemCommand
 local Commands = {}
 Commands.__index = Commands
 
@@ -43,6 +53,7 @@ function Commands.new()
 	self.ClickInventoryItemCommand = ClickInventoryItemCommand
 	self.PickupLootCommand = PickupLootCommand
 	self.UseLecternCommand = UseLecternCommand
+	self.EquipItemCommand = EquipItemCommand
 	return self
 end
 

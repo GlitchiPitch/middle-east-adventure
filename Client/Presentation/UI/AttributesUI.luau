@@ -68,10 +68,15 @@ function AttributesUI:update()
 
 	self.nextLevel.Value.Text = "not implement"
 
-	for _, v in attributesData do
-		for j, k in v do
-			local attLabel = self[j]
-			attLabel.Value.Text = k
+	for i, v in attributesData do
+		if typeof(v) == "table" then
+			for j, k in v do
+				local attLabel = self[j]
+				attLabel.Value.Text = k
+			end
+		else
+			local attLabel = self[i]
+			attLabel.Value.Text = v
 		end
 	end
 end

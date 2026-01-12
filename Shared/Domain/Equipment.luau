@@ -54,13 +54,13 @@ function Equipment:equipAmulet(amulet)
 	self.amulet = amulet
 end
 
----@param item ItemEntity
-function Equipment:equipSlot(item)
+---@param itemName string
+function Equipment:equipSlot(itemName)
 	local keys = {
-		Enum.KeyCode.One,
-		Enum.KeyCode.Two,
-		Enum.KeyCode.Three,
-		Enum.KeyCode.Four,
+		Enum.KeyCode.One.Name,
+		Enum.KeyCode.Two.Name,
+		Enum.KeyCode.Three.Name,
+		Enum.KeyCode.Four.Name,
 	}
 
 	local freeSlot
@@ -72,8 +72,8 @@ function Equipment:equipSlot(item)
 		end
 	end
 
-	freeSlot = freeSlot or Enum.KeyCode.One
-	self.slots[freeSlot] = item
+	freeSlot = freeSlot or Enum.KeyCode.One.Name
+	self.slots[freeSlot] = itemName
 end
 
 ---@param cloth ClothEntity

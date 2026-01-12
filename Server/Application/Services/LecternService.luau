@@ -24,7 +24,7 @@ function LecternService:useLectern(player, command)
 	local playerEntity = self.playerService:getPlayerEntity(player)
 	if not table.find(playerEntity.playerProgress.usedLectern, command.lectern.Name) then
 		table.insert(playerEntity.playerProgress.usedLectern, command.lectern.Name)
-		playerEntity.attributes.anchientKnowladge += 5
+		playerEntity.attributes.ancientKnowledge += 5
 	end
 end
 

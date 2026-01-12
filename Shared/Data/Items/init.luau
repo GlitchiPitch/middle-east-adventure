@@ -12,9 +12,9 @@ local Items = {
 ---@param itemName string
 ---@return table
 function Items:getItemData(itemName)
-	local weaponData = self.Weapon:getWeaponData(itemName)
+	local weaponData, weaponType = self.Weapon:getWeaponData(itemName)
 	if weaponData then
-		weaponData.type = "OneHanded"
+		weaponData.type = weaponType
 		return weaponData
 	end
 

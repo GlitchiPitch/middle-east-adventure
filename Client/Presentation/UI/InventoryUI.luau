@@ -127,7 +127,7 @@ function InventoryUI:_createSlot(itemName, itemData)
 	local _itemData = self.sharedData:getItemData(itemName)
 
 	local function onClick()
-		self.inventoryService:clickItem(itemData)
+		self.inventoryService:clickItem(itemName)
 	end
 
 	itemSlot.Parent = self.itemsContainer

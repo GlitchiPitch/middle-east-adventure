@@ -362,18 +362,28 @@ local Weapon = {
 	Crossbows = Crossbows,
 }
 
-local _allWeapons = {}
-
-for _, v in Weapon do
-	for j, k in v do
-		_allWeapons[j] = k
-	end
-end
-
 ---@param weaponName string
 ---@return table
 function Weapon:getWeaponData(weaponName)
-	return _allWeapons[weaponName]
+	local oneHanded = self.OneHanded[weaponName]
+	if oneHanded then
+		return oneHanded, "OneHanded"
+	end
+	local twoHanded = self.TwoHanded[weaponName]
+	if twoHanded then
+		return twoHanded, "TwoHanded"
+	end
+	local bow = self.Bows[weaponName]
+	if bow then
+		return bow, "Bow"
+	end
+
+	local crossbow = self.Crossbows[weaponName]
+	if crossbow then
+		return crossbow, "Crossbow"
+	end
+
+	return
 end
 
 return Weapon

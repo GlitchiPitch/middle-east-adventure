@@ -1,6 +1,7 @@
 ---@class ServerInventoryService
 ---@field diContainer DIContainer
 ---@field playerService ServerPlayerService
+---@field sharedData SharedData
 local InventoryService = {}
 InventoryService.__index = InventoryService
 
@@ -15,6 +16,10 @@ end
 function InventoryService:init()
 	---@type ServerApplication
 	local application = self.diContainer:resolve("Application")
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
+
+	self.sharedData = shared.data
 	self.playerService = application.services.playerService
 end
 
@@ -22,12 +27,7 @@ end
 ---@param itemData table
 function InventoryService:clickItem(player, itemData)
 	local playerEntity = self.playerService:getPlayerEntity(player)
-	local item = playerEntity.inventory:getItem(itemData.name) -- entity
-	if itemData.equipdable then
-		playerEntity.equipment:equip(item)
-	elseif itemData.usable then
-		item:use()
-	end
+	playerEntity.equipment:equipSlot(itemData.itemName)
 end
 
 ---@param playerEntity PlayerEntity
