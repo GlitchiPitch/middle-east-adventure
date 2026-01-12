@@ -45,7 +45,7 @@ function SmithService:finish()
 	self.eventBus:fire("setSmithMode", { isActive = self.isActive })
 	self.playerService:toggleRobloxControl(true)
 	self.cameraController:activateDefaultCamera()
-	self.playerService:setPlayerState("")
+	self.playerService:setPlayerState(self.constants.PLAYER_STATES.IDLE)
 end
 
 return SmithService

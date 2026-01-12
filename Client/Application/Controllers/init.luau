@@ -21,6 +21,8 @@ end
 
 function Controllers:init()
 	self.targetController:init()
+	self.cameraController:init()
+	self.sprintController:init()
 end
 
 return Controllers

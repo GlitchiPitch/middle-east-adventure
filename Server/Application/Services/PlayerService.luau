@@ -1,13 +1,14 @@
----@class ServerApplicationPlayerService
+---@class ServerPlayerService
 ---@field diContainer DIContainer
 ---@field playerRepository PlayerRepository
 ---@field remoteEventService RemoteEventService
 ---@field constants Constants
+---@field useCases ServerUseCases
 local PlayerService = {}
 PlayerService.__index = PlayerService
 
 ---@param diContainer DIContainer
----@return ServerApplicationPlayerService
+---@return ServerPlayerService
 function PlayerService.new(diContainer)
 	local self = setmetatable({}, PlayerService)
 	self.diContainer = diContainer
@@ -26,18 +27,15 @@ function PlayerService:init()
 	self.remoteEventService = shared.remoteEventService
 	self.playerRepository = infrastructure.playerRepository
 	self.ragdollHandler = application.handlers.ragdoll
+	self.useCases = application.useCases
 end
 
 ---@param player Player
 function PlayerService:onPlayerAdded(player)
 	---@param character Model
 	local function onCharacterAdded(character)
-		local playerEntity = self.playerRepository:getPlayerEntity(player)
 		self.ragdollHandler:setRagdollToCharacter(character)
-		self.remoteEventService:fireClient(player, {
-			eventName = self.constants.REMOTE_EVENTS.UPDATE_PLAYER_DATA,
-			data = playerEntity:toData(),
-		})
+		self:updatePlayerData(player)
 	end
 
 	self.playerRepository:onPlayerAdded(player)
@@ -61,6 +59,10 @@ end
 function PlayerService:getPlayerEntity(player)
 	local playerEntity = self.playerRepository:getPlayerEntity(player)
 	return playerEntity
+end
+
+function PlayerService:updatePlayerData(player)
+	self.useCases.updatePlayerData:execute(player)
 end
 
 return PlayerService

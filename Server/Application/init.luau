@@ -1,11 +1,13 @@
 local Players = game:GetService("Players")
 local Services = require(script.Services)
 local Handlers = require(script.Handlers)
+local UseCases = require(script.UseCases)
 
 ---@class ServerApplication
 ---@field diContainer DIContainer
 ---@field services ServerApplicationServices
 ---@field handlers ServerApplicationHandlers
+---@field useCases ServerUseCases
 local Application = {}
 Application.__index = Application
 
@@ -16,6 +18,7 @@ function Application.new(diContainer)
 	self.diContainer = diContainer
 	self.services = Services.new(diContainer)
 	self.handlers = Handlers.new()
+	self.useCases = UseCases.new(diContainer)
 	return self
 end
 
@@ -38,11 +41,7 @@ function Application:init()
 		---@param player Player
 		---@param _ eventData
 		[shared.constants.REMOTE_EVENTS.UPDATE_PLAYER_DATA] = function(player, _)
-			local playerData = self.services.playerService:getPlayerData(player)
-			remoteEventService:fireClient(player, {
-				eventName = shared.constants.REMOTE_EVENTS.UPDATE_PLAYER_DATA,
-				data = playerData,
-			})
+			self.services.playerService:updatePlayerData(player)
 		end,
 
 		---@param player Player
@@ -52,13 +51,23 @@ function Application:init()
 		end,
 
 		[shared.constants.REMOTE_EVENTS.TOOL_ACTIVATED] = function(player, eventData)
-			print(player, eventData)
+			self.services.toolService:activate(player)
+		end,
+
+		[shared.constants.REMOTE_EVENTS.PICKUP_LOOT] = function(player, eventData)
+			self.services.lootService:pickupLoot(player, eventData.data)
+			self.services.playerService:updatePlayerData(player)
+		end,
+
+		[shared.constants.REMOTE_EVENTS.USE_LECTERN] = function(player, eventData)
+			self.services.lecternService:useLectern(player, eventData.data)
+			self.services.playerService:updatePlayerData(player)
 		end,
 	})
 
-
 	self.services:init()
-	
+	self.useCases:init()
+
 	Players.PlayerRemoving:Connect(onPlayerRemoving)
 	Players.PlayerAdded:Connect(onPlayerAdded)
 end

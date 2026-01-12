@@ -4,6 +4,9 @@
 ---@field constants Constants
 ---@field cameraController CameraController
 ---@field playerService ClientPlayerService
+---@field animationService AnimationService
+---@field commands SharedCommands
+---@field useCases ClientUseCases
 local LecternService = {}
 LecternService.__index = LecternService
 
@@ -25,11 +28,17 @@ function LecternService:init()
 	self.constants = shared.constants
 	self.cameraController = application.controllers.cameraController
 	self.playerService = application.services.playerService
+	self.animationService = application.services.animationService
+	self.commands = shared.application.commands
+	self.useCases = application.useCases
 end
 
 function LecternService:start(lectern)
 	self._lectern = lectern
-	task.wait(5)
+	self.animationService.animTracks.Lectern:Play()
+	task.wait(self.animationService.animTracks.Lectern.Length)
+	self.useCases.useLectern:execute(self.commands.UseLecternCommand.new(lectern))
+	task.wait(1)
 	self:finish()
 end
 
@@ -37,7 +46,7 @@ function LecternService:finish()
 	self._lectern = nil
 	self.playerService:toggleRobloxControl(true)
 	self.cameraController:activateDefaultCamera()
-	self.playerService:setPlayerState("")
+	self.playerService:setPlayerState(self.constants.PLAYER_STATES.IDLE)
 end
 
 return LecternService

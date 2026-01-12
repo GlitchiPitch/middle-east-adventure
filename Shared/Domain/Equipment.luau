@@ -10,20 +10,23 @@
 local Equipment = {}
 Equipment.__index = Equipment
 
-function Equipment.new()
+function Equipment.new(data)
 	local self = setmetatable({}, Equipment)
-	self.cloth = nil
-	self.rings = {
+	self.cloth = data.cloth
+	self.rings = data.rings or {
 		left = nil,
 		right = nil,
 	}
-	self.amulet = nil
-	self.slots = {
-		[Enum.KeyCode.One] = nil,
-		[Enum.KeyCode.Two] = nil,
-		[Enum.KeyCode.Three] = nil,
-		[Enum.KeyCode.Four] = nil,
-	}
+	self.amulet = data.amulet
+
+	self.slots = data.slots
+		or {
+			[Enum.KeyCode.One] = nil,
+			[Enum.KeyCode.Two] = nil,
+			[Enum.KeyCode.Three] = nil,
+			[Enum.KeyCode.Four] = nil,
+		}
+
 	return self
 end
 

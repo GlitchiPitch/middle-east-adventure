@@ -6,17 +6,17 @@ Skills.__index = Skills
 ---@return SkillsEntity
 function Skills.new(data)
     local self = setmetatable({}, Skills)
-    self.combat = {}
-    self.magic = {}
-    self.thief = {}
-    self.hunting = {}
-    self.alchemy = {}
-    self.misc = {}
+    self.combat = data.combat or {}
+    self.magic = data.magic or {}
+    self.thief = data.thief or {}
+    self.hunting = data.hunting or {}
+    self.alchemy = data.alchemy or {}
+    self.misc = data.misc or {}
     return self
 end
 
 function Skills:toData()
-    return {}
+    return self
 end
 
 return Skills

@@ -14,7 +14,17 @@ function ClickInventoryItem.new(remoteEventService, constants)
 	return self
 end
 
+---@param command ClickInventoryItemCommand
+function ClickInventoryItem:execute(command)
+	self.remoteEventService:fireServer({
+		eventName = self.constants.REMOTE_EVENTS.CLICK_INVENTORY_ITEM,
+		data = command,
+	})
+end
+
 ---@class ClientPickupLoot
+---@field remoteEventService RemoteEventService
+---@field constants Constants
 local PickupLoot = {}
 PickupLoot.__index = PickupLoot
 
@@ -28,7 +38,7 @@ function PickupLoot.new(remoteEventService, constants)
 	return self
 end
 
----@param command any
+---@param command PickupLootCommand
 function PickupLoot:execute(command)
 	self.remoteEventService:fireServer({
 		eventName = self.constants.REMOTE_EVENTS.PICKUP_LOOT,
@@ -36,16 +46,35 @@ function PickupLoot:execute(command)
 	})
 end
 
----@param command ClickInventoryItemCommand
-function ClickInventoryItem:execute(command)
+---@class ClientUseLectern
+---@field remoteEventService RemoteEventService
+---@field constants Constants
+local UseLectern = {}
+UseLectern.__index = UseLectern
+
+---@param remoteEventService RemoteEventService
+---@param constants Constants
+---@return ClientUseLectern
+function UseLectern.new(remoteEventService, constants)
+	local self = setmetatable({}, UseLectern)
+	self.remoteEventService = remoteEventService
+	self.constants = constants
+	return self
+end
+
+---@param command UseLecternCommand
+function UseLectern:execute(command)
 	self.remoteEventService:fireServer({
-		eventName = self.constants.REMOTE_EVENTS.CLICK_INVENTORY_ITEM,
+		eventName = self.constants.REMOTE_EVENTS.USE_LECTERN,
 		data = command,
 	})
 end
 
 ---@class ClientUseCases
 ---@field diContainer DIContainer
+---@field clickInventoryItem ClientClickInventoryItem
+---@field pickupLoot ClientPickupLoot
+---@field useLectern ClientUseLectern
 local UseCases = {}
 UseCases.__index = UseCases
 
@@ -62,7 +91,7 @@ function UseCases:init()
 	local shared = self.diContainer:resolve("Shared")
 	self.clickInventoryItem = ClickInventoryItem.new(shared.remoteEventService, shared.constants)
 	self.pickupLoot = PickupLoot.new(shared.remoteEventService, shared.constants)
-	
+	self.useLectern = UseLectern.new(shared.remoteEventService, shared.constants)
 end
 
 return UseCases

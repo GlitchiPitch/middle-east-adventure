@@ -27,6 +27,7 @@ local Food = {
 	Meat = {
 		name = "Meat",
 		effect = "Regenerates 3% health",
+		image = "rbxassetid://102437076121625",
 	},
 	Apple = {
 		name = "Apple",

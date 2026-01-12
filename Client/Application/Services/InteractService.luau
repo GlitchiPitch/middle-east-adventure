@@ -60,6 +60,7 @@ function InteractService:activate()
 			self.chestService:openChest(currentTarget)
 			self.playerService:setPlayerState(self.constants.PLAYER_STATES.CHEST)
 		elseif interactType == self.constants.INTERACT_TYPES.LOOT then
+			warn("babababab")
 			self.lootService:pickupLoot(currentTarget)
 			self.playerService:setPlayerState(self.constants.PLAYER_STATES.LOOT)
 		end

@@ -11,4 +11,13 @@ function ToolService.new(diContainer)
     return self
 end
 
+function ToolService:init()
+    
+end
+
+---@param player Player
+function ToolService:activate(player)
+    print(player)
+end
+
 return ToolService

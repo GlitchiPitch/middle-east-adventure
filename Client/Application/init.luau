@@ -34,9 +34,8 @@ function Application:init()
 		local application = self.diContainer:resolve("Application")
 		application.services.toolService:checkCharacterTool()
 		application.services.animationService:setupAnimationToCharacter()
-		application.controllers.cameraController:init()
-		application.controllers.sprintController:init()
 		application.services.playerService:toggleRobloxControl(false)
+		application.controllers:init()
 	end
 
 	remoteEventService:connectToEvents({
@@ -48,7 +47,6 @@ function Application:init()
 
 	self.services:init()
 	self.useCases:init()
-	self.controllers:init()
 
 	if self.player.Character then
 		onCharacterAdded(self.player.Character)

@@ -116,6 +116,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Service integration stability
 * Mobile touch control enhancements
 
+## [1.0.24] - 2026-01-12
+
+### Added
+
+* Enhanced character customization with additional appearance options
+* Advanced quest mechanics with complex branching storylines
+* Multiplayer features and social interaction capabilities
+* Comprehensive sound system with effects and background music
+* Tutorial and onboarding system for new players
+* Enhanced NPC AI with realistic behavior patterns
+* Weather system and dynamic time cycles
+* Mini-games and side activities
+* Guild/clan system for social organization
+* Advanced crafting recipes and blueprint system
+
+### Changed
+
+* Improved service architecture for better modularity
+* Enhanced performance across all platforms
+* Updated UI components with improved accessibility
+* Expanded NPC interaction capabilities
+* Optimized mobile device compatibility
+
+### Fixed
+
+* Performance optimizations for smoother gameplay
+* UI responsiveness improvements
+* Service integration stability enhancements
+* Mobile touch control refinements
+
 ## [Unreleased]
 
 ### Planned

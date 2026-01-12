@@ -187,6 +187,7 @@ function CameraController:_onRender(dt)
 		self:_targetCamera(dt)
 	end
 
+	--@TODO: add cond for loot and lectern
 	self:_followCharacterToCursor()
 end
 

@@ -8,50 +8,65 @@ RemoteEventService.__index = RemoteEventService
 
 ---@return RemoteEventService
 function RemoteEventService.new()
-    local self = setmetatable({}, RemoteEventService)
-    self.remoteEvent = script.Parent.RemoteEvent
-    self._connects = {}
-    return self
+	local self = setmetatable({}, RemoteEventService)
+	self.remoteEvent = script.Parent.RemoteEvent
+	self._connects = {}
+	return self
 end
 
 ---@param connectData table<string, function>
 function RemoteEventService:connectToEvents(connectData)
-    for eventName, callback in connectData do
-        if not self._connects[eventName] then
-            local _signal = if RunService:IsServer() then self.remoteEvent.OnServerEvent else self.remoteEvent.OnClientEvent
-            self._connects[eventName] = _signal:Connect(callback)
-        end
-    end
+	for eventName, callback in connectData do
+		if not self._connects[eventName] then
+			local function _serverCallback(player, eventData)
+				if eventData.eventName == eventName then
+					callback(player, eventData)
+				end
+			end
+
+			local function _clientCallback(eventData)
+				if eventData.eventName == eventName then
+					callback(eventData)
+				end
+			end
+
+			local _signal = if RunService:IsServer()
+				then self.remoteEvent.OnServerEvent
+				else self.remoteEvent.OnClientEvent
+			local _callback = if RunService:IsServer() then _serverCallback else _clientCallback
+			self._connects[eventName] = _signal:Connect(_callback)
+		end
+	end
 end
 
 if RunService:IsServer() then
-    ---@param player Player
-    ---@param eventData eventData
-    function RemoteEventService:fireClient(player, eventData)
-        -- if not self:_validateEvent(eventData.eventName) then
-        --     return
-        -- end
-        self.remoteEvent:FireClient(player, eventData)
-    end
+	---@param player Player
+	---@param eventData eventData
+	function RemoteEventService:fireClient(player, eventData)
+		-- if not self:_validateEvent(eventData.eventName) then
+		--     return
+		-- end
+		self.remoteEvent:FireClient(player, eventData)
+	end
 else
-    ---@param eventData eventData
-    function RemoteEventService:fireServer(eventData)
-        -- if not self:_validateEvent(eventData.eventName) then
-        --     return
-        -- end
-        self.remoteEvent:FireServer(eventData)
-    end
+	---@param eventData eventData
+	function RemoteEventService:fireServer(eventData)
+		-- if not self:_validateEvent(eventData.eventName) then
+		--     return
+		-- end
+		self.remoteEvent:FireServer(eventData)
+	end
 end
 
 ---@param eventName string
 ---@return boolean
 function RemoteEventService:_validateEvent(eventName)
-    if not self._connects[eventName] then
-        warn(`{eventName} is not exist`)
-        return false
-    end
+	if not self._connects[eventName] then
+		warn(`{eventName} is not exist`)
+		return false
+	end
 
-    return true
+	return true
 end
 
 return RemoteEventService

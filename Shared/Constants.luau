@@ -7,6 +7,7 @@ local Constants = {
 		CLICK_INVENTORY_ITEM = "ClickInventoryItem",
 		TOOL_ACTIVATED = "ToolActivated",
 		PICKUP_LOOT = "PickupLoot",
+		USE_LECTERN = "UseLectern",
 	},
 
 	PLAYER_STATES = {
@@ -18,6 +19,7 @@ local Constants = {
 		WEAPON = "Weapon",
 		LECTERN = "Lectern",
 		CHEST = "Chest",
+		IDLE = "Idle",
 	},
 
 	ATTRIBUTES = {

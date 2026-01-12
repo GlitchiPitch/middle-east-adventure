@@ -8,10 +8,12 @@ local HuntingService = require(script.HuntingService)
 local AlchemyService = require(script.AlchemyService)
 local CombatService = require(script.CombatService)
 local ToolService = require(script.ToolService)
+local LootService = require(script.LootService)
+local LecternService = require(script.LecternService)
 
 ---@class ServerApplicationServices
----@field inventoryService ServerApplicationInventoryService
----@field playerService ServerApplicationPlayerService
+---@field inventoryService ServerInventoryService
+---@field playerService ServerPlayerService
 ---@field tradeService ServerApplicationTradeService
 ---@field craftService ServerApplicationCraftService
 ---@field smithService ServerApplicationSmithService
@@ -20,28 +22,35 @@ local ToolService = require(script.ToolService)
 ---@field alchemyService ServerApplicationAlchemyService
 ---@field combatService ServerApplicationCombatService
 ---@field toolService ServerToolService
+---@field lootService ServerLootService
+---@field lecternService ServerLecternService
 local Services = {}
 Services.__index = Services
 
 ---@param diContainer DIContainer
 ---@return ServerApplicationServices
 function Services.new(diContainer)
-    local self = setmetatable({}, Services)
-    self.inventoryService = InventoryService.new(diContainer)
-    self.playerService = PlayerService.new(diContainer)
-    self.tradeService = TradeService.new()
-    self.craftService = CraftService.new()
-    self.smithService = SmithService.new()
-    self.fishingService = FishingService.new()
-    self.huntingService = HuntingService.new()
-    self.alchemyService = AlchemyService.new()
-    self.combatService = CombatService.new()
-    self.toolService = ToolService.new(diContainer)
-    return self
+	local self = setmetatable({}, Services)
+	self.inventoryService = InventoryService.new(diContainer)
+	self.playerService = PlayerService.new(diContainer)
+	self.tradeService = TradeService.new()
+	self.craftService = CraftService.new()
+	self.smithService = SmithService.new()
+	self.fishingService = FishingService.new()
+	self.huntingService = HuntingService.new()
+	self.alchemyService = AlchemyService.new()
+	self.combatService = CombatService.new()
+	self.toolService = ToolService.new(diContainer)
+	self.lecternService = LecternService.new(diContainer)
+	self.lootService = LootService.new(diContainer)
+	return self
 end
 
 function Services:init()
-    self.playerService:init()
+	self.playerService:init()
+	self.inventoryService:init()
+	self.lootService:init()
+	self.lecternService:init()
 end
 
 return Services

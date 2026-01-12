@@ -3,6 +3,7 @@ local RunService = game:GetService("RunService")
 ---@class TargetController
 ---@field diContainer DIContainer
 ---@field playerService ClientPlayerService
+---@field availableStatesForRender string[]
 ---@field eventBus EventBus
 local TargetController = {}
 TargetController.__index = TargetController
@@ -37,6 +38,13 @@ function TargetController:init()
 	self.lockOnInfo = shared.config.Client.TargetController
 	self.playerService = application.services.playerService
 
+	self.availableStatesForRender = {
+		self.constants.PLAYER_STATES.IDLE,
+		self.constants.PLAYER_STATES.WEAPON,
+		self.constants.PLAYER_STATES.NPC,
+		self.constants.PLAYER_STATES.LOOT,
+	}
+
 	RunService.RenderStepped:Connect(onRender)
 end
 
@@ -45,14 +53,15 @@ function TargetController:getCurrentTarget()
 end
 
 function TargetController:_onRender()
-	local playerState = self.playerService:getPlayerState()
-	if playerState == self.constants.PLAYER_STATES.ALCHEMY then
-		if self.currentCheckedTarget and self.currentCheckedTarget ~= self.checkedTarget then
-			self:_toogleTargetView(false)
-			self.currentCheckedTarget = nil
-		end
-		return
-	end
+	-- local playerState = self.playerService:getPlayerState()
+	-- warn(playerState)
+	-- if not table.find(self.availableStatesForRender, playerState) then
+	-- 	if self.currentCheckedTarget then
+	-- 		self:_toogleTargetView(false)
+	-- 		self.currentCheckedTarget = nil
+	-- 	end
+	-- 	return
+	-- end
 
 	self.checkedTarget = self:_getTargetsClosestCrosshair()
 	if self.checkedTarget then
@@ -116,12 +125,11 @@ function TargetController:_setPlayerStateByTarget()
 		elseif self.currentCheckedTarget:HasTag(self.constants.PLAYER_STATES.NPC) then
 			self.playerService:setPlayerState("NPC")
 		else
-			self.playerService:setPlayerState("")
+			self.playerService:setPlayerState(self.constants.PLAYER_STATES.IDLE)
 		end
 		self.eventBus:fire("toggleActionButton", { state = true })
-		
 	else
-		self.playerService:setPlayerState("")
+		self.playerService:setPlayerState(self.constants.PLAYER_STATES.IDLE)
 		self.eventBus:fire("toggleActionButton", { state = false })
 	end
 end
