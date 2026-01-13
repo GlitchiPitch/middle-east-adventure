@@ -41,11 +41,20 @@ function EquipItemCommand.new(slotIndex)
 	}
 end
 
+---@class ToggleSprintCommand
+---@field isRunning boolean
+local ToggleSprintCommand = {}
+
+function ToggleSprintCommand.new(running)
+	return { isRunning = running }
+end
+
 ---@class SharedCommands
 ---@field ClickInventoryItemCommand ClickInventoryItemCommand
 ---@field PickupLootCommand PickupLootCommand
 ---@field UseLecternCommand UseLecternCommand
 ---@field EquipItemCommand EquipItemCommand
+---@field ToggleSprintCommand ToggleSprintCommand
 local Commands = {}
 Commands.__index = Commands
 
@@ -55,6 +64,7 @@ function Commands.new()
 	self.PickupLootCommand = PickupLootCommand
 	self.UseLecternCommand = UseLecternCommand
 	self.EquipItemCommand = EquipItemCommand
+	self.ToggleSprintCommand = ToggleSprintCommand
 	return self
 end
 

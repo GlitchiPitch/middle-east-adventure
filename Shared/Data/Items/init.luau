@@ -14,7 +14,8 @@ local Items = {
 function Items:getItemData(itemName)
 	local weaponData, weaponType = self.Weapon:getWeaponData(itemName)
 	if weaponData then
-		weaponData.type = weaponType
+		weaponData.weaponType = weaponType
+		weaponData.type = "Weapon"
 		return weaponData
 	end
 
@@ -64,7 +65,7 @@ function Items:getAll()
 			all[i] = v
 		end
 	end
-	return {self.Food} ---all
+	return { self.Food } ---all
 end
 
 return Items

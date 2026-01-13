@@ -28,5 +28,15 @@ local Config = {
 			requiresLineOfSight = true, -- If the characer needs line of sight with target to use lock on.
 		},
 	},
+
+	Player = {
+		walkSpeed = 13,
+		runSpeed = 25,
+		runFov = 80,
+		transitionSpeed = 0.5,
+		restoreStaminaValue = 5,
+		restoreWeakStaminaValue = 1,
+		spendStaminaValue = 5,
+	},
 }
 return Config

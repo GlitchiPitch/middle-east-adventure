@@ -100,12 +100,38 @@ function EquipItem:execute(command)
 	end
 end
 
+
+---@class ClientToggleSprint
+---@field remoteEventService RemoteEventService
+---@field constants Constants
+local ToggleSprint = {}
+ToggleSprint.__index = ToggleSprint
+
+---@param remoteEventService RemoteEventService
+---@param constants Constants
+---@return ClientToggleSprint
+function ToggleSprint.new(remoteEventService, constants) 
+	local self = setmetatable({}, ToggleSprint)
+	self.remoteEventService = remoteEventService
+	self.constants = constants
+	return self
+end
+
+---@param command ToggleSprintCommand
+function ToggleSprint:execute(command)
+	self.remoteEventService:fireServer({
+		eventName = self.constants.REMOTE_EVENTS.TOGGLE_SPRINT,
+		data = command,
+	})
+end
+
 ---@class ClientUseCases
 ---@field diContainer DIContainer
 ---@field clickInventoryItem ClientClickInventoryItem
 ---@field pickupLoot ClientPickupLoot
 ---@field useLectern ClientUseLectern
 ---@field equipItem ClientEquipItem
+---@field toggleSprint ClientToggleSprint
 local UseCases = {}
 UseCases.__index = UseCases
 
@@ -127,6 +153,7 @@ function UseCases:init()
 	self.pickupLoot = PickupLoot.new(shared.remoteEventService, shared.constants)
 	self.useLectern = UseLectern.new(shared.remoteEventService, shared.constants)
 	self.equipItem = EquipItem.new(shared.remoteEventService, application.services.playerService, shared.constants)
+	self.toggleSprint = ToggleSprint.new(shared.remoteEventService, shared.constants)
 end
 
 return UseCases

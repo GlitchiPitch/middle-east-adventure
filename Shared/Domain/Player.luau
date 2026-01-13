@@ -7,6 +7,7 @@
 ---@field stats StatsEntity
 ---@field _instance Player
 ---@field state playerStateEnum
+---@field isRunning boolean
 local Player = {}
 Player.__index = Player
 
@@ -16,6 +17,7 @@ function Player.new(player)
 	local self = setmetatable({}, Player)
 	self._instance = player
 	self.state = "Idle"
+	self.isRunning = false
 	return self
 end
 

@@ -1,8 +1,11 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
+
 ---@class SprintController
 ---@field diContainer DIContainer
+---@field playerService ClientPlayerService
+---@field commands SharedCommands
+---@field useCases ClientUseCases
 local SprintController = {}
 SprintController.__index = SprintController
 
@@ -12,19 +15,14 @@ function SprintController.new(diContainer)
 	local self = setmetatable({}, SprintController)
 	self.player = Players.LocalPlayer
 	self.diContainer = diContainer
-	self.walkSpeed = 13
-	self.runSpeed = 25 -- Speed while runninh
-	self.walkFov = workspace.Camera.FieldOfView
-	self.runFov = 80 -- Camera FieldOfView while running
-	self.canRun = true -- If the player is able to run
-	self.transitionSpeed = 0.5 -- Time it takes to go from walking to running
-
 	return self
 end
 
 function SprintController:init()
 	---@type Shared
 	local shared = self.diContainer:resolve("Shared")
+	---@type ClientApplication
+	local application = self.diContainer:resolve("Application")
 
 	local function onRender()
 		if self.humanoid.MoveDirection.Magnitude > 0 then
@@ -38,6 +36,11 @@ function SprintController:init()
 		end
 	end
 
+	self.canRun = true -- If the player is able to run
+
+	self.commands = shared.application.commands
+	self.useCases = application.useCases
+	self.playerService = application.services.playerService
 	self.character = self.player.Character
 	self.humanoid = self.character:WaitForChild("Humanoid")
 	self.animator = self.humanoid:WaitForChild("Animator")
@@ -51,16 +54,12 @@ function SprintController:init()
 end
 
 function SprintController:run()
+	local playerEntity = self.playerService:getPlayerEntity()
+	self.canRun = playerEntity.stats.stamina.current > 0
+
 	if self.walking and self.canRun then
 		self.running = true
-
-		local runTween = TweenService:Create(
-			self.humanoid,
-			TweenInfo.new(self.transitionSpeed, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
-			{ WalkSpeed = self.runSpeed }
-		)
-		--local FovTween = tweenService:Create(camera, TweenInfo.new(RunConfig.TransitionSpeed, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {FieldOfView = RunConfig.RunFov})
-		runTween:Play()
+		self.useCases.toggleSprint:execute(self.commands.ToggleSprintCommand.new(self.running))
 		--FovTween:Play()
 		self.runTrack:Play()
 	end
@@ -68,14 +67,7 @@ end
 
 function SprintController:walk()
 	self.running = false
-
-	local walkTween = TweenService:Create(
-		self.humanoid,
-		TweenInfo.new(self.transitionSpeed, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
-		{ WalkSpeed = self.walkSpeed }
-	)
-	--local fovTween = tweenService:Create(camera, TweenInfo.new(RunConfig.TransitionSpeed, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {FieldOfView = RunConfig.WalkFov})
-	walkTween:Play()
+	self.useCases.toggleSprint:execute(self.commands.ToggleSprintCommand.new(self.running))
 	--fovTween:Play()
 	self.runTrack:Stop()
 end

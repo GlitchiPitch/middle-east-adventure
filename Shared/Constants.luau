@@ -9,6 +9,7 @@ local Constants = {
 		PICKUP_LOOT = "PickupLoot",
 		USE_LECTERN = "UseLectern",
 		EQUIP_ITEM = "EquipItem",
+		TOGGLE_SPRINT = "ToggleSprint",
 	},
 
 	PLAYER_STATES = {
@@ -30,6 +31,9 @@ local Constants = {
 	ITEM_TYPES = {
 		FOOD = "Food",
 		WEAPON = "Weapon",
+		POTION = "Potion",
+		SCROLL = "Scroll",
+		MAGIC = "Magic",
 	},
 
 	INTERACT_TYPES = {

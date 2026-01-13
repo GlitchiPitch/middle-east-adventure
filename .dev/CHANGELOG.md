@@ -230,6 +230,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Boss battle encounters
 * Reputation system
 
+## [1.0.30] - 2026-01-13
+
+### Added
+
+* Comprehensive stamina-based sprint system with server-side stamina management
+* New PlayerController for handling player state updates and sprint mechanics
+* Enhanced Config.luau with player movement settings (walk speed, run speed, stamina rates)
+* ToggleSprint command for client-server communication
+* Automatic stamina restoration when walking, with reduced rates when weakened
+
+### Changed
+
+* Refactored SprintController to use use cases and command pattern architecture
+* Enhanced PlayerService with getPlayers() method for server-side player iteration
+* Updated Constants.luau with new TOGGLE_SPRINT command and additional item types
+* Improved service integration across Client and Server Application layers
+* Enhanced Player domain with stamina and running state tracking
+
+### Fixed
+
+* CameraController formatting improvements
+* Service initialization and dependency injection consistency
+* Code structure optimizations across multiple modules
+
 ## [1.0.29] - 2026-01-13
 
 ### Added

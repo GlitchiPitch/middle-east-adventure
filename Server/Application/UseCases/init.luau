@@ -20,7 +20,6 @@ end
 ---@param player Player
 function UpdatePlayerData:execute(player)
 	local playerData = self.playerService:getPlayerData(player)
-	warn(playerData)
 	self.remoteEventService:fireClient(player, {
 		eventName = self.constants.REMOTE_EVENTS.UPDATE_PLAYER_DATA,
 		data = playerData,

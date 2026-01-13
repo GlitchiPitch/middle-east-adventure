@@ -186,7 +186,6 @@ function CameraController:_onRender(dt)
 	elseif self._cameraState == self.constants.CAMERA_STATES.TARGET then
 		self:_targetCamera(dt)
 	end
-
 	--@TODO: add cond for loot and lectern
 	self:_followCharacterToCursor()
 end

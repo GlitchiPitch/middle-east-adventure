@@ -2,11 +2,13 @@ local Players = game:GetService("Players")
 local Services = require(script.Services)
 local Handlers = require(script.Handlers)
 local UseCases = require(script.UseCases)
+local Controllers = require(script.Controllers)
 
 ---@class ServerApplication
 ---@field diContainer DIContainer
 ---@field services ServerApplicationServices
 ---@field handlers ServerApplicationHandlers
+---@field controllers ServerControllers
 ---@field useCases ServerUseCases
 local Application = {}
 Application.__index = Application
@@ -19,6 +21,7 @@ function Application.new(diContainer)
 	self.services = Services.new(diContainer)
 	self.handlers = Handlers.new()
 	self.useCases = UseCases.new(diContainer)
+	self.controllers = Controllers.new(diContainer)
 	return self
 end
 
@@ -54,6 +57,7 @@ function Application:init()
 		[shared.constants.REMOTE_EVENTS.EQUIP_ITEM] = function(player, eventData)
 			self.services.equipmentService:equipItem(player, eventData.data)
 		end,
+		
 		[shared.constants.REMOTE_EVENTS.TOOL_ACTIVATED] = function(player, eventData)
 			local needUpdate = self.services.toolService:activate(player)
 			if needUpdate then
@@ -70,10 +74,15 @@ function Application:init()
 			self.services.lecternService:useLectern(player, eventData.data)
 			self.services.playerService:updatePlayerData(player)
 		end,
+
+		[shared.constants.REMOTE_EVENTS.TOGGLE_SPRINT] = function(player, eventData)
+			self.controllers.playerController:toggleSprint(player, eventData.data)
+		end,
 	})
 
 	self.services:init()
 	self.useCases:init()
+	self.controllers:init()
 
 	Players.PlayerRemoving:Connect(onPlayerRemoving)
 	Players.PlayerAdded:Connect(onPlayerAdded)

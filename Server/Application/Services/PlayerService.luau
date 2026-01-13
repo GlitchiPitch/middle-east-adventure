@@ -66,6 +66,10 @@ function PlayerService:getPlayerEntity(player)
 	return playerEntity
 end
 
+function PlayerService:getPlayers()
+	return self.playerRepository._players
+end
+
 function PlayerService:updatePlayerData(player)
 	self.useCases.updatePlayerData:execute(player)
 end

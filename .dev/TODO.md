@@ -1,6 +1,6 @@
 # TODO List
 
-## Project Progress: ~72%
+## Project Progress: ~75%
 
 Major systems implemented:
 
@@ -10,11 +10,13 @@ Major systems implemented:
 * ✅ NPC interactions and dialog system
 * ✅ Weapon and equipment systems with visual assets
 * ✅ Mobile optimization and performance improvements
+* ✅ Stamina-based sprint system with server-side management
 
 Next major milestones:
 
-* Advanced inventory management system
-* Pet/companion system with AI
+* Advanced inventory management system with sorting and filtering
+* Zone-based gameplay mechanics (MineZones, MobZones, PlantsZones)
+* Pet/companion system with AI behaviors and training
 * Housing/building construction mechanics
 * Advanced magic system with spells and effects
 
@@ -44,6 +46,21 @@ Next major milestones:
 * \[x] Update game version from v1.0.26 to v1.0.27 in GameVersion.model.json
 * \[x] Add v1.0.27 entry to CHANGELOG.md with weapon and equipment system enhancements
 
+### Completed in v1.0.30
+
+* \[x] Implement comprehensive stamina-based sprint system with server-side stamina management
+* \[x] Create new PlayerController for handling player state updates and sprint mechanics
+* \[x] Add player movement settings to Config.luau (walk speed, run speed, stamina rates)
+* \[x] Implement ToggleSprint command for client-server communication
+* \[x] Add automatic stamina restoration when walking with reduced rates when weakened
+* \[x] Refactor SprintController to use use cases and command pattern architecture
+* \[x] Enhance PlayerService with getPlayers() method for server-side player iteration
+* \[x] Update Constants.luau with TOGGLE_SPRINT command and additional item types
+* \[x] Improve service integration across Client and Server Application layers
+* \[x] Enhance Player domain with stamina and running state tracking
+* \[x] Update game version from v1.0.29 to v1.0.30 in GameVersion.model.json
+* \[x] Add v1.0.30 entry to CHANGELOG.md with stamina sprint system implementation
+
 ### Completed in v1.0.29
 
 * \[x] Implement comprehensive food asset system with 3D models for all food items
@@ -69,20 +86,22 @@ Next major milestones:
 * \[x] Update game version from v1.0.27 to v1.0.28 in GameVersion.model.json
 * \[x] Add v1.0.28 entry to CHANGELOG.md with zone system and equipment improvements
 
-### Next Development Steps (v1.0.30)
+### Next Development Steps (v1.0.31)
 
-* \[ ] Implement advanced inventory management system with sorting and filtering
+* \[ ] Implement advanced inventory management system with sorting, filtering, and search
 * \[ ] Add zone-based gameplay mechanics using the new Zone domain entity
 * \[ ] Create MineZones functionality with mining mechanics and resource gathering
 * \[ ] Implement MobZones with dynamic mob spawning and combat encounters
 * \[ ] Add PlantsZones with gathering and herbalism systems
-* \[ ] Enhance Workspace integration with additional zone types
-* \[ ] Add pet/companion system with AI behaviors and training mechanics
+* \[ ] Enhance Workspace integration with additional zone types and biome diversity
+* \[ ] Add pet/companion system with AI behaviors, training mechanics, and loyalty system
 * \[ ] Create housing/building system with construction mechanics and customization
 * \[ ] Implement advanced magic system with spell casting, effects, and mana management
 * \[ ] Integrate food consumption mechanics with hunger/satiety system
-* \[ ] Add potion brewing and consumption effects
+* \[ ] Add potion brewing and consumption effects with visual feedback
 * \[ ] Implement scroll reading and magical effects system
+* \[ ] Add weather system integration with zone-based environmental effects
+* \[ ] Create mini-games and side activities for additional gameplay variety
 
 ### Next Development Steps (v1.0.26) - Completed
 
