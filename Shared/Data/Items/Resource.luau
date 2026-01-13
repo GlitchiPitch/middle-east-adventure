@@ -263,4 +263,15 @@ function Resource:getResourceData(resourceName)
 	return self.Mushrooms[resourceName] or self.Herbs[resourceName] or self.Misc[resourceName]
 end
 
+function Resource:getAll()
+	local all = {}
+	for _, v in { self.Mushrooms, self.Herbs, self.Misc } do
+		for j, k in v do
+			all[j] = k
+		end
+	end
+
+	return all
+end
+
 return Resource

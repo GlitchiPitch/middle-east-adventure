@@ -1,6 +1,7 @@
 ---@class ServerInventoryService
 ---@field diContainer DIContainer
 ---@field playerService ServerPlayerService
+---@field equipmentService ServerEquipmentService
 ---@field sharedData SharedData
 local InventoryService = {}
 InventoryService.__index = InventoryService
@@ -21,13 +22,15 @@ function InventoryService:init()
 
 	self.sharedData = shared.data
 	self.playerService = application.services.playerService
+	self.equipmentService = application.services.equipmentService
 end
 
 ---@param player Player
 ---@param itemData table
 function InventoryService:clickItem(player, itemData)
-	local playerEntity = self.playerService:getPlayerEntity(player)
-	playerEntity.equipment:setSlot(itemData.itemName)
+	itemData.state = "set"
+	
+	self.equipmentService:setPlayerSlot(player, itemData)
 end
 
 ---@param playerEntity PlayerEntity

@@ -32,14 +32,18 @@ function PlayerService:updatePlayerData(newData)
 	---@type Shared
 	local shared = self.diContainer:resolve("Shared")
 
-	newData.inventory = domain.Inventory.new(newData.inventory)
-	newData.skills = domain.Skills.new(newData.skills)
-	newData.stats = domain.Stats.new(newData.stats)
-	newData.equipment = domain.Equipment.new(newData.equipment)
-	newData.playerProgress = domain.PlayerProgress.new(newData.playerProgress)
-	newData.attributes = domain.Attributes.new(newData.attributes)
+	local _newData = {
+		inventory = domain.Inventory.new(),
+		skills = domain.Skills.new(newData.skills),
+		stats = domain.Stats.new(newData.stats),
+		equipment = domain.Equipment.new(newData.equipment),
+		playerProgress = domain.PlayerProgress.new(newData.playerProgress),
+		attributes = domain.Attributes.new(newData.attributes),
+	}
 
-	infrastructure.playerRepository:updatePlayerEntity(newData)
+	_newData.inventory:fromData(newData.inventory)
+
+	infrastructure.playerRepository:updatePlayerEntity(_newData)
 	shared.eventBus:fire("updatePlayerData")
 end
 
@@ -100,7 +104,6 @@ function PlayerService:moveTo(interactModel)
 				playerEntity._instance.Character:PivotTo(
 					CFrame.new(humanoidRootPart.Position, interactModel.PrimaryPart.Position)
 				)
-
 			end
 		else
 			humanoid:MoveTo(way[currentPoint].Position)
@@ -125,7 +128,6 @@ function PlayerService:moveTo(interactModel)
 
 	humanoid:MoveTo(way[currentPoint].Position)
 	_moveConn = humanoid.MoveToFinished:Connect(onFinished)
-
 end
 
 return PlayerService

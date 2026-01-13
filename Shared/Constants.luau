@@ -27,6 +27,11 @@ local Constants = {
 		INTERACT_TYPE = "InteractType",
 	},
 
+	ITEM_TYPES = {
+		FOOD = "Food",
+		WEAPON = "Weapon",
+	},
+
 	INTERACT_TYPES = {
 		ALCHEMY = "Alchemy",
 		LOOT = "Loot",

@@ -230,6 +230,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Boss battle encounters
 * Reputation system
 
+## [1.0.29] - 2026-01-13
+
+### Added
+
+* Comprehensive food asset system with 3D models for all food items
+* Enhanced food effect system with structured action-based effects
+* Extended item database with miscellaneous items, morph gems, potions, resources, and scrolls
+* New food assets integration in Shared/Assets/Food system
+* Enhanced item data structures with model references and improved organization
+
+### Changed
+
+* Refactored Food.luau with structured effect system (restore actions with stat percentages)
+* Enhanced Assets system with food asset integration and unified getAsset method
+* Updated Equipment, Inventory, and Stats domains with improved data structures
+* Expanded ToolService, EquipmentService, and InventoryService functionality
+* Improved service integration across client and server architectures
+
+### Fixed
+
+* Stats domain toData method returning proper self reference instead of empty table
+* Code formatting and structure improvements across multiple service modules
+* Enhanced service initialization and dependency injection consistency
+
 ## [1.0.28] - 2026-01-12
 
 ### Added

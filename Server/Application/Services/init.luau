@@ -55,6 +55,7 @@ function Services:init()
 	self.lootService:init()
 	self.lecternService:init()
 	self.equipmentService:init()
+	self.toolService:init()
 end
 
 return Services

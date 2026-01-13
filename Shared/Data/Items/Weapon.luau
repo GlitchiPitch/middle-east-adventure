@@ -433,4 +433,15 @@ function Weapon:getWeaponData(weaponName)
 	return
 end
 
+function Weapon:getAll()
+	local all = {}
+	for _, v in { self.OneHanded, self.TwoHanded, self.Bows, self.Crossbows } do
+		for j, k in v do
+			all[j] = k
+		end
+	end
+
+	return all
+end
+
 return Weapon

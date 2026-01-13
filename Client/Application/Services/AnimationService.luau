@@ -24,6 +24,7 @@ function AnimationService:init()
 
 	self.pickupLoot = animations.PickupLoot
 	self.lectern = animations.Lectern
+	self.eat = animations.Eat
 
 	self.OneHandedAnimations = {
 		animations.OneHandednSlash1,
@@ -44,9 +45,15 @@ function AnimationService:setupAnimationToCharacter()
 	self.animTracks.OneHandedBlock.Looped = true
 	self.animTracks.OneHandedBlock.Priority = Enum.AnimationPriority.Action2
 
+
+
 	self.animTracks.PickupLoot = character.Humanoid.Animator:LoadAnimation(self.pickupLoot)
 	self.animTracks.PickupLoot.Looped = false
 	self.animTracks.PickupLoot.Priority = Enum.AnimationPriority.Action2
+
+	self.animTracks.Eat = character.Humanoid.Animator:LoadAnimation(self.eat)
+	self.animTracks.Eat.Looped = false
+	self.animTracks.Eat.Priority = Enum.AnimationPriority.Action2
 
 	self.animTracks.Lectern = character.Humanoid.Animator:LoadAnimation(self.lectern)
 	self.animTracks.Lectern.Looped = false

@@ -34,10 +34,13 @@ local Weapons = {
 }
 
 ---@param weaponName string
----@return Tool
+---@return Tool?
 function Weapons:getWeaponTool(weaponName)
 	local weapon = self.OneHanded[weaponName] or self.TwoHanded[weaponName]
-	return weapon:Clone()
+	if weapon then
+		return weapon:Clone()
+	end
+	return
 end
 
 return Weapons

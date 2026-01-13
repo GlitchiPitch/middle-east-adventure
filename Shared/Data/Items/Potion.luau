@@ -300,4 +300,14 @@ function Potion:getPotionData(potionName)
 	return self[potionName]
 end
 
+function Potion:getAll()
+	local all = {}
+	for i, v in self do
+		if typeof(v) == "table" then
+			all[i] = v
+		end
+	end
+	return all
+end
+
 return Potion

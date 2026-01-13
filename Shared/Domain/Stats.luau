@@ -16,30 +16,30 @@ Stats.__index = Stats
 ---@param data table
 ---@return StatsEntity
 function Stats.new(data)
-    local self = setmetatable({}, Stats)
-    self.health = data.health or {
-        max = 100,
-        current = 50,
-    }
-    self.stamina = data.stamina or {
-        max = 100,
-        current = 30,
-    }
-    self.mana = data.mana or {
-        max = 100,
-        current = 70,
-    }
-    
-    self.weak = false
-    self.posioned = false
-    self.frosted = false
-    self.fired = false
+	local self = setmetatable({}, Stats)
+	self.health = data.health or {
+		max = 100,
+		current = 50,
+	}
+	self.stamina = data.stamina or {
+		max = 100,
+		current = 30,
+	}
+	self.mana = data.mana or {
+		max = 100,
+		current = 70,
+	}
 
-    return self
+	self.weak = false
+	self.posioned = false
+	self.frosted = false
+	self.fired = false
+
+	return self
 end
 
 function Stats:toData()
-    return {}
+	return self
 end
 
 return Stats

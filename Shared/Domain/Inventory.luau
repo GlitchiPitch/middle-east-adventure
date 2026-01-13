@@ -12,20 +12,18 @@ Inventory.__index = Inventory
 ---@field name itemName
 ---@field data inventoryData
 
----@param data table<itemName, inventoryData>
+---@param defaultData SharedData
 ---@return InventoryEntity
-function Inventory.new(data)
+function Inventory.new(defaultData)
 	local self = setmetatable({}, Inventory)
-	for i, v in data do
-		self[i] = v
-	end
 
-	self.Banana = { amount = 10 }
-	self.PotionOfStamina = { amount = 15 }
-	self.OrcSlayer = { amount = 1 }
-	self.AssassinSword = { amount = 1 }
-	self.JaggedAxe = { amount = 1 }
-	self.WarHammer = { amount = 1 }
+	if defaultData then
+		for _, v in defaultData.Items:getAll() do
+			for j, _ in v:getAll() do
+				self[j] = { amount = 0 }
+			end
+		end
+	end
 
 	return self
 end
@@ -40,6 +38,10 @@ function Inventory:addItem(item)
 	self[item.name] = item.data
 end
 
+function Inventory:removeItem(item)
+	self[item.name] = item.data
+end
+
 ---@param itemName itemName
 ---@return inventoryData
 function Inventory:getItem(itemName)
@@ -48,6 +50,13 @@ end
 
 function Inventory:toData()
 	return self
+end
+
+---@param data table<itemName, inventoryData>
+function Inventory:fromData(data)
+	for i, v in data do
+		self[i] = v
+	end
 end
 
 return Inventory

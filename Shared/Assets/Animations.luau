@@ -9,6 +9,7 @@ local Animations = {
 	OneHandedBlock = "rbxassetid://136984402984617",
 	PickupLoot = "rbxassetid://75771484012541",
 	Lectern = "rbxassetid://74388291990601",
+	Eat = "rbxassetid://115354805353614",
 	Walk = "rbxassetid://138456918929926",
 	Run = "rbxassetid://102729767070225",
 }

@@ -123,6 +123,12 @@ function InventoryUI:_setup()
 end
 
 function InventoryUI:_createSlot(itemName, itemData)
+	if itemData.amount == 0 then
+		return
+	end
+
+	warn(itemName, itemData)
+
 	local itemSlot = self.itemSlotTemplate:Clone()
 	local _itemData = self.sharedData:getItemData(itemName)
 

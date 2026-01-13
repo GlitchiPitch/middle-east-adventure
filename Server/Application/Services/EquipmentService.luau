@@ -1,7 +1,7 @@
 ---@class ServerEquipmentService
 ---@field diContainer DIContainer
 ---@field playerService ServerPlayerService
----@field assets Assets
+---@field toolService ServerToolService
 local EquipmentService = {}
 EquipmentService.__index = EquipmentService
 
@@ -21,7 +21,7 @@ function EquipmentService:init()
 
 	self.sharedData = shared.data
 	self.playerService = application.services.playerService
-	self.assets = shared.assets
+	self.toolService = application.services.toolService
 end
 
 ---@param player Player
@@ -29,25 +29,34 @@ end
 function EquipmentService:equipItem(player, command)
 	local playerEntity = self.playerService:getPlayerEntity(player)
 	if playerEntity.equipment.slots[command.slotIndex] then
-		if playerEntity.equipment.equippedWeapon then
-			playerEntity.equipment:equipWeapon(nil)
+		if playerEntity.equipment.equippedItem then
+			playerEntity.equipment:equipItem(nil)
 		else
-			playerEntity.equipment:equipWeapon(playerEntity.equipment.slots[command.slotIndex])
+			playerEntity.equipment:equipItem(playerEntity.equipment.slots[command.slotIndex])
 		end
 
-		self:setToolToPlayer(playerEntity)
+		self:_setToolToPlayer(playerEntity)
 	end
 end
 
+---@param player Player
+---@param itemData table
+function EquipmentService:setPlayerSlot(player, itemData)
+	local playerEntity = self.playerService:getPlayerEntity(player)
+	playerEntity.equipment:setSlot(itemData)
+end
+
 ---@param playerEntity PlayerEntity
-function EquipmentService:setToolToPlayer(playerEntity)
-	local character = playerEntity._instance.Character
-	if playerEntity.equipment.equippedWeapon then
-		local weaponTool = self.assets.Weapons:getWeaponTool(playerEntity.equipment.equippedWeapon)
-		character.Humanoid:EquipTool(weaponTool)
+function EquipmentService:_setToolToPlayer(playerEntity)
+	if playerEntity.equipment.equippedItem then
+		self.toolService:equipItem(playerEntity)
 	else
-        character.Humanoid:UnequipTools()
+		self.toolService:unequipItem(playerEntity)
 	end
+end
+
+function EquipmentService:useFood()
+	
 end
 
 return EquipmentService

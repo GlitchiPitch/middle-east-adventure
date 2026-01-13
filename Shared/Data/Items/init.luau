@@ -48,13 +48,23 @@ function Items:getItemData(itemName)
 		return potionData
 	end
 
-    local morphGem = self.MorphGem:getMorphGemData(itemName)
-    if morphGem then
-        morphGem.type = "MorphGem"
-        return morphGem
-    end
+	local morphGem = self.MorphGem:getMorphGemData(itemName)
+	if morphGem then
+		morphGem.type = "MorphGem"
+		return morphGem
+	end
 
 	return {}
+end
+
+function Items:getAll()
+	local all = {}
+	for i, v in self do
+		if typeof(v) == "table" then
+			all[i] = v
+		end
+	end
+	return {self.Food} ---all
 end
 
 return Items

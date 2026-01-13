@@ -62,7 +62,11 @@ end
 function ToolService:_setupTool(currentTool)
 	self.isEquipped = true
 	self._currentTool = currentTool
-	self.animationService:playAnimation("OneHandedIdle")
+	if currentTool:HasTag("OneHanded") then
+		self.animationService:playAnimation("OneHandedIdle")
+	elseif currentTool:HasTag("TwoHanded") then
+		self.animationService:playAnimation("TwoHandedIdle")
+	end
 end
 
 function ToolService:_removeTool()
@@ -83,6 +87,32 @@ function ToolService:activated()
 
 	self.debounce = true
 
+	if self._currentTool:HasTag("OneHanded") then
+		self:_activeOneHanded()
+	elseif self._currentTool:HasTag("TwoHanded") then
+		self:_activeTwoHanded()
+	elseif self._currentTool:HasTag("Food") then
+		self:_activeFood()
+	end
+
+	self.remoteEventService:fireServer({
+		eventName = self.constants.REMOTE_EVENTS.TOOL_ACTIVATED,
+		data = {},
+	})
+
+	self.debounce = false
+end
+
+---@param setBlock boolean
+function ToolService:block(setBlock)
+	if setBlock then
+		self.animationService:playAnimation("OneHandedBlock")
+	else
+		self.animationService:stopAnimation("OneHandedBlock")
+	end
+end
+
+function ToolService:_activeOneHanded()
 	if self.lastTime == nil then
 		print("First TIme")
 	elseif os.time() - 2 > self.lastTime then
@@ -103,22 +133,13 @@ function ToolService:activated()
 	else
 		task.wait(0.5)
 	end
-
-	self.remoteEventService:fireServer({
-		eventName = self.constants.REMOTE_EVENTS.TOOL_ACTIVATED,
-		data = {},
-	})
-
-	self.debounce = false
 end
 
----@param setBlock boolean
-function ToolService:block(setBlock)
-	if setBlock then
-		self.animationService:playAnimation("OneHandedBlock")
-	else
-		self.animationService:stopAnimation("OneHandedBlock")
-	end
+function ToolService:_activeTwoHanded() end
+
+function ToolService:_activeFood()
+	self.animationService.animTracks.Eat:Play()
+	task.wait(self.animationService.animTracks.Eat.Length)
 end
 
 return ToolService

@@ -1,6 +1,6 @@
 # TODO List
 
-## Project Progress: ~68%
+## Project Progress: ~72%
 
 Major systems implemented:
 
@@ -44,6 +44,20 @@ Next major milestones:
 * \[x] Update game version from v1.0.26 to v1.0.27 in GameVersion.model.json
 * \[x] Add v1.0.27 entry to CHANGELOG.md with weapon and equipment system enhancements
 
+### Completed in v1.0.29
+
+* \[x] Implement comprehensive food asset system with 3D models for all food items
+* \[x] Enhance food effect system with structured action-based effects
+* \[x] Extend item database with miscellaneous items, morph gems, potions, resources, and scrolls
+* \[x] Integrate food assets in Shared/Assets/Food system
+* \[x] Refactor Food.luau with structured effect system and model references
+* \[x] Enhance Assets system with food integration and unified getAsset method
+* \[x] Update Equipment, Inventory, and Stats domains with improved structures
+* \[x] Expand ToolService, EquipmentService, and InventoryService functionality
+* \[x] Improve service integration across client and server architectures
+* \[x] Update game version from v1.0.28 to v1.0.29 in GameVersion.model.json
+* \[x] Add v1.0.29 entry to CHANGELOG.md with food system and asset improvements
+
 ### Completed in v1.0.28
 
 * \[x] Implement Zone domain entity for location-based gameplay mechanics
@@ -55,7 +69,7 @@ Next major milestones:
 * \[x] Update game version from v1.0.27 to v1.0.28 in GameVersion.model.json
 * \[x] Add v1.0.28 entry to CHANGELOG.md with zone system and equipment improvements
 
-### Next Development Steps (v1.0.29)
+### Next Development Steps (v1.0.30)
 
 * \[ ] Implement advanced inventory management system with sorting and filtering
 * \[ ] Add zone-based gameplay mechanics using the new Zone domain entity
@@ -66,6 +80,9 @@ Next major milestones:
 * \[ ] Add pet/companion system with AI behaviors and training mechanics
 * \[ ] Create housing/building system with construction mechanics and customization
 * \[ ] Implement advanced magic system with spell casting, effects, and mana management
+* \[ ] Integrate food consumption mechanics with hunger/satiety system
+* \[ ] Add potion brewing and consumption effects
+* \[ ] Implement scroll reading and magical effects system
 
 ### Next Development Steps (v1.0.26) - Completed
 

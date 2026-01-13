@@ -7,7 +7,7 @@
 ---@field rings rings
 ---@field amulet AmuletEntity
 ---@field slots table<string, string>
----@field equippedWeapon string
+---@field equippedItem string
 local Equipment = {}
 Equipment.__index = Equipment
 
@@ -20,7 +20,7 @@ function Equipment.new(data)
 	}
 	self.amulet = data.amulet
 
-	self.equippedWeapon = nil
+	self.equippedItem = nil
 
 	self.slots = data.slots
 		or {
@@ -57,13 +57,13 @@ function Equipment:setAmulet(amulet)
 	self.amulet = amulet
 end
 
----@param weaponName string
-function Equipment:equipWeapon(weaponName)
-	self.equippedWeapon = weaponName
+---@param itemName string
+function Equipment:equipItem(itemName)
+	self.equippedItem = itemName
 end
 
----@param itemName string
-function Equipment:setSlot(itemName)
+---@param itemData table
+function Equipment:setSlot(itemData)
 	local keys = {
 		Enum.KeyCode.One.Name,
 		Enum.KeyCode.Two.Name,
@@ -71,17 +71,19 @@ function Equipment:setSlot(itemName)
 		Enum.KeyCode.Four.Name,
 	}
 
-	local freeSlot
-
 	for _, key in keys do
-		if not self.slots[key] then
-			freeSlot = key
-			break
+		if itemData.state == "set" then
+			if not self.slots[key] then
+				self.slots[key] = itemData.itemName
+				return
+			end
+		elseif itemData.state == "remove" then
+			if self.slots[key] and self.slots[key] == itemData.itemName then
+				self.slots[key] = nil
+				break
+			end
 		end
 	end
-
-	freeSlot = freeSlot or Enum.KeyCode.One.Name
-	self.slots[freeSlot] = itemName
 end
 
 ---@param cloth string

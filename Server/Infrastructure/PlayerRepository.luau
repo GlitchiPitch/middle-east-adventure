@@ -1,9 +1,5 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
-local Attributes = require(ReplicatedStorage.Shared.Domain.Attributes)
-local Equipment = require(ReplicatedStorage.Shared.Domain.Equipment)
-local PlayerProgress = require(ReplicatedStorage.Shared.Domain.PlayerProgress)
 -- local DataStoreService = game:GetService("DataStoreService")
+
 ---@class PlayerRepository
 ---@field diContainer DIContainer
 ---@field _players table<number, PlayerEntity>
@@ -56,8 +52,8 @@ end
 function PlayerRepository:_createPlayerEntity(player)
 	---@type SharedDomain
 	local domain = self.diContainer:resolve("Domain")
-	-- ---@type Shared
-	-- local shared = self.diContainer:resolve("Shared")
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
 	-- local dataStore = DataStoreService:GetDataStore(shared.config.PlayerDataStoreKey)
 
 	local success, result = pcall(function()
@@ -67,7 +63,7 @@ function PlayerRepository:_createPlayerEntity(player)
 	local _playerData = success and result or {}
 
 	local playerData = {
-		inventory = domain.Inventory.new(_playerData.inventory or {}),
+		inventory = domain.Inventory.new(shared.data),
 		skills = domain.Skills.new(_playerData.skills or {}),
 		stats = domain.Stats.new(_playerData.stats or {}),
 		equipment = domain.Equipment.new(_playerData.equipment or {}),
@@ -75,6 +71,9 @@ function PlayerRepository:_createPlayerEntity(player)
 		attributes = domain.Attributes.new(_playerData.attributes or {}),
 	}
 
+	playerData.inventory:fromData(_playerData.inventory or {})
+
+	
 	self._players[player.UserId] = domain.Player.new(player)
 	self._players[player.UserId]:fromData(playerData)
 end
