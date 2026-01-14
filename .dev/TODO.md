@@ -1,6 +1,6 @@
 # TODO List
 
-## Project Progress: ~85%
+## Project Progress: ~90%
 
 Major systems implemented:
 
@@ -12,6 +12,9 @@ Major systems implemented:
 * ✅ Mobile optimization and performance improvements
 * ✅ Stamina-based sprint system with server-side management
 * ✅ Advanced architectural patterns (Unit of Work, EventEmitter, Cache invalidation)
+* ✅ Use Case pattern implementation across Client Application layer
+* ✅ Presenter pattern with comprehensive UI management
+* ✅ ApplicationFacade for centralized presentation coordination
 
 Next major milestones:
 
@@ -33,6 +36,9 @@ Next major milestones:
 * \[x] Implement Unit of Work pattern for atomic operations (completed v1.0.33)
 * \[x] Create EventEmitter service for event-driven architecture (completed v1.0.33)
 * \[x] Enhance Cache service with automatic invalidation (completed v1.0.33)
+* \[x] Implement Use Case pattern across Client Application layer (completed v1.0.35)
+* \[x] Implement Presenter pattern with comprehensive UI management (completed v1.0.35)
+* \[x] Create ApplicationFacade for centralized presentation coordination (completed v1.0.35)
 * \[ ] Implement advanced inventory management system
 * \[ ] Add pet/companion system
 * \[ ] Create housing/building system
@@ -50,6 +56,26 @@ Next major milestones:
 * \[x] Enhance UseCases architecture with dependency injection for EquipItem
 * \[x] Update game version from v1.0.26 to v1.0.27 in GameVersion.model.json
 * \[x] Add v1.0.27 entry to CHANGELOG.md with weapon and equipment system enhancements
+
+### Completed in v1.0.35
+
+* \[x] Implement comprehensive Use Case architecture across Client Application layer
+* \[x] Create UseCases: AcceptTrade, AddItemToTrade, ClickInventoryItem, ContinueDialog, CraftItem, EquipItem, PickupLoot, RemoveItemFromTrade, SelectDialogOption, StartAlchemy, StartSmithing, StartTrade, ToggleSprint, UnequipItem, UseLectern
+* \[x] Implement Presenter pattern with BasePresenter, AlchemyPresenter, AttributesPresenter, DialogPresenter, EquipmentPresenter, InventoryPresenter, SmithPresenter, StatsPresenter, TradePresenter
+* \[x] Create ApplicationFacade for centralized presentation layer management and service coordination
+* \[x] Add PresentationInterfaces module for type-safe presenter contracts and service bindings
+* \[x] Implement PresenterFactory for automated presenter instantiation and dependency injection
+* \[x] Enhance EquipmentUI with improved presenter integration and equipment management
+* \[x] Restructure Client Presentation layer with new Presenters architecture
+* \[x] Update Client/Application/UseCases/init.luau with extensive Use Case implementations (484+ lines)
+* \[x] Enhance Shared/Infrastructure/init.luau with PresentationInterfaces integration
+* \[x] Improve Client/Presentation/init.luau with PresenterFactory and ApplicationFacade integration
+* \[x] Update Shared/init.luau with enhanced infrastructure module exports
+* \[x] Remove obsolete EquippedSlotsService and PromptService from presentation layer
+* \[x] Update game version from v1.0.34 to v1.0.35 in GameVersion.model.json
+* \[x] Update version from v1.0.21 to v1.0.35 in README.md
+* \[x] Add v1.0.35 entry to CHANGELOG.md with Use Case and Presenter architecture implementation
+* \[x] Update project progress from ~85% to ~90% in TODO.md
 
 ### Completed in v1.0.34
 
@@ -150,7 +176,7 @@ Next major milestones:
 * \[x] Update game version from v1.0.27 to v1.0.28 in GameVersion.model.json
 * \[x] Add v1.0.28 entry to CHANGELOG.md with zone system and equipment improvements
 
-### Next Development Steps (v1.0.35)
+### Next Development Steps (v1.0.36)
 
 * \[ ] Implement visual effects for alchemy crafting process with particle systems and animations
 * \[ ] Add smithing workbench mechanics with hammer sounds and visual feedback
@@ -173,6 +199,11 @@ Next major milestones:
 * \[ ] Add Observer pattern for UI updates and real-time notifications
 * \[ ] Create Service Locator pattern for improved dependency resolution
 * \[ ] Implement Strategy pattern for different AI behaviors and combat styles
+* \[ ] Add advanced inventory management system with sorting, filtering, and search capabilities
+* \[ ] Implement zone-based gameplay mechanics using the new Zone domain entity
+* \[ ] Create MineZones functionality with mining mechanics and resource gathering
+* \[ ] Add MobZones with dynamic mob spawning and combat encounters
+* \[ ] Implement PlantsZones with gathering and herbalism systems
 
 ### Next Development Steps (v1.0.34) - Completed
 

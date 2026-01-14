@@ -19,6 +19,7 @@ local Types = require(script.Types)
 ---@field config Config
 ---@field assets Assets
 ---@field data SharedData
+---@field presentationInterfaces PresentationInterfaces
 local Shared = {}
 Shared.__index = Shared
 
@@ -26,7 +27,7 @@ function Shared.new()
     local self = setmetatable({}, Shared)
     self.infrastructure = Infrastructure.new()
     self.domain = Domain.new()
-    
+
     self.diContainer = self.infrastructure.diContainer
     self.remoteEventService = self.infrastructure.remoteEventService
     self.eventBus = self.infrastructure.eventBus
@@ -38,6 +39,7 @@ function Shared.new()
     self.data = Data
     self.assets = Assets
     self.Types = Types
+    self.presentationInterfaces = self.infrastructure.presentationInterfaces
     return self
 end
 

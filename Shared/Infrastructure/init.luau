@@ -1,5 +1,6 @@
 local Services = require(script.Services)
 local Repositories = require(script.Repositories)
+local PresentationInterfaces = require(script.PresentationInterfaces)
 ---@class SharedInfrastructure
 ---@field _services SharedInfrastructureServices
 ---@field diContainer DIContainer
@@ -9,6 +10,7 @@ local Repositories = require(script.Repositories)
 ---@field eventEmitter EventEmitter
 ---@field cache Cache
 ---@field repositories SharedRepositories
+---@field presentationInterfaces PresentationInterfaces
 local Infrastructure = {}
 Infrastructure.__index = Infrastructure
 
@@ -24,6 +26,7 @@ function Infrastructure.new()
 	self.cache = self._services.cache
 
 	self.repositories = Repositories.new(self.diContainer)
+	self.presentationInterfaces = PresentationInterfaces
 	return self
 end
 

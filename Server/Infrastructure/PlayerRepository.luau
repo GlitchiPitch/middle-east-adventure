@@ -58,6 +58,7 @@ end
 
 ---@param player Player
 function PlayerRepository:getPlayerEntity(player)
+	warn(player)
 	if not self._players[player.UserId] then
 		self:_createPlayerEntity(player)
 	end

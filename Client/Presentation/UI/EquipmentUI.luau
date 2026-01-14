@@ -49,7 +49,6 @@ end
 function EquipmentUI:update()
 	local playerEntity = self.playerService:getPlayerEntity()
 	local equipmentData = playerEntity.equipment:toData()
-	warn(equipmentData)
 	local keys = {
 		[Enum.KeyCode.One.Name] = self.button1,
 		[Enum.KeyCode.Two.Name] = self.button2,

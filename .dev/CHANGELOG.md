@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.35] - 2026-01-14
+
+### Added
+
+* Comprehensive Use Case architecture implementation across Client Application layer
+* New UseCases: AcceptTrade, AddItemToTrade, ClickInventoryItem, ContinueDialog, CraftItem, EquipItem, PickupLoot, RemoveItemFromTrade, SelectDialogOption, StartAlchemy, StartSmithing, StartTrade, ToggleSprint, UnequipItem, UseLectern
+* Presenter pattern implementation with BasePresenter, AlchemyPresenter, AttributesPresenter, DialogPresenter, EquipmentPresenter, InventoryPresenter, SmithPresenter, StatsPresenter, TradePresenter
+* ApplicationFacade implementation for centralized presentation layer management
+* PresentationInterfaces module for type-safe presenter contracts and service bindings
+* PresenterFactory for automated presenter instantiation and dependency injection
+* Enhanced EquipmentUI with improved presenter integration and equipment management
+
+### Changed
+
+* Restructured Client Presentation layer with new Presenters architecture
+* Enhanced ApplicationFacade with comprehensive UI management and service coordination
+* Improved dependency injection across all presentation components
+* Refactored EquipmentPresenter with advanced equipment slot management and visual updates
+* Updated Client/Application/UseCases/init.luau with extensive Use Case implementations (484+ lines)
+* Enhanced Shared/Infrastructure/init.luau with PresentationInterfaces integration
+* Improved Client/Presentation/init.luau with PresenterFactory and ApplicationFacade integration
+* Updated Shared/init.luau with enhanced infrastructure module exports
+
+### Fixed
+
+* Removed obsolete EquippedSlotsService and PromptService from presentation layer
+* Cleaned up Client/Presentation/Services/init.luau service registrations
+* Enhanced code organization and separation of concerns in presentation layer
+* Improved service integration and dependency management across all components
+
 ## \[1.0.17] - 2025-01-11
 
 ### Added

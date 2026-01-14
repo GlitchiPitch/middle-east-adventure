@@ -2,7 +2,7 @@
 
 An RPG game. A story about a nameless hero who must stop the apocalypse.
 
-**Version:** v1.0.21 | **Status:** In Development | **Completion:** ~45%
+**Version:** v1.0.35 | **Status:** In Development | **Completion:** ~85%
 
 ## Description
 
@@ -10,30 +10,32 @@ The game features a variety of activities, including hunting, fishing, collectin
 
 ## Links
 
-- [Project TODO](./.dev/TODO.md)
-- [Changelog](./.dev/CHANGELOG.md)
+* [Project TODO](./.dev/TODO.md)
+* [Changelog](./.dev/CHANGELOG.md)
 
 ## Development Status
 
 ### ✅ Completed Systems
-- **Clean Architecture**: Client/Server/Shared separation implemented
-- **Core Client Services**: 7/8 services complete (Animation, Camera, Input, Sprint, Tool, Player, Inventory)
-- **Domain Models**: 8/10 entities complete (Player, Inventory, Equipment, Skills, Stats, OneHanded, TwoHanded, Cloth)
-- **UI Framework**: Basic combat, inventory, stats, and equipment interfaces
-- **Equipment System**: Equipment slot management with keyboard shortcuts (1,2,3,4)
+
+* **Clean Architecture**: Client/Server/Shared separation implemented
+* **Core Client Services**: 7/8 services complete (Animation, Camera, Input, Sprint, Tool, Player, Inventory)
+* **Domain Models**: 8/10 entities complete (Player, Inventory, Equipment, Skills, Stats, OneHanded, TwoHanded, Cloth)
+* **UI Framework**: Basic combat, inventory, stats, and equipment interfaces
+* **Equipment System**: Equipment slot management with keyboard shortcuts (1,2,3,4)
 
 ### 🔄 Current Sprint (v1.1.0)
-- Combat system integration with server-side logic
-- Inventory management and persistence
-- Player-to-player trading system
-- Health/damage mechanics implementation
+
+* Combat system integration with server-side logic
+* Inventory management and persistence
+* Player-to-player trading system
+* Health/damage mechanics implementation
 
 ### 📋 Planned Features
-- Advanced crafting systems (Alchemy, Smithing)
-- Hunting and fishing mini-games
-- Magic system implementation
-- Multiplayer features and world exploration
 
+* Advanced crafting systems (Alchemy, Smithing)
+* Hunting and fishing mini-games
+* Magic system implementation
+* Multiplayer features and world exploration
 
 ## Project Structure
 
@@ -134,25 +136,29 @@ This project follows Clean Architecture principles, organized into three main la
 ## Development
 
 ### Prerequisites
-- Roblox Studio
-- Aftman (for Lua tooling)
-- Git
+
+* Roblox Studio
+* Aftman (for Lua tooling)
+* Git
 
 ### Getting Started
+
 1. Clone the repository
 2. Open the project in Roblox Studio using `default.project.json`
 3. Install dependencies: `aftman install`
 4. Run static analysis: `selene src/`
 
 ### Architecture Overview
+
 This project follows Clean Architecture principles to ensure maintainable and testable code:
 
-- **Domain Layer**: Contains business logic and entities
-- **Application Layer**: Use cases and service orchestration
-- **Infrastructure Layer**: External concerns (data persistence, APIs)
-- **Presentation Layer**: UI and user interaction
+* **Domain Layer**: Contains business logic and entities
+* **Application Layer**: Use cases and service orchestration
+* **Infrastructure Layer**: External concerns (data persistence, APIs)
+* **Presentation Layer**: UI and user interaction
 
 ### Code Quality
-- Lua type checking with EmmyLua annotations
-- Static analysis with Selene
-- Clean Architecture patterns for maintainability
+
+* Lua type checking with EmmyLua annotations
+* Static analysis with Selene
+* Clean Architecture patterns for maintainability
