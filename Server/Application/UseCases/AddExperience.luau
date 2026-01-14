@@ -2,25 +2,36 @@
 ---@field attributesRepository ServerAttributesRepository
 ---@field playerService ServerPlayerService
 ---@field constants Constants
+---@field diContainer DIContainer
 local AddExperience = {}
 AddExperience.__index = AddExperience
 
----@param attributesRepository ServerAttributesRepository
----@param playerService ServerPlayerService
----@param constants Constants
+---@param diContainer DIContainer
 ---@return ServerAddExperience
-function AddExperience.new(attributesRepository, playerService, constants)
+function AddExperience.new(diContainer)
 	local self = setmetatable({}, AddExperience)
-	self.attributesRepository = attributesRepository
-	self.playerService = playerService
-	self.constants = constants
+	self.diContainer = diContainer
 	return self
+end
+
+function AddExperience:init()
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
+	---@type ServerInfrastructure
+	local infrastructure = self.diContainer:resolve("Infrastructure")
+	---@type ServerApplication
+	local application = self.diContainer:resolve("Application")
+
+	self.attributesRepository = infrastructure.attributesRepository
+	self.playerService = application.services.playerService
+	self.constants = shared.constants
 end
 
 ---@param player Player
 ---@param expAmount number
 function AddExperience:execute(player, expAmount)
-	self.attributesRepository:addExp(player, expAmount)
+	local playerEntity = self.playerService:getPlayerEntity(player)
+	self.attributesRepository:addExp(playerEntity, expAmount)
 	self.playerService:updatePlayerData(player)
 end
 

@@ -2,26 +2,37 @@
 ---@field equipmentRepository ServerEquipmentRepository
 ---@field playerService ServerPlayerService
 ---@field constants Constants
+---@field diContainer DIContainer
 local SetEquipmentSlot = {}
 SetEquipmentSlot.__index = SetEquipmentSlot
 
----@param equipmentRepository ServerEquipmentRepository
----@param playerService ServerPlayerService
----@param constants Constants
+---@param diContainer DIContainer
 ---@return ServerSetEquipmentSlot
-function SetEquipmentSlot.new(equipmentRepository, playerService, constants)
+function SetEquipmentSlot.new(diContainer)
 	local self = setmetatable({}, SetEquipmentSlot)
-	self.equipmentRepository = equipmentRepository
-	self.playerService = playerService
-	self.constants = constants
+	self.diContainer = diContainer
 	return self
+end
+
+function SetEquipmentSlot:init()
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
+	---@type ServerInfrastructure
+	local infrastructure = self.diContainer:resolve("Infrastructure")
+	---@type ServerApplication
+	local application = self.diContainer:resolve("Application")
+
+	self.equipmentRepository = infrastructure.equipmentRepository
+	self.playerService = application.services.playerService
+	self.constants = shared.constants
 end
 
 ---@param player Player
 ---@param itemName string
 ---@param slotKey string
 function SetEquipmentSlot:execute(player, itemName, slotKey)
-	self.equipmentRepository:setSlot(player, itemName, slotKey)
+	local playerEntity = self.playerService:getPlayerEntity(player)
+	self.equipmentRepository:setSlot(playerEntity, itemName, slotKey)
 	self.playerService:updatePlayerData(player)
 end
 

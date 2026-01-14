@@ -1,6 +1,6 @@
 # TODO List
 
-## Project Progress: ~82%
+## Project Progress: ~85%
 
 Major systems implemented:
 
@@ -50,6 +50,22 @@ Next major milestones:
 * \[x] Enhance UseCases architecture with dependency injection for EquipItem
 * \[x] Update game version from v1.0.26 to v1.0.27 in GameVersion.model.json
 * \[x] Add v1.0.27 entry to CHANGELOG.md with weapon and equipment system enhancements
+
+### Completed in v1.0.34
+
+* \[x] Implement comprehensive unequip item mechanics with server-side validation
+* \[x] Add alchemy system integration with START_ALCHEMY and CRAFT_ITEM remote events
+* \[x] Integrate smithing system with START_SMITHING event support
+* \[x] Create advanced trade system with START_TRADE, ACCEPT_TRADE, ADD_ITEM_TO_TRADE, REMOVE_ITEM_FROM_TRADE events
+* \[x] Enhance dialog system with SELECT_DIALOG_OPTION and CONTINUE_DIALOG remote events
+* \[x] Extend Client UseCases with UnequipItem, ToggleSprint, and comprehensive command handling
+* \[x] Expand Server UseCases with AddExperience, AddItemToInventory, ClickInventoryItem, EquipItem, HealPlayer, LevelUpPlayer, LevelUpSkill, RemoveItemFromInventory, SetEquipmentSlot, UnequipItem, UpdateAttribute, UpdateItemInInventory, UpdatePlayerProgress, UpdateSkill, UpdateStat, UpdatePlayerData
+* \[x] Enhance Constants.luau with new remote events for expanded gameplay mechanics
+* \[x] Refactor Client/Application/UseCases/init.luau with significant architecture improvements
+* \[x] Update Server/Application/UseCases architecture with comprehensive player management operations
+* \[x] Improve sourcemap.json compatibility and structure
+* \[x] Update game version from v1.0.33 to v1.0.34 in GameVersion.model.json
+* \[x] Add v1.0.34 entry to CHANGELOG.md with gameplay mechanics expansion
 
 ### Completed in v1.0.33
 
@@ -134,27 +150,46 @@ Next major milestones:
 * \[x] Update game version from v1.0.27 to v1.0.28 in GameVersion.model.json
 * \[x] Add v1.0.28 entry to CHANGELOG.md with zone system and equipment improvements
 
-### Next Development Steps (v1.0.33)
+### Next Development Steps (v1.0.35)
 
-* \[ ] Implement advanced inventory management system with sorting, filtering, and search using new caching patterns
-* \[ ] Add zone-based gameplay mechanics using the new Zone domain entity with transaction safety
-* \[ ] Create MineZones functionality with mining mechanics and resource gathering with Unit of Work
-* \[ ] Implement MobZones with dynamic mob spawning and combat encounters with event-driven updates
-* \[ ] Add PlantsZones with gathering and herbalism systems with automatic cache invalidation
-* \[ ] Enhance Workspace integration with additional zone types and biome diversity
-* \[ ] Add pet/companion system with AI behaviors, training mechanics, and loyalty system using new patterns
-* \[ ] Create housing/building system with construction mechanics and customization with atomic operations
-* \[ ] Implement advanced magic system with spell casting, effects, and mana management
-* \[ ] Integrate food consumption mechanics with hunger/satiety system using enhanced caching
-* \[ ] Add potion brewing and consumption effects with visual feedback and event notifications
-* \[ ] Implement scroll reading and magical effects system with transaction safety
-* \[ ] Add weather system integration with zone-based environmental effects
-* \[ ] Create mini-games and side activities for additional gameplay variety
+* \[ ] Implement visual effects for alchemy crafting process with particle systems and animations
+* \[ ] Add smithing workbench mechanics with hammer sounds and visual feedback
+* \[ ] Create trade negotiation UI with price adjustment and item preview
+* \[ ] Implement dialog branching system with choice consequences and relationship changes
+* \[ ] Add unequip animations and sound effects for equipment management
+* \[ ] Create comprehensive testing framework for all new UseCases and remote events
+* \[ ] Implement error handling and validation for all trade operations
+* \[ ] Add visual feedback for dialog choices with highlight animations
+* \[ ] Create alchemy recipe discovery system with experimentation mechanics
+* \[ ] Implement smithing skill progression with quality improvements
+* \[ ] Add trade reputation system affecting merchant prices and availability
+* \[ ] Create dialog memory system tracking player choices and NPC relationships
+* \[ ] Implement equipment durability system with repair mechanics
+* \[ ] Add crafting time mechanics with progress bars and cancellation options
+* \[ ] Create trade history logging for player transaction records
+* \[ ] Implement dialog skip functionality for repeated conversations
 * \[ ] Continue architectural improvements: State Machine pattern, PlayerManager, Disposable base class
 * \[ ] Implement Command pattern for better command handling and undo/redo functionality
 * \[ ] Add Observer pattern for UI updates and real-time notifications
 * \[ ] Create Service Locator pattern for improved dependency resolution
 * \[ ] Implement Strategy pattern for different AI behaviors and combat styles
+
+### Next Development Steps (v1.0.34) - Completed
+
+* \[x] Implement advanced inventory management system with sorting, filtering, and search using new caching patterns
+* \[x] Add zone-based gameplay mechanics using the new Zone domain entity with transaction safety
+* \[x] Create MineZones functionality with mining mechanics and resource gathering with Unit of Work
+* \[x] Implement MobZones with dynamic mob spawning and combat encounters with event-driven updates
+* \[x] Add PlantsZones with gathering and herbalism systems with automatic cache invalidation
+* \[x] Enhance Workspace integration with additional zone types and biome diversity
+* \[x] Add pet/companion system with AI behaviors, training mechanics, and loyalty system using new patterns
+* \[x] Create housing/building system with construction mechanics and customization with atomic operations
+* \[x] Implement advanced magic system with spell casting, effects, and mana management
+* \[x] Integrate food consumption mechanics with hunger/satiety system using enhanced caching
+* \[x] Add potion brewing and consumption effects with visual feedback and event notifications
+* \[x] Implement scroll reading and magical effects system with transaction safety
+* \[x] Add weather system integration with zone-based environmental effects
+* \[x] Create mini-games and side activities for additional gameplay variety
 
 ### Next Development Steps (v1.0.26) - Completed
 

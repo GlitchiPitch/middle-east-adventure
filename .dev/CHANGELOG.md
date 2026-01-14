@@ -291,6 +291,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Improved error handling and data validation
 * Code structure optimizations and dependency management
 
+## [1.0.34] - 2026-01-14
+
+### Added
+
+* Comprehensive unequip item mechanics with server-side validation
+* Alchemy system integration with START_ALCHEMY and CRAFT_ITEM events
+* Smithing system with START_SMITHING remote event support
+* Advanced trade system with START_TRADE, ACCEPT_TRADE, ADD_ITEM_TO_TRADE, REMOVE_ITEM_FROM_TRADE events
+* Enhanced dialog system with SELECT_DIALOG_OPTION and CONTINUE_DIALOG remote events
+* Extended Client UseCases with UnequipItem, ToggleSprint, and comprehensive command handling
+* Server-side UseCases expansion (AddExperience, AddItemToInventory, ClickInventoryItem, EquipItem, HealPlayer, LevelUpPlayer, LevelUpSkill, RemoveItemFromInventory, SetEquipmentSlot, UnequipItem, UpdateAttribute, UpdateItemInInventory, UpdatePlayerProgress, UpdateSkill, UpdateStat, UpdatePlayerData)
+
+### Changed
+
+* Enhanced Constants.luau with new remote events for expanded gameplay mechanics
+* Refactored Client/Application/UseCases/init.luau with significant architecture improvements (484+ lines added)
+* Updated Server/Application/UseCases architecture with comprehensive player management operations
+* Improved sourcemap.json compatibility and structure
+
+### Fixed
+
+* Enhanced UseCase implementations with proper dependency injection and service integration
+* Code structure optimizations across client and server application layers
+* Improved error handling and validation in player operations
+
 ## [Unreleased]
 
 ### Planned

@@ -2,19 +2,29 @@
 ---@field playerRepository ServerPlayerRepository
 ---@field playerService ServerPlayerService
 ---@field constants Constants
+---@field diContainer DIContainer
 local UpdatePlayerProgress = {}
 UpdatePlayerProgress.__index = UpdatePlayerProgress
 
----@param playerRepository ServerPlayerRepository
----@param playerService ServerPlayerService
----@param constants Constants
+---@param diContainer DIContainer
 ---@return ServerUpdatePlayerProgress
-function UpdatePlayerProgress.new(playerRepository, playerService, constants)
+function UpdatePlayerProgress.new(diContainer)
 	local self = setmetatable({}, UpdatePlayerProgress)
-	self.playerRepository = playerRepository
-	self.playerService = playerService
-	self.constants = constants
+	self.diContainer = diContainer
 	return self
+end
+
+function UpdatePlayerProgress:init()
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
+	---@type ServerInfrastructure
+	local infrastructure = self.diContainer:resolve("Infrastructure")
+	---@type ServerApplication
+	local application = self.diContainer:resolve("Application")
+
+	self.playerRepository = infrastructure.playerRepository
+	self.playerService = application.services.playerService
+	self.constants = shared.constants
 end
 
 ---@param player Player

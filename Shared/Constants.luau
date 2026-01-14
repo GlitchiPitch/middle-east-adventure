@@ -9,7 +9,17 @@ local Constants = {
 		PICKUP_LOOT = "PickupLoot",
 		USE_LECTERN = "UseLectern",
 		EQUIP_ITEM = "EquipItem",
+		UNEQUIP_ITEM = "UnequipItem",
 		TOGGLE_SPRINT = "ToggleSprint",
+		START_ALCHEMY = "StartAlchemy",
+		START_SMITHING = "StartSmithing",
+		CRAFT_ITEM = "CraftItem",
+		START_TRADE = "StartTrade",
+		ACCEPT_TRADE = "AcceptTrade",
+		ADD_ITEM_TO_TRADE = "AddItemToTrade",
+		REMOVE_ITEM_FROM_TRADE = "RemoveItemFromTrade",
+		SELECT_DIALOG_OPTION = "SelectDialogOption",
+		CONTINUE_DIALOG = "ContinueDialog",
 	},
 
 	PLAYER_STATES = {

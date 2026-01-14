@@ -2,26 +2,38 @@
 ---@field inventoryRepository ServerInventoryRepository
 ---@field playerService ServerPlayerService
 ---@field constants Constants
+---@field diContainer DIContainer
 local UpdateItemInInventory = {}
 UpdateItemInInventory.__index = UpdateItemInInventory
 
----@param inventoryRepository ServerInventoryRepository
----@param playerService ServerPlayerService
----@param constants Constants
+---@param diContainer DIContainer
 ---@return ServerUpdateItemInInventory
-function UpdateItemInInventory.new(inventoryRepository, playerService, constants)
+function UpdateItemInInventory.new(diContainer)
 	local self = setmetatable({}, UpdateItemInInventory)
-	self.inventoryRepository = inventoryRepository
-	self.playerService = playerService
-	self.constants = constants
+	self.diContainer = diContainer
 	return self
+end
+
+function UpdateItemInInventory:init()
+	---@type Shared
+	local shared = self.diContainer:resolve("Shared")
+	---@type ServerApplication
+	local application = self.diContainer:resolve("Application")
+	---@type ServerInfrastructure
+	local infrastructure = self.diContainer:resolve("Infrastructure")
+
+	self.inventoryRepository = infrastructure.inventoryRepository
+	self.remoteEventService = shared.remoteEventService
+	self.playerService = application.services.playerService
+	self.constants = shared.constants
 end
 
 ---@param player Player
 ---@param itemName string
 ---@param newData table
 function UpdateItemInInventory:execute(player, itemName, newData)
-	self.inventoryRepository:updateItem(player, itemName, newData)
+	local playerEntity = self.playerService:getPlayerEntity(player)
+	self.inventoryRepository:updateItem(playerEntity, itemName, newData)
 	self.playerService:updatePlayerData(player)
 end
 
