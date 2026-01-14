@@ -19,7 +19,7 @@ function EventBus:getEvent(eventName)
 	return self._events[eventName]
 end
 
----@alias dialogName '"finishDialog"' | '"showDialog"'
+---@alias dialogName '"finishDialog"' | '"showDialog"' | '"showAnswers"'
 ---@alias eventName2 '"toggleActionButton"' | '"toggleInventoryView"'
 ---@alias eventName '"pressEquipKey"' | '"updatePlayerData"' | '"setAlchemyMode"' | '"setSmithMode"' | dialogName | eventName2
 

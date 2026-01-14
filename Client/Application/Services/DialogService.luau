@@ -62,6 +62,7 @@ function DialogService:setupCharacterWithDialog(npc)
 		dialogData = npcDialog,
 		npc = npc,
 		index = 0,
+		showingAnswers = false, -- Track if we're currently showing answers
 	}
 end
 
@@ -71,10 +72,42 @@ function DialogService:activateDialog()
 		return
 	end
 
-	if self.dialogsCache[npc].index < #self.dialogsCache[npc].dialogData then
-		self.dialogsCache[npc].index += 1
+	local cache = self.dialogsCache[npc]
+
+	-- If we're currently showing a dialog and have answers to show, show them
+	if cache.index > 0 and not cache.showingAnswers and cache.dialogData.answers then
+		cache.showingAnswers = true
+		self:_showAnswers(npc)
+		return
+	end
+
+	-- Otherwise, show next dialog phrase
+	if cache.index < #cache.dialogData.phrases then
+		cache.index += 1
+		cache.showingAnswers = false -- Reset answers state for new dialog
 		self:_showDialog(npc)
 	else
+		self:_finishDialog(npc)
+	end
+end
+
+---@param answerIndex number
+function DialogService:selectAnswer(answerIndex)
+	local npc = self.targetController:getCurrentTarget()
+	if not self.dialogsCache[npc] or not self.dialogsCache[npc].dialogData.answers then
+		return
+	end
+
+	local answers = self.dialogsCache[npc].dialogData.answers
+	local selectedAnswer = answers[answerIndex]
+
+	if selectedAnswer and selectedAnswer.nextPhraseIndex then
+		-- Jump to the specified phrase
+		self.dialogsCache[npc].index = selectedAnswer.nextPhraseIndex - 1 -- -1 because activateDialog will increment it
+		self.dialogsCache[npc].showingAnswers = false -- Reset state for new phrase
+		self:activateDialog()
+	else
+		-- No next phrase specified, end dialog
 		self:_finishDialog(npc)
 	end
 end
@@ -85,6 +118,7 @@ function DialogService:_showDialog(npc)
 		npc = npc,
 	})
 
+	--@TODO: multiply active camera is not good
 	self.cameraController:activateDialogCamera()
 end
 
@@ -92,8 +126,15 @@ function DialogService:_finishDialog(npc)
 	self.eventBus:fire("finishDialog", {})
 
 	self.dialogsCache[npc].index = 0
+	self.dialogsCache[npc].showingAnswers = false
 	self.playerService:toggleRobloxControl(true)
 	self.cameraController:activateDefaultCamera()
+end
+
+function DialogService:_showAnswers(npc)
+	self.eventBus:fire("showAnswers", {
+		npc = npc,
+	})
 end
 
 return DialogService

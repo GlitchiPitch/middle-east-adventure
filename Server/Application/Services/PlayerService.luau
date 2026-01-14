@@ -34,6 +34,7 @@ end
 function PlayerService:onPlayerAdded(player)
 	---@param character Model
 	local function onCharacterAdded(character)
+		character.Archivable = true
 		self.ragdollHandler:setRagdollToCharacter(character)
 		self:updatePlayerData(player)
 

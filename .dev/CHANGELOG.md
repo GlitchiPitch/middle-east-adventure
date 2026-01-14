@@ -215,6 +215,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Service initialization and dependency injection improvements
 * Tool equipping/un-equipping mechanics for player characters
 
+## [1.0.31] - 2026-01-14
+
+### Added
+
+* Enhanced dialog system with answer button components and improved UI interactions
+* New DialogAnswerButton model component for structured dialog responses
+* Advanced NPC conversation mechanics with better flow management
+* Extended dialog data with additional NPC interactions and responses
+
+### Changed
+
+* Refactored DialogService with improved dialog handling and event management
+* Enhanced DialogUI with better component integration and user experience
+* Updated dialog data structure in Dialogs.luau with expanded conversation options
+* Improved EventBus service with enhanced communication protocols
+* Updated CameraController with formatting improvements
+* Enhanced PlayerService with additional functionality
+
+### Fixed
+
+* Dialog system stability improvements and interaction refinements
+* UI component initialization and presentation layer enhancements
+* Code structure optimizations across multiple service modules
+* Service integration consistency improvements
+
 ## [Unreleased]
 
 ### Planned

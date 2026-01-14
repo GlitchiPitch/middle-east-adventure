@@ -46,6 +46,19 @@ Next major milestones:
 * \[x] Update game version from v1.0.26 to v1.0.27 in GameVersion.model.json
 * \[x] Add v1.0.27 entry to CHANGELOG.md with weapon and equipment system enhancements
 
+### Completed in v1.0.31
+
+* \[x] Enhance dialog system with answer button components and improved UI interactions
+* \[x] Create DialogAnswerButton model component for structured dialog responses
+* \[x] Refactor DialogService with improved dialog handling and event management
+* \[x] Enhance DialogUI with better component integration and user experience
+* \[x] Update dialog data structure in Dialogs.luau with expanded conversation options
+* \[x] Improve EventBus service with enhanced communication protocols
+* \[x] Update CameraController with formatting improvements
+* \[x] Enhance PlayerService with additional functionality
+* \[x] Update game version from v1.0.30 to v1.0.31 in GameVersion.model.json
+* \[x] Add v1.0.31 entry to CHANGELOG.md with dialog system enhancements
+
 ### Completed in v1.0.30
 
 * \[x] Implement comprehensive stamina-based sprint system with server-side stamina management
@@ -55,7 +68,7 @@ Next major milestones:
 * \[x] Add automatic stamina restoration when walking with reduced rates when weakened
 * \[x] Refactor SprintController to use use cases and command pattern architecture
 * \[x] Enhance PlayerService with getPlayers() method for server-side player iteration
-* \[x] Update Constants.luau with TOGGLE_SPRINT command and additional item types
+* \[x] Update Constants.luau with TOGGLE\_SPRINT command and additional item types
 * \[x] Improve service integration across Client and Server Application layers
 * \[x] Enhance Player domain with stamina and running state tracking
 * \[x] Update game version from v1.0.29 to v1.0.30 in GameVersion.model.json

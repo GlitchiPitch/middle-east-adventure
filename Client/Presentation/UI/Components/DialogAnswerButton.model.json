@@ -1,0 +1,25 @@
+{
+    "className": "TextButton",
+    "children": [
+        {
+            "className": "Frame",
+            "name": "Body",
+            "children": [
+                {
+                    "className": "TextLabel"
+                },
+                {
+                    "className": "UICorner"
+                },
+                {
+                    "className": "UIStroke",
+                    "children": [
+                        {
+                            "className": "UIGradient"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

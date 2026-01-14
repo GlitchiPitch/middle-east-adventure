@@ -46,6 +46,10 @@ function Presentation:init()
 		self.ui.uiManager:setCurrentScreen("dialog")
 	end)
 
+	shared.eventBus:connect("showAnswers", function(data)
+		self.ui.dialogUI:showAnswers(data)
+	end)
+
 	shared.eventBus:connect("finishDialog", function(_)
 		self.ui.dialogUI:hideDialog()
 		self.ui.uiManager:setCurrentScreen("primary")

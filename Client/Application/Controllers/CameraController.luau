@@ -123,6 +123,18 @@ function CameraController:activateInventoryCamera()
 		self._cameraState = self.constants.CAMERA_STATES.INVENTORY
 		self:_toggleFreeMouse(true)
 		-- self.cam.CFrame = CFrame.new(self.head.Position + Vector3.new(0, 2, 5), self.head.Position)
+
+		--[[
+			local cameraType = camera.CameraType
+		local motor = Otter.createSingleMotor(0)
+		local direction = character:GetPivot().LookVector
+		local goalPosition = camera.Focus.Position + (Vector3.new(offset, 0, offset) * direction)
+		local goal = CFrame.lookAt(goalPosition, camera.Focus.Position)
+
+		motor:onStep(function(alpha: number)
+			camera.CFrame = camera.CFrame:Lerp(goal, alpha)
+		end)
+		]]
 	end
 end
 
