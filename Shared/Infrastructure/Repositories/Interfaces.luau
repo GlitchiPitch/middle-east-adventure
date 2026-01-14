@@ -1,5 +1,7 @@
 ---@class IRepository
 ---@field diContainer DIContainer
+---@field unitOfWork UnitOfWork
+---@field eventEmitter EventEmitter
 local IRepository = {}
 
 ---@param diContainer DIContainer
@@ -8,6 +10,13 @@ function IRepository.new(diContainer)
 	local self = setmetatable({}, { __index = IRepository })
 	self.diContainer = diContainer
 	return self
+end
+
+function IRepository:init()
+	---@type SharedInfrastructure
+	local infrastructure = self.diContainer:resolve("Infrastructure")
+	self.unitOfWork = infrastructure.unitOfWork
+	self.eventEmitter = infrastructure.eventEmitter
 end
 
 ---@class IPlayerRepository : IRepository

@@ -5,6 +5,7 @@ local IRepository = Interfaces.IRepository
 ---@field playerRepository IPlayerRepository
 ---@field statCache table
 ---@field cacheExpiry number
+---@field maxCacheSize number
 local StatsRepository = setmetatable({}, { __index = IRepository })
 StatsRepository.__index = StatsRepository
 
@@ -14,6 +15,7 @@ function StatsRepository.new(diContainer)
 	local self = setmetatable(IRepository.new(diContainer), StatsRepository)
 	self.statCache = {}
 	self.cacheExpiry = 0.05 -- 50ms cache expiry for stats (more frequent updates)
+	self.maxCacheSize = 1000 -- Maximum number of cached entries
 	return self
 end
 
@@ -46,6 +48,9 @@ function StatsRepository:_getCachedStat(playerEntity, statName, cache, getter)
 		timestamp = currentTime,
 	}
 
+	-- Manage cache size after adding new entry
+	self:_manageCacheSize()
+
 	return value
 end
 
@@ -55,8 +60,57 @@ function StatsRepository:invalidateCache(playerEntity)
 	local playerId = playerEntity.id or tostring(playerEntity)
 	-- Remove all cache entries for this player
 	for key in pairs(self.statCache) do
-		if key:sub(1, #playerId) == playerId then
+		if key:sub(1, #playerId + 1) == playerId .. "_" then
 			self.statCache[key] = nil
+		end
+	end
+end
+
+--- Очистка всего кеша
+function StatsRepository:clearCache()
+	self.statCache = {}
+end
+
+--- Управление размером кеша
+function StatsRepository:_manageCacheSize()
+	local cacheSize = 0
+	for _ in pairs(self.statCache) do
+		cacheSize = cacheSize + 1
+	end
+
+	-- If cache is too large, remove oldest entries
+	if cacheSize > self.maxCacheSize then
+		local currentTime = tick()
+		local entriesToRemove = {}
+
+		-- Collect entries that are expired or oldest
+		for key, entry in pairs(self.statCache) do
+			if currentTime - entry.timestamp > self.cacheExpiry then
+				table.insert(entriesToRemove, key)
+			end
+		end
+
+		-- Remove expired entries first
+		for _, key in ipairs(entriesToRemove) do
+			self.statCache[key] = nil
+			cacheSize = cacheSize - 1
+		end
+
+		-- If still too large, remove more entries (oldest first)
+		if cacheSize > self.maxCacheSize then
+			local sortedEntries = {}
+			for key, entry in pairs(self.statCache) do
+				table.insert(sortedEntries, { key = key, timestamp = entry.timestamp })
+			end
+
+			table.sort(sortedEntries, function(a, b)
+				return a.timestamp < b.timestamp
+			end)
+
+			local toRemove = cacheSize - self.maxCacheSize
+			for i = 1, math.min(toRemove, #sortedEntries) do
+				self.statCache[sortedEntries[i].key] = nil
+			end
 		end
 	end
 end
@@ -71,12 +125,38 @@ end
 ---@param statName string
 ---@param value number
 function StatsRepository:updateStat(playerEntity, statName, value)
+	-- Validation
+	if not playerEntity then
+		error("playerEntity is required")
+	end
+	if not statName or statName == "" then
+		error("statName is required and cannot be empty")
+	end
+	if value == nil then
+		error("value is required")
+	end
+
 	local stats = self:getStats(playerEntity)
+	if not stats then
+		error("Failed to get stats for player")
+	end
+
+	if not stats[statName] then
+		error(string.format("Stat '%s' does not exist", statName))
+	end
 
 	if stats[statName] and typeof(stats[statName]) == "table" then
+		if typeof(value) ~= "number" then
+			error("value must be a number for stat objects")
+		end
 		stats[statName].current = math.clamp(value, 0, stats[statName].max)
 	elseif typeof(stats[statName]) == "boolean" then
+		if typeof(value) ~= "boolean" then
+			error("value must be a boolean for boolean stats")
+		end
 		stats[statName] = value
+	else
+		error(string.format("Unsupported stat type for '%s'", statName))
 	end
 
 	-- Invalidate cache for this stat
@@ -126,16 +206,15 @@ function StatsRepository:resetStats(playerEntity)
 	local stats = self:getStats(playerEntity)
 
 	-- Reset numeric stats to max
-	for statName, statData in pairs(stats) do
+	for _, statData in pairs(stats) do
 		if typeof(statData) == "table" and statData.max then
 			statData.current = statData.max
 		end
-		-- statName is used for iteration, no need for explicit usage
 	end
 
 	-- Reset effects
 	stats.weak = false
-	stats.posioned = false
+	stats.poisoned = false
 	stats.frosted = false
 	stats.fired = false
 

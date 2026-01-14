@@ -91,7 +91,62 @@ function Equipment:equipCloth(cloth)
 	self.cloth = cloth
 end
 
-function Equipment:calculateBoosts() end
+---@return table<string, number>
+function Equipment:calculateBoosts()
+	local boosts = {
+		-- Defense boosts
+		bladeDefense = 0,
+		strikeDefense = 0,
+		arrowDefense = 0,
+		fireDefense = 0,
+		coldDefense = 0,
+
+		-- Stat boosts
+		strength = 0,
+		dexterity = 0,
+		health = 0,
+		stamina = 0,
+		mana = 0,
+
+		-- Damage boosts
+		damage = 0,
+	}
+
+	-- Calculate boosts from cloth armor
+	if self.cloth then
+		-- Cloth provides defense bonuses
+		-- This would need to be expanded based on cloth data
+		boosts.bladeDefense = boosts.bladeDefense + 5 -- basic armor
+		boosts.strikeDefense = boosts.strikeDefense + 3
+	end
+
+	-- Calculate boosts from rings
+	for _, ring in pairs(self.rings) do
+		if ring then
+			-- Rings provide various bonuses (strength, dexterity, etc.)
+			-- This would be based on ring data
+			boosts.strength = boosts.strength + 2 -- example ring bonus
+		end
+	end
+
+	-- Calculate boosts from amulet
+	if self.amulet then
+		-- Amulets provide various bonuses
+		-- This would be based on amulet data
+		boosts.mana = boosts.mana + 10 -- example amulet bonus
+	end
+
+	-- Calculate boosts from equipped weapons/tools in slots
+	for _, itemName in pairs(self.slots) do
+		if itemName then
+			-- Weapons provide damage bonuses
+			-- This would need item data lookup
+			boosts.damage = boosts.damage + 5 -- example weapon bonus
+		end
+	end
+
+	return boosts
+end
 
 function Equipment:toData()
 	return {

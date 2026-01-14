@@ -7,7 +7,7 @@
 ---@field stamina stat
 ---@field mana stat
 ---@field weak boolean
----@field posioned boolean
+---@field poisoned boolean
 ---@field frosted boolean
 ---@field fired boolean
 local Stats = {}
@@ -31,7 +31,7 @@ function Stats.new(data)
 	}
 
 	self.weak = false
-	self.posioned = false
+	self.poisoned = false
 	self.frosted = false
 	self.fired = false
 

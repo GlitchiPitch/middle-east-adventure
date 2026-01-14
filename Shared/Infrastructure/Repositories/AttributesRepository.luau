@@ -6,6 +6,7 @@ local IRepository = Interfaces.IRepository
 ---@field levelCache table
 ---@field expCache table
 ---@field cacheExpiry number
+---@field maxCacheSize number
 local AttributesRepository = setmetatable({}, { __index = IRepository })
 AttributesRepository.__index = AttributesRepository
 
@@ -16,6 +17,7 @@ function AttributesRepository.new(diContainer)
 	self.levelCache = {}
 	self.expCache = {}
 	self.cacheExpiry = 0.1 -- 100ms cache expiry
+	self.maxCacheSize = 500 -- Maximum number of cached entries per cache type
 	return self
 end
 
@@ -46,6 +48,9 @@ function AttributesRepository:_getCachedValue(playerEntity, cache, getter)
 		timestamp = currentTime,
 	}
 
+	-- Manage cache size after adding new entry
+	self:_manageCacheSize(cache)
+
 	return value
 end
 
@@ -55,6 +60,57 @@ function AttributesRepository:invalidateCache(playerEntity)
 	local playerId = playerEntity.id or tostring(playerEntity)
 	self.levelCache[playerId] = nil
 	self.expCache[playerId] = nil
+end
+
+--- Очистка всего кеша
+function AttributesRepository:clearCache()
+	self.levelCache = {}
+	self.expCache = {}
+end
+
+--- Управление размером кеша
+---@param cache table
+function AttributesRepository:_manageCacheSize(cache)
+	local cacheSize = 0
+	for _ in pairs(cache) do
+		cacheSize = cacheSize + 1
+	end
+
+	-- If cache is too large, remove oldest entries
+	if cacheSize > self.maxCacheSize then
+		local currentTime = tick()
+		local entriesToRemove = {}
+
+		-- Collect expired entries first
+		for key, entry in pairs(cache) do
+			if currentTime - entry.timestamp > self.cacheExpiry then
+				table.insert(entriesToRemove, key)
+			end
+		end
+
+		-- Remove expired entries
+		for _, key in ipairs(entriesToRemove) do
+			cache[key] = nil
+			cacheSize = cacheSize - 1
+		end
+
+		-- If still too large, remove oldest entries
+		if cacheSize > self.maxCacheSize then
+			local sortedEntries = {}
+			for key, entry in pairs(cache) do
+				table.insert(sortedEntries, { key = key, timestamp = entry.timestamp })
+			end
+
+			table.sort(sortedEntries, function(a, b)
+				return a.timestamp < b.timestamp
+			end)
+
+			local toRemove = cacheSize - self.maxCacheSize
+			for i = 1, math.min(toRemove, #sortedEntries) do
+				cache[sortedEntries[i].key] = nil
+			end
+		end
+	end
 end
 
 ---@param playerEntity PlayerEntity

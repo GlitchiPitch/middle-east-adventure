@@ -70,4 +70,12 @@ function Player:toggleRobloxControl(state)
 	end
 end
 
+function Player:getInventory()
+	return self.inventory
+end
+
+function Player:getEquipment()
+	return self.equipment
+end
+
 return Player

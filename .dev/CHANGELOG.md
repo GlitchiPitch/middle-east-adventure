@@ -240,6 +240,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Code structure optimizations across multiple service modules
 * Service integration consistency improvements
 
+## [1.0.33] - 2026-01-14
+
+### Added
+
+* Unit of Work pattern implementation for atomic operations and transaction management
+* EventEmitter service for event-driven architecture and cache invalidation
+* Enhanced Cache service with automatic invalidation based on entity changes
+* EquipItemExample use case demonstrating Unit of Work and caching patterns
+* Patterns_README.md documentation for new architectural patterns
+
+### Changed
+
+* Updated repository interfaces to support event emission on data changes
+* Enhanced Infrastructure services with UnitOfWork and EventEmitter integration
+* Improved dependency injection with new architectural pattern services
+* Refactored domain entities with better change tracking capabilities
+
+### Fixed
+
+* Transaction safety improvements for complex operations
+* Cache consistency with automatic invalidation on data mutations
+* Enhanced error handling in repository operations
+* Performance optimizations through intelligent caching strategies
+
 ## [1.0.32] - 2026-01-14
 
 ### Added
