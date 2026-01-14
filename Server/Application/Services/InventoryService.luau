@@ -1,8 +1,10 @@
 ---@class ServerInventoryService
 ---@field diContainer DIContainer
----@field playerService ServerPlayerService
----@field equipmentService ServerEquipmentService
+---@field playerRepository ServerPlayerRepository
+---@field equipmentRepository ServerEquipmentRepository
+---@field inventoryRepository ServerInventoryRepository
 ---@field sharedData SharedData
+---@field useCases ServerUseCases
 local InventoryService = {}
 InventoryService.__index = InventoryService
 
@@ -15,33 +17,30 @@ function InventoryService.new(diContainer)
 end
 
 function InventoryService:init()
-	---@type ServerApplication
-	local application = self.diContainer:resolve("Application")
+	---@type ServerInfrastructure
+	local infrastructure = self.diContainer:resolve("Infrastructure")
 	---@type Shared
 	local shared = self.diContainer:resolve("Shared")
+	---@type ServerApplication
+	local application = self.diContainer:resolve("Application")
 
 	self.sharedData = shared.data
-	self.playerService = application.services.playerService
-	self.equipmentService = application.services.equipmentService
+	self.playerRepository = infrastructure.playerRepository
+	self.equipmentRepository = infrastructure.equipmentRepository
+	self.inventoryRepository = infrastructure.inventoryRepository
+	self.useCases = application.useCases
 end
 
 ---@param player Player
 ---@param itemData table
 function InventoryService:clickItem(player, itemData)
-	itemData.state = "set"
-	
-	self.equipmentService:setPlayerSlot(player, itemData)
+	self.useCases.clickInventoryItem:execute(player, itemData)
 end
 
----@param playerEntity PlayerEntity
+---@param player Player
 ---@param itemName string
-function InventoryService:addItem(playerEntity, itemName)
-	playerEntity.inventory:addItem({
-		name = itemName,
-		data = {
-			amount = 1,
-		},
-	})
+function InventoryService:addItem(player, itemName)
+	self.useCases.addItemToInventory:execute(player, itemName, {amount = 1})
 end
 
 return InventoryService

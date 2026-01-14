@@ -2,7 +2,7 @@
 ---@field diContainer DIContainer
 ---@field assets Assets
 ---@field constants Constants
----@field playerService ServerPlayerService
+---@field playerRepository ServerPlayerRepository
 local ToolService = {}
 ToolService.__index = ToolService
 
@@ -17,18 +17,18 @@ end
 function ToolService:init()
 	---@type Shared
 	local shared = self.diContainer:resolve("Shared")
-	---@type ServerApplication
-	local application = self.diContainer:resolve("Application")
+	---@type ServerInfrastructure
+	local infrastructure = self.diContainer:resolve("Infrastructure")
 
 	self.assets = shared.assets
 	self.constants = shared.constants
 	self.sharedData = shared.data
-	self.playerService = application.services.playerService
+	self.playerRepository = infrastructure.playerRepository
 end
 
 ---@param player Player
 function ToolService:activate(player)
-	local playerEntity = self.playerService:getPlayerEntity(player)
+	local playerEntity = self.playerRepository:getPlayerEntity(player)
 	if playerEntity.equipment.equippedItem then
 		local itemData = self.sharedData:getItemData(playerEntity.equipment.equippedItem)
 		if itemData.type == self.constants.ITEM_TYPES.FOOD then

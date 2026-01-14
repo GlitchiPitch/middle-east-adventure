@@ -1,6 +1,6 @@
 ---@class ServerLecternService
 ---@field diContainer DIContainer
----@field playerService ServerPlayerService
+---@field playerRepository ServerPlayerRepository
 local LecternService = {}
 LecternService.__index = LecternService
 
@@ -13,15 +13,15 @@ function LecternService.new(diContainer)
 end
 
 function LecternService:init()
-	---@type ServerApplication
-	local application = self.diContainer:resolve("Application")
-	self.playerService = application.services.playerService
+	---@type ServerInfrastructure
+	local infrastructure = self.diContainer:resolve("Infrastructure")
+	self.playerRepository = infrastructure.playerRepository
 end
 
 ---@param player Player
 ---@param command UseLecternCommand
 function LecternService:useLectern(player, command)
-	local playerEntity = self.playerService:getPlayerEntity(player)
+	local playerEntity = self.playerRepository:getPlayerEntity(player)
 	if not table.find(playerEntity.playerProgress.usedLectern, command.lectern.Name) then
 		table.insert(playerEntity.playerProgress.usedLectern, command.lectern.Name)
 		playerEntity.attributes.ancientKnowledge += 5

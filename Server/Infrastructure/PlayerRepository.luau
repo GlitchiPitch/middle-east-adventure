@@ -1,18 +1,34 @@
 -- local DataStoreService = game:GetService("DataStoreService")
 
----@class PlayerRepository
+---@class ServerPlayerRepository
 ---@field diContainer DIContainer
 ---@field _players table<number, PlayerEntity>
+---@field inventoryRepository ServerInventoryRepository
+---@field equipmentRepository ServerEquipmentRepository
+---@field skillsRepository ServerSkillsRepository
+---@field statsRepository ServerStatsRepository
+---@field attributesRepository ServerAttributesRepository
 local PlayerRepository = {}
 PlayerRepository.__index = PlayerRepository
 
 ---@param diContainer DIContainer
----@return PlayerRepository
+---@return ServerPlayerRepository
 function PlayerRepository.new(diContainer)
 	local self = setmetatable({}, PlayerRepository)
 	self.diContainer = diContainer
 	self._players = {}
 	return self
+end
+
+function PlayerRepository:init()
+	-- Initialize repositories
+	---@type ServerInfrastructure
+	local infrastructure = self.diContainer:resolve("Infrastructure")
+	self.inventoryRepository = infrastructure.inventoryRepository
+	self.equipmentRepository = infrastructure.equipmentRepository
+	self.skillsRepository = infrastructure.skillsRepository
+	self.statsRepository = infrastructure.statsRepository
+	self.attributesRepository = infrastructure.attributesRepository
 end
 
 ---@param player Player
@@ -49,6 +65,48 @@ function PlayerRepository:getPlayerEntity(player)
 	return self._players[player.UserId]
 end
 
+---@param playerEntity PlayerEntity
+---@return InventoryEntity
+function PlayerRepository:getInventory(playerEntity)
+	return playerEntity.inventory
+end
+
+---@param playerEntity PlayerEntity
+---@return EquipmentEntity
+function PlayerRepository:getEquipment(playerEntity)
+	return playerEntity.equipment
+end
+
+---@param playerEntity PlayerEntity
+---@return SkillsEntity
+function PlayerRepository:getSkills(playerEntity)
+	return playerEntity.skills
+end
+
+---@param playerEntity PlayerEntity
+---@return StatsEntity
+function PlayerRepository:getStats(playerEntity)
+	return playerEntity.stats
+end
+
+---@param playerEntity PlayerEntity
+---@return AttributesEntity
+function PlayerRepository:getAttributes(playerEntity)
+	return playerEntity.attributes
+end
+
+---@param playerEntity PlayerEntity
+---@param newData table
+function PlayerRepository:updatePlayerEntityByEntity(playerEntity, newData)
+	playerEntity:fromData(newData)
+end
+
+---@param playerEntity PlayerEntity
+---@return table
+function PlayerRepository:toData(playerEntity)
+	return playerEntity:toData()
+end
+
 function PlayerRepository:_createPlayerEntity(player)
 	---@type SharedDomain
 	local domain = self.diContainer:resolve("Domain")
@@ -73,7 +131,6 @@ function PlayerRepository:_createPlayerEntity(player)
 
 	playerData.inventory:fromData(_playerData.inventory or {})
 
-	
 	self._players[player.UserId] = domain.Player.new(player)
 	self._players[player.UserId]:fromData(playerData)
 end

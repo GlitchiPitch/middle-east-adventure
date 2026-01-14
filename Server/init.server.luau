@@ -39,6 +39,8 @@ function Server:init()
         return self.application
     end)
 
+    self.shared:init()
+    self.infrastructure:init()
     self.application:init()
 
     ReplicatedStorage:SetAttribute(self.shared.constants.INIT_SERVER, true)

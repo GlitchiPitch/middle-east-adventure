@@ -74,24 +74,31 @@ end
 ---@field remoteEventService RemoteEventService
 ---@field constants Constants
 ---@field playerService ClientPlayerService
+---@field diContainer DIContainer
 local EquipItem = {}
 EquipItem.__index = EquipItem
 
 ---@param remoteEventService RemoteEventService
 ---@param playerService ClientPlayerService
 ---@param constants Constants
+---@param diContainer DIContainer
 ---@return ClientEquipItem
-function EquipItem.new(remoteEventService, playerService, constants)
+function EquipItem.new(remoteEventService, playerService, constants, diContainer)
 	local self = setmetatable({}, EquipItem)
 	self.remoteEventService = remoteEventService
 	self.playerService = playerService
 	self.constants = constants
+	self.diContainer = diContainer
 	return self
 end
 
 ---@param command EquipItemCommand
 function EquipItem:execute(command)
-	local playerEntity = self.playerService:getPlayerEntity()
+	-- Check if slot exists by accessing equipment data from client infrastructure
+	---@type ClientInfrastructure
+	local infrastructure = self.diContainer:resolve("Infrastructure")
+	local playerEntity = infrastructure.playerRepository:getPlayerEntity()
+
 	if playerEntity.equipment.slots[command.slotIndex] then
 		self.remoteEventService:fireServer({
 			eventName = self.constants.REMOTE_EVENTS.EQUIP_ITEM,
@@ -152,7 +159,7 @@ function UseCases:init()
 	self.clickInventoryItem = ClickInventoryItem.new(shared.remoteEventService, shared.constants)
 	self.pickupLoot = PickupLoot.new(shared.remoteEventService, shared.constants)
 	self.useLectern = UseLectern.new(shared.remoteEventService, shared.constants)
-	self.equipItem = EquipItem.new(shared.remoteEventService, application.services.playerService, shared.constants)
+	self.equipItem = EquipItem.new(shared.remoteEventService, application.services.playerService, shared.constants, self.diContainer)
 	self.toggleSprint = ToggleSprint.new(shared.remoteEventService, shared.constants)
 end
 

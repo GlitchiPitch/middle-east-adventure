@@ -46,6 +46,8 @@ function Client:init()
 		return self.infrastructure
 	end)
 
+	self.shared:init()
+	self.infrastructure:init()
 	self.application:init()
 	self.presentation:init()
 end

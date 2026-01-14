@@ -1,7 +1,7 @@
 ---@class ServerLootService
 ---@field diContainer DIContainer
 ---@field sharedData SharedData
----@field inventoryService ServerInventoryService
+---@field inventoryRepository ServerInventoryRepository
 local LootService = {}
 LootService.__index = LootService
 
@@ -14,23 +14,21 @@ function LootService.new(diContainer)
 end
 
 function LootService:init()
-	---@type ServerApplication
-	local application = self.diContainer:resolve("Application")
+	---@type ServerInfrastructure
+	local infrastructure = self.diContainer:resolve("Infrastructure")
 	---@type Shared
 	local shared = self.diContainer:resolve("Shared")
 
 	self.sharedData = shared.data
-	self.playerService = application.services.playerService
-	self.inventoryService = application.services.inventoryService
+	self.inventoryRepository = infrastructure.inventoryRepository
 end
 
 ---@param player Player
 ---@param command PickupLootCommand
 function LootService:pickupLoot(player, command)
-	local playerEntity = self.playerService:getPlayerEntity(player)
 	local itemData = self.sharedData:getItemData(command.loot.Name)
 	command.loot:Destroy()
-	self.inventoryService:addItem(playerEntity, itemData.name)
+	self.inventoryRepository:addItem(player, itemData.name, {amount = 1})
 end
 
 return LootService

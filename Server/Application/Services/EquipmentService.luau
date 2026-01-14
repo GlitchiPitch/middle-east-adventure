@@ -1,7 +1,8 @@
 ---@class ServerEquipmentService
 ---@field diContainer DIContainer
----@field playerService ServerPlayerService
+---@field playerRepository ServerPlayerRepository
 ---@field toolService ServerToolService
+---@field useCases ServerUseCases
 local EquipmentService = {}
 EquipmentService.__index = EquipmentService
 
@@ -14,46 +15,31 @@ function EquipmentService.new(diContainer)
 end
 
 function EquipmentService:init()
+	---@type ServerInfrastructure
+	local infrastructure = self.diContainer:resolve("Infrastructure")
 	---@type ServerApplication
 	local application = self.diContainer:resolve("Application")
 	---@type Shared
 	local shared = self.diContainer:resolve("Shared")
 
 	self.sharedData = shared.data
-	self.playerService = application.services.playerService
+	self.playerRepository = infrastructure.playerRepository
 	self.toolService = application.services.toolService
+	self.useCases = application.useCases
 end
 
 ---@param player Player
 ---@param command EquipItemCommand
 function EquipmentService:equipItem(player, command)
-	local playerEntity = self.playerService:getPlayerEntity(player)
-	if playerEntity.equipment.slots[command.slotIndex] then
-		if playerEntity.equipment.equippedItem then
-			playerEntity.equipment:equipItem(nil)
-		else
-			playerEntity.equipment:equipItem(playerEntity.equipment.slots[command.slotIndex])
-		end
-
-		self:_setToolToPlayer(playerEntity)
-	end
+	self.useCases.equipItem:execute(player, command)
 end
 
 ---@param player Player
 ---@param itemData table
 function EquipmentService:setPlayerSlot(player, itemData)
-	local playerEntity = self.playerService:getPlayerEntity(player)
-	playerEntity.equipment:setSlot(itemData)
+	self.useCases.setEquipmentSlot:execute(player, itemData.name, itemData.slot or "One")
 end
 
----@param playerEntity PlayerEntity
-function EquipmentService:_setToolToPlayer(playerEntity)
-	if playerEntity.equipment.equippedItem then
-		self.toolService:equipItem(playerEntity)
-	else
-		self.toolService:unequipItem(playerEntity)
-	end
-end
 
 function EquipmentService:useFood()
 	

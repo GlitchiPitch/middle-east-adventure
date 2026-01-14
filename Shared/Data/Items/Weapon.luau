@@ -434,14 +434,25 @@ function Weapon:getWeaponData(weaponName)
 end
 
 function Weapon:getAll()
+	-- Кеширование результата для избежания повторных вычислений
+	if self._cachedAll then
+		return self._cachedAll
+	end
+
 	local all = {}
-	for _, v in { self.OneHanded, self.TwoHanded, self.Bows, self.Crossbows } do
-		for j, k in v do
-			all[j] = k
+	for _, category in { self.OneHanded, self.TwoHanded, self.Bows, self.Crossbows } do
+		for weaponName, weaponData in pairs(category) do
+			all[weaponName] = weaponData
 		end
 	end
 
+	self._cachedAll = all
 	return all
+end
+
+--- Очистка кеша при необходимости
+function Weapon:clearCache()
+	self._cachedAll = nil
 end
 
 return Weapon

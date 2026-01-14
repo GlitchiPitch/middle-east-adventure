@@ -93,7 +93,9 @@ end
 
 ---@param answerIndex number
 function DialogService:selectAnswer(answerIndex)
+	warn(answerIndex)
 	local npc = self.targetController:getCurrentTarget()
+	warn(npc)
 	if not self.dialogsCache[npc] or not self.dialogsCache[npc].dialogData.answers then
 		return
 	end
@@ -102,6 +104,7 @@ function DialogService:selectAnswer(answerIndex)
 	local selectedAnswer = answers[answerIndex]
 
 	if selectedAnswer and selectedAnswer.nextPhraseIndex then
+		
 		-- Jump to the specified phrase
 		self.dialogsCache[npc].index = selectedAnswer.nextPhraseIndex - 1 -- -1 because activateDialog will increment it
 		self.dialogsCache[npc].showingAnswers = false -- Reset state for new phrase

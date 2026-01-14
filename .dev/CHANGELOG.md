@@ -240,6 +240,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Code structure optimizations across multiple service modules
 * Service integration consistency improvements
 
+## [1.0.32] - 2026-01-14
+
+### Added
+
+* Comprehensive repository pattern implementation for data isolation
+* New AttributesRepository, EquipmentRepository, InventoryRepository, ItemRepository
+* SkillsRepository and StatsRepository with caching mechanisms
+* Shared Infrastructure Repositories module with centralized repository management
+* Server-side UseCases for player management (AddExperience, AddItemToInventory, etc.)
+* Enhanced dependency injection with repository integration
+* Improved data access layer with caching and performance optimizations
+
+### Changed
+
+* Refactored Shared infrastructure with new Repositories module
+* Updated Client and Server Infrastructure to use repository pattern
+* Enhanced service architecture with repository dependencies
+* Improved code organization and separation of concerns
+* Updated UseCases to utilize repository pattern for data operations
+
+### Fixed
+
+* Data access consistency improvements across all layers
+* Enhanced performance with caching mechanisms in repositories
+* Improved error handling and data validation
+* Code structure optimizations and dependency management
+
 ## [Unreleased]
 
 ### Planned

@@ -10,7 +10,7 @@ local Types = require(script.Types)
 
 ---@class Shared
 ---@field remoteEventService RemoteEventService
----@field _infrastructure SharedInfrastructure
+---@field infrastructure SharedInfrastructure
 ---@field diContainer DIContainer
 ---@field eventBus EventBus
 ---@field domain SharedDomain
@@ -24,12 +24,12 @@ Shared.__index = Shared
 
 function Shared.new()
     local self = setmetatable({}, Shared)
-    self._infrastructure = Infrastructure.new()
+    self.infrastructure = Infrastructure.new()
     self.domain = Domain.new()
     
-    self.diContainer = self._infrastructure.diContainer
-    self.remoteEventService = self._infrastructure.remoteEventService
-    self.eventBus = self._infrastructure.eventBus
+    self.diContainer = self.infrastructure.diContainer
+    self.remoteEventService = self.infrastructure.remoteEventService
+    self.eventBus = self.infrastructure.eventBus
 
     self.application = Application.new()
 
@@ -39,6 +39,10 @@ function Shared.new()
     self.assets = Assets
     self.Types = Types
     return self
+end
+
+function Shared:init()
+    self.infrastructure:init()
 end
 
 return Shared
